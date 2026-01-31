@@ -1,9 +1,4 @@
 ---
-interface Props {
-  current?: 'home' | 'blog';
-}
-
-const { current } = Astro.props;
 ---
 
 <header style="padding: 3rem 1.5rem 2rem; max-width: 720px; margin: 0 auto;">
@@ -12,10 +7,7 @@ const { current } = Astro.props;
       Weiqi Liu
     </a>
     <div style="display: flex; gap: 1.5rem;">
-      <a href="/" style={current === 'home' ? 'text-decoration: none; font-weight: 500;' : 'text-decoration: none;'}>
-        About
-      </a>
-      <a href="/blog" style={current === 'blog' ? 'text-decoration: none; font-weight: 500;' : 'text-decoration: none;'}>
+      <a href="/" style="text-decoration: none;">
         Blog
       </a>
       <a href="/rss.xml" style="text-decoration: none;" target="_blank" rel="noopener noreferrer">

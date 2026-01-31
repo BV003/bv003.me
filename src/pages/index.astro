@@ -2,62 +2,41 @@
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import PostCard from '../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+import { getReadingTime } from '../utils/readingTime';
+
+const posts = await getCollection('blog');
+
+const sortedPosts = posts
+  .map((post) => ({
+    ...post,
+    readingTime: getReadingTime(post.body || ''),
+  }))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 ---
 
-<Layout title="About Me - Weiqi Liu">
-  <Header current="home" />
+<Layout title="Blog - Weiqi Liu" description="Personal blog of Weiqi Liu - AI research, engineering, and more.">
+  <Header />
   
   <main style="max-width: 720px; margin: 0 auto; padding: 0 1.5rem 3rem;">
-    <section style="margin-bottom: 3rem;">
-      <h1 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 1.5rem;">About Me</h1>
-      <p style="margin-bottom: 1rem; line-height: 1.7;">
-        Hi. I'm Weiqi Liu, and you can call me Michael.
-      </p>
-      <p style="margin-bottom: 1rem; line-height: 1.7;">
-        I aim to become one of the top engineers in the world.
-      </p>
-      <p style="line-height: 1.7;">
-        For any suggestions or collaborations, please feel free to drop me an <a href="mailto:your-email@example.com">e-mail</a>.
-      </p>
-    </section>
-
-    <section style="margin-bottom: 3rem;">
-      <h2 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem;">Research</h2>
-      <p style="line-height: 1.7;">
-        My primary focus is currently on artificial intelligence research. The emergence of large language models has greatly accelerated technological innovation and can automate many repetitive cognitive tasks. When these models are integrated with software and hardware, they enable large-scale automation in the real world. I believe that researching how to build more efficient AI models and exploring their practical applications is a highly promising direction. As for my personal interests, I am also deeply passionate about investing, Web3 technologies, literary writing, and aesthetics.
-      </p>
-    </section>
-
-    <section style="margin-bottom: 3rem;">
-      <h2 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem;">News</h2>
-      <ul style="line-height: 1.7;">
-        <li>Academic Publications</li>
-      </ul>
-    </section>
-
-    <section style="margin-bottom: 3rem;">
-      <h2 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem;">Academic Publications</h2>
-      <div style="margin-bottom: 1rem;">
-        <p style="font-weight: 500; margin-bottom: 0.5rem;">
-          NeuronScope: A Multi-Agent Framework for Explaining Polysemantic Neurons in Language Models
-        </p>
-        <p style="font-size: 0.875rem; color: #666; margin-bottom: 0.5rem;">
-          Weiqi Liu, Yongliang Miao, Haiyan Zhao, Yanguang Liu, Mengnan Du
-        </p>
-        <div style="display: flex; gap: 1rem;">
-          <a href="#" style="font-size: 0.875rem;">[paper]</a>
-          <a href="#" style="font-size: 0.875rem;">arxiv</a>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <h2 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem;">Education</h2>
+    <h1 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 2rem;">Blog</h1>
+    
+    {sortedPosts.length === 0 ? (
+      <p style="color: #666;">No posts yet. Check back soon!</p>
+    ) : (
       <div>
-        <p style="font-weight: 500;">B.S. in Software Engineering</p>
-        <p style="font-size: 0.875rem; color: #666;">2022 - 2026</p>
+        {sortedPosts.map((post) => (
+          <PostCard
+            title={post.data.title}
+            slug={post.data.slug}
+            pubDate={post.data.pubDate}
+            description={post.data.description}
+            readingTime={post.readingTime}
+          />
+        ))}
       </div>
-    </section>
+    )}
   </main>
   
   <Footer />

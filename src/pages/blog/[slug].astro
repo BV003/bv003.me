@@ -21,7 +21,7 @@ const readingTime = getReadingTime(post.body || '');
 ---
 
 <Layout title={`${post.data.title} - Weiqi Liu`} description={post.data.description}>
-  <Header current="blog" />
+  <Header />
   
   <main style="max-width: 720px; margin: 0 auto; padding: 0 1.5rem 3rem;">
     <article>
@@ -43,7 +43,7 @@ const readingTime = getReadingTime(post.body || '');
     </article>
     
     <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #e5e5e5;">
-      <a href="/blog" style="text-decoration: none;">← Back to all posts</a>
+      <a href="/" style="text-decoration: none;">← Back to all posts</a>
     </div>
   </main>
   
