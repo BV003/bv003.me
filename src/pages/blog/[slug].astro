@@ -1,0 +1,51 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { formatDate } from '../../utils/date';
+import { getReadingTime } from '../../utils/readingTime';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  
+  return posts.map((post) => ({
+    params: { slug: post.data.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const readingTime = getReadingTime(post.body || '');
+---
+
+<Layout title={`${post.data.title} - Weiqi Liu`} description={post.data.description}>
+  <Header current="blog" />
+  
+  <main style="max-width: 720px; margin: 0 auto; padding: 0 1.5rem 3rem;">
+    <article>
+      <header style="margin-bottom: 2rem;">
+        <h1 style="font-size: 1.75rem; font-weight: 600; margin-bottom: 1rem; line-height: 1.3;">
+          {post.data.title}
+        </h1>
+        <div style="font-size: 0.875rem; color: #666;">
+          <time datetime={post.data.pubDate.toISOString()}>
+            {formatDate(post.data.pubDate)}
+          </time>
+          <span> · {readingTime} min read</span>
+        </div>
+      </header>
+      
+      <div class="prose" style="line-height: 1.7;">
+        <Content />
+      </div>
+    </article>
+    
+    <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #e5e5e5;">
+      <a href="/blog" style="text-decoration: none;">← Back to all posts</a>
+    </div>
+  </main>
+  
+  <Footer />
+</Layout>

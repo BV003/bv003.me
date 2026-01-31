@@ -1,0 +1,43 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+import { getReadingTime } from '../../utils/readingTime';
+
+const posts = await getCollection('blog');
+
+const sortedPosts = posts
+  .map((post) => ({
+    ...post,
+    readingTime: getReadingTime(post.body || ''),
+  }))
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+---
+
+<Layout title="Blog - Weiqi Liu">
+  <Header current="blog" />
+  
+  <main style="max-width: 720px; margin: 0 auto; padding: 0 1.5rem 3rem;">
+    <h1 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 2rem;">Blog</h1>
+    
+    {sortedPosts.length === 0 ? (
+      <p style="color: #666;">No posts yet. Check back soon!</p>
+    ) : (
+      <div>
+        {sortedPosts.map((post) => (
+          <PostCard
+            title={post.data.title}
+            slug={post.data.slug}
+            pubDate={post.data.pubDate}
+            description={post.data.description}
+            readingTime={post.readingTime}
+          />
+        ))}
+      </div>
+    )}
+  </main>
+  
+  <Footer />
+</Layout>
