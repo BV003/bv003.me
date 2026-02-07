@@ -105,3 +105,83 @@ site: 'https://yourdomain.com',
 ## Credits
 
 Built with [Astro](https://astro.build) + [KaTeX](https://katex.org)
+
+
+
+
+## Next
+
+  🚀 Deploy to Vercel
+
+  Quick Steps:
+
+  1. Push to GitHub
+
+  cd /mnt/d/home/bv003.me
+
+  # Add all files
+  git add .
+
+  # Commit
+  git commit -m "Initial blog setup with Astro"
+
+  # Push (replace with your repo URL)
+  git remote add origin https://github.com/bv003/blog.git
+  git push -u origin main
+
+  2. Deploy on Vercel
+
+  # Install Vercel CLI (once)
+  npm i -g vercel
+
+  # Login
+  vercel login
+
+  # Deploy (from project directory)
+  cd /mnt/d/home/bv003.me
+  vercel
+
+  Follow the prompts:
+
+  • Set up and deploy? Yes
+  • Which scope? Select your account
+  • Link to existing project? No
+  • Project name? (e.g., bv003-blog)
+  • Directory? ./ (current)
+
+  3. Get your URL After deployment, you'll see:
+
+  🔍  Inspect: https://vercel.com/yourname/bv003-blog/xxxxx
+  ✅  Production: https://bv003-blog.vercel.app
+
+  🔄 Auto-Deploy Setup
+
+  For automatic deployments on every git push:
+
+  1. Go to vercel.com/dashboard
+  2. Find your project → Settings → Git
+  3. Connect your GitHub repository
+  4. Enable "Auto-deploy on push"
+
+  Now every git push will automatically deploy!
+
+  📝 After Deployment
+
+  Update your site URL in astro.config.mjs:
+
+  site: 'https://bv003-blog.vercel.app',  // Replace with your actual URL
+
+  Then redeploy:
+
+  vercel --prod
+
+  ✅ Files Ready for Deployment
+
+  Your project is ready with:
+
+  • ✅ vercel.json - Vercel configuration
+  • ✅ astro.config.mjs - Astro settings
+  • ✅ Static output configured
+  • ✅ All dependencies in package.json
+
+  Want me to help with anything else?
