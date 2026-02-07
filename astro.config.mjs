@@ -7,7 +7,7 @@ import rehypeKatex from 'rehype-katex';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://your-vercel-url.vercel.app', // Will be updated after deployment
+  site: 'https://bv003me.vercel.app',
   integrations: [tailwind(), sitemap()],
   markdown: {
     remarkPlugins: [remarkMath],
