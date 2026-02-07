@@ -12,19 +12,16 @@ interface Props {
 const { title, slug, pubDate, description, readingTime } = Astro.props;
 ---
 
-<article style="margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid #e5e5e5;">
+<article style="margin-bottom: 1.5rem;">
   <a href={`/blog/${slug}`} style="text-decoration: none; display: block;">
-    <h2 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem; line-height: 1.4;">
+    <h2 style="font-size: 1.125rem; font-weight: 500; margin-bottom: 0.25rem; line-height: 1.4; color: #000;">
       {title}
     </h2>
   </a>
-  <div style="font-size: 0.875rem; color: #666; margin-bottom: 0.75rem;">
+  <div style="font-size: 0.8rem; color: #666;">
     <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
     {readingTime && (
       <span> · {readingTime} min read</span>
     )}
   </div>
-  {description && (
-    <p style="color: #444; line-height: 1.6;">{description}</p>
-  )}
 </article>

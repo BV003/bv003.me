@@ -1,187 +1,193 @@
 # bv003.me
 
-Personal blog of Weiqi Liu (Michael) - built with Astro.
+A minimal, beautiful personal blog built with [Astro](https://astro.build). Features clean typography, math formula support (KaTeX), RSS feed, and automatic sitemap generation.
+
+**Live site:** https://bv003me.vercel.app
 
 ## Features
 
-- ⚡ **Fast** - Static site generation with Astro
-- ✍️ **Markdown** - Write posts in Markdown
-- 📐 **Math Support** - KaTeX for math formulas
-- 📱 **Responsive** - Clean, minimalist design
-- 🎨 **Your Style** - Simple black text on white background
+- ⚡ **Fast** - Static site generation
+- ✍️ **Markdown** - Write posts in Markdown with frontmatter
+- 📐 **Math Support** - KaTeX for `$inline$` and `$$block$$` math
+- 📝 **Typography** - Beautiful heading hierarchy and spacing
 - 📡 **RSS Feed** - Auto-generated at `/rss.xml`
 - 🗺️ **Sitemap** - SEO-friendly
+- 🎨 **Minimal Design** - Clean black text on white background
 
-## Commands
+## Project Structure
 
-| Command           | Action                                       |
-|:------------------|:---------------------------------------------|
-| `npm install`     | Installs dependencies                        |
-| `npm run dev`     | Starts local dev server at `localhost:4321`  |
-| `npm run build`   | Build your production site to `./dist/`      |
-| `npm run preview` | Preview your build locally                   |
+```
+├── src/
+│   ├── components/          # Reusable components (Header, PostCard)
+│   ├── content/blog/        # Blog posts organized by year
+│   │   └── 2026/
+│   │       ├── first-post.md
+│   │       └── another-post.md
+│   ├── layouts/
+│   │   └── Layout.astro     # Base HTML layout with global styles
+│   ├── pages/
+│   │   ├── index.astro      # Homepage with post list
+│   │   ├── blog/[slug].astro # Individual post pages
+│   │   └── rss.xml.js       # RSS feed generation
+│   └── utils/               # Helper functions (date, reading time)
+├── public/
+│   ├── profile.png          # Your favicon/site icon
+│   └── images/              # Blog images
+├── astro.config.mjs         # Astro configuration
+└── package.json
+```
 
-## Writing Posts
+## Build Your Own Blog
 
-1. Create a new `.md` file in `src/content/blog/YYYY/`
-2. Add frontmatter:
+### 1. Fork This Repository
+
+Click the "Fork" button on GitHub to create your own copy.
+
+### 2. Clone and Setup
+
+```bash
+git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
+cd YOUR_REPO_NAME
+npm install
+```
+
+### 3. Customize
+
+**Update site info in `astro.config.mjs`:**
+```javascript
+site: 'https://your-site-url.vercel.app',
+```
+
+**Replace favicon:**
+- Put your image as `public/profile.png`
+
+**Update header links in `src/components/Header.astro`:**
+```astro
+<a href="https://your-website.com">Website</a>
+```
+
+### 4. Add Your First Post
+
+Create a file in `src/content/blog/2026/my-first-post.md`:
 
 ```markdown
 ---
-title: "Your Post Title"
-slug: "your-post-slug"
-pubDate: 2026-01-31
-description: "Brief description"
+title: "My First Post"
+slug: "my-first-post"
+pubDate: 2026-02-07
+description: "A brief description of this post"
 ---
 
-Your content here...
+## Introduction
+
+Write your content here using **Markdown**.
+
+### Math Example
+
+Inline math: $E = mc^2$
+
+Block math:
+$$
+\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}
+$$
+
+### Lists
+
+- Item 1
+- Item 2
+- Item 3
 ```
 
-3. For math formulas, use `$...$` for inline or `$$...$$` for blocks
+**Frontmatter fields:**
+- `title` - Post title (required)
+- `slug` - URL-friendly identifier (required)
+- `pubDate` - Publication date (YYYY-MM-DD format)
+- `description` - Brief summary
 
-## Deployment
+### 5. Local Development
 
-### Option 1: Connect GitHub to Vercel (Recommended)
+```bash
+npm run dev
+```
 
-1. Push your code to a GitHub repository
-2. Go to [vercel.com](https://vercel.com) and sign up/login
-3. Click "Add New Project"
-4. Import your GitHub repository
-5. Vercel will auto-detect Astro and configure everything
-6. Click "Deploy"
+Visit `http://localhost:4321` to preview.
 
-Your site will be live at `https://your-project.vercel.app`
+### 6. Deploy to Vercel
 
-### Option 2: Vercel CLI
+**Option A: Vercel CLI (Quick)**
 
 ```bash
 # Install Vercel CLI
 npm i -g vercel
 
-# Login to Vercel
+# Login (opens browser)
 vercel login
 
 # Deploy
-vercel
-
-# For production deployment
 vercel --prod
 ```
 
-### Option 3: Git Push (with Vercel Git Integration)
+**Option B: GitHub Integration (Recommended)**
 
-After connecting your repo, every push to `main` branch will auto-deploy!
-
+1. Push your code to GitHub:
 ```bash
 git add .
 git commit -m "Initial blog setup"
 git push origin main
 ```
 
+2. Go to [vercel.com](https://vercel.com), sign up with GitHub
+3. Click "Add New Project"
+4. Import your repository
+5. Vercel auto-detects Astro, click "Deploy"
+6. **Enable auto-deploy:** Project Settings → Git → Enable "Auto-deploy on push"
+
+Now every `git push` automatically deploys your blog!
+
+## Add Images to Posts
+
+1. Place images in `public/images/`
+2. Reference in Markdown:
+
+```markdown
+![Alt text](/images/my-photo.jpg)
+```
+
+## Update Your Blog
+
+**To add a new post:**
+```bash
+# Create new post file
+# Edit in your favorite editor
+# Deploy
+vercel --prod
+```
+
+**Or with Git auto-deploy:**
+```bash
+git add .
+git commit -m "Add new post"
+git push origin main  # Auto-deploys!
+```
+
 ## Custom Domain (Optional)
 
-1. In Vercel dashboard, go to your project → Settings → Domains
-2. Add your custom domain
-3. Follow DNS configuration instructions
-4. Update `astro.config.mjs` with your domain:
-
-```js
+1. In Vercel dashboard: Project → Settings → Domains
+2. Add your domain
+3. Update `astro.config.mjs`:
+```javascript
 site: 'https://yourdomain.com',
 ```
 
-## Project Structure
+## Commands Reference
 
-```
-├── src/
-│   ├── components/     # UI components
-│   ├── content/blog/   # Blog posts (Markdown)
-│   ├── layouts/        # Page layouts
-│   ├── pages/          # Routes
-│   └── utils/          # Helpers
-├── public/             # Static assets
-└── dist/               # Build output
-```
+| Command | Action |
+|:--------|:-------|
+| `npm run dev` | Start dev server at `localhost:4321` |
+| `npm run build` | Build production site to `./dist/` |
+| `npm run preview` | Preview build locally |
+| `vercel --prod` | Deploy to production |
 
 ## Credits
 
-Built with [Astro](https://astro.build) + [KaTeX](https://katex.org)
-
-
-
-
-## Next
-
-  🚀 Deploy to Vercel
-
-  Quick Steps:
-
-  1. Push to GitHub
-
-  cd /mnt/d/home/bv003.me
-
-  # Add all files
-  git add .
-
-  # Commit
-  git commit -m "Initial blog setup with Astro"
-
-  # Push (replace with your repo URL)
-  git remote add origin https://github.com/bv003/blog.git
-  git push -u origin main
-
-  2. Deploy on Vercel
-
-  # Install Vercel CLI (once)
-  npm i -g vercel
-
-  # Login
-  vercel login
-
-  # Deploy (from project directory)
-  cd /mnt/d/home/bv003.me
-  vercel
-
-  Follow the prompts:
-
-  • Set up and deploy? Yes
-  • Which scope? Select your account
-  • Link to existing project? No
-  • Project name? (e.g., bv003-blog)
-  • Directory? ./ (current)
-
-  3. Get your URL After deployment, you'll see:
-
-  🔍  Inspect: https://vercel.com/yourname/bv003-blog/xxxxx
-  ✅  Production: https://bv003-blog.vercel.app
-
-  🔄 Auto-Deploy Setup
-
-  For automatic deployments on every git push:
-
-  1. Go to vercel.com/dashboard
-  2. Find your project → Settings → Git
-  3. Connect your GitHub repository
-  4. Enable "Auto-deploy on push"
-
-  Now every git push will automatically deploy!
-
-  📝 After Deployment
-
-  Update your site URL in astro.config.mjs:
-
-  site: 'https://bv003-blog.vercel.app',  // Replace with your actual URL
-
-  Then redeploy:
-
-  vercel --prod
-
-  ✅ Files Ready for Deployment
-
-  Your project is ready with:
-
-  • ✅ vercel.json - Vercel configuration
-  • ✅ astro.config.mjs - Astro settings
-  • ✅ Static output configured
-  • ✅ All dependencies in package.json
-
-  Want me to help with anything else?
+Built with [Astro](https://astro.build) + [KaTeX](https://katex.org) + [Tailwind CSS](https://tailwindcss.com)
