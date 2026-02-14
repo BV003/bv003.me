@@ -134,6 +134,7 @@ vercel --prod
 git add .
 git commit -m "Initial blog setup"
 git push origin main
+
 ```
 
 2. Go to [vercel.com](https://vercel.com), sign up with GitHub
