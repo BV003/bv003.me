@@ -7,8 +7,7 @@ subtitle: "My struggles while preparing for graduate school applications and int
 ---
 2025/10/19
 
-> 胜人者有力，自胜者强。  
-> ——老子
+> 胜人者有力，自胜者强。  ——老子
 
 The Stoic school emphasizes that a person should be able to take control of their own life. I think I really need to do that now.
 
