@@ -219,10 +219,16 @@ const { title, description = "Michael Liu's personal blog" } = Astro.props;
       
       .footnotes ol {
         padding-left: 1.5rem;
+        list-style-type: decimal;
       }
       
       .footnotes li {
         margin-bottom: 0.75rem;
+        list-style-type: decimal;
+      }
+      
+      .footnotes li::marker {
+        font-weight: 500;
       }
     </style>
   </head>
