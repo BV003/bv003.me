@@ -7,8 +7,8 @@ export async function GET(context) {
   const sortedPosts = posts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
   return rss({
-    title: 'Weiqi Liu (Michael)',
-    description: 'Personal blog of Weiqi Liu - AI research, engineering, and more.',
+    title: 'Michael Liu',
+    description: 'Personal blog of Michael Liu - AI research, engineering, and more.',
     site: context.site,
     items: sortedPosts.map((post) => ({
       title: post.data.title,
