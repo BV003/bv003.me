@@ -76,6 +76,7 @@ title: "My First Post"
 slug: "my-first-post"
 pubDate: 2026-02-07
 description: "A brief description of this post"
+
 ---
 
 ## Introduction
