@@ -5,7 +5,7 @@ pubDate: 2025-10-19
 description: ""
 subtitle: "My struggles while preparing for graduate school applications and internship hunting."
 ---
-2025/10/19
+### 2025/10/19
 
 > 胜人者有力，自胜者强。  ——老子
 
@@ -23,7 +23,7 @@ Searching for internships and working on applications feels like a massive whirl
 
 ---
 
-2026/2/14
+### 2026/2/14
 
 Today is February 14, 2026, and it has been four months since I wrote down the above things. So far, I have only received an offer from the University of Waterloo.[^1] Other universities have not sent me either an offer letter or a rejection letter.
 
