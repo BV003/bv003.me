@@ -1,6 +1,6 @@
 ---
 title: "Professionals' self-media"
-slug: ""
+slug: "Professionals-self-media"
 pubDate: 2025-10-12
 description: ""
 subtitle: ""
