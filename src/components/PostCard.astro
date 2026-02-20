@@ -7,15 +7,16 @@ interface Props {
   pubDate: Date;
   description?: string;
   readingTime?: number;
+  pinned?: boolean;
 }
 
-const { title, slug, pubDate, description, readingTime } = Astro.props;
+const { title, slug, pubDate, description, readingTime, pinned } = Astro.props;
 ---
 
 <article style="margin-bottom: 1.5rem;">
   <a href={`/blog/${slug}`} style="text-decoration: none; display: block;">
     <h2 style="font-size: 1.125rem; font-weight: 500; margin-bottom: 0.25rem; line-height: 1.4; color: #000;">
-      {title}
+      {pinned && <span style="margin-right: 0.5rem;">📌</span>}{title}
     </h2>
   </a>
   <div style="font-size: 0.8rem; color: #666;">
