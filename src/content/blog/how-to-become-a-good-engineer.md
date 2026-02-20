@@ -1,9 +1,10 @@
 ---
 title: "How to Become a Good Engineer"
 slug: "how-to-become-a-good-engineer"
-pubDate: 2026-1-18
+pubDate: 2025-10-1
 description: ""
 subtitle: "This article is about how to become a good engineer, written mainly for myself. Since my understanding is constantly evolving, this piece will also keep changing."
+pinned: true
 ---
 ### Always Do Useful Things to Achieve Compounding
 A good career is one where compounding exists. The work you do now will lead to better opportunities in the future. For me at this stage, internships (work) and research in trending areas of industry are useful things.

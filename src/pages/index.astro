@@ -12,7 +12,11 @@ const sortedPosts = posts
     ...post,
     readingTime: getReadingTime(post.body || ''),
   }))
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+  .sort((a, b) => {
+    if (a.data.pinned && !b.data.pinned) return -1;
+    if (!a.data.pinned && b.data.pinned) return 1;
+    return b.data.pubDate.getTime() - a.data.pubDate.getTime();
+  });
 ---
 
 <Layout title="Blog - Michael Liu" description="Personal blog of Michael Liu - AI research, engineering, and more.">

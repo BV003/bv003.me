@@ -8,6 +8,7 @@ const blog = defineCollection({
     slug: z.string(),
     pubDate: z.coerce.date(),
     description: z.string().optional(),
+    pinned: z.boolean().optional().default(false),
   }),
 });
 
