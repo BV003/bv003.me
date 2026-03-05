@@ -137,24 +137,48 @@ const { title, description = "Michael Liu's personal blog" } = Astro.props;
       }
       
       code {
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace;
         font-size: 0.875em;
-        background: #f5f5f5;
-        padding: 0.125rem 0.375rem;
-        border-radius: 3px;
+        background: #f1f5f9;
+        color: #334155;
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        border: 1px solid #e2e8f0;
       }
       
       pre {
-        background: #f5f5f5;
-        padding: 1rem;
-        border-radius: 4px;
+        background: #1e293b;
+        padding: 1.25rem;
+        border-radius: 12px;
         overflow-x: auto;
-        margin-bottom: 1rem;
+        margin: 1.5rem 0;
+        position: relative;
+        box-shadow: 
+          0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -1px rgba(0, 0, 0, 0.06),
+          0 0 0 1px rgba(0, 0, 0, 0.1) inset;
       }
       
       pre code {
         background: none;
         padding: 0;
+        color: #e2e8f0;
+        font-size: 0.9em;
+        line-height: 1.6;
+      }
+      
+      pre::before {
+        content: '';
+        display: block;
+        width: 52px;
+        height: 12px;
+        background-image: radial-gradient(circle, #ff5f56 6px, transparent 6px),
+                          radial-gradient(circle, #ffbd2e 6px, transparent 6px),
+                          radial-gradient(circle, #27c93f 6px, transparent 6px);
+        background-position: 0 0, 20px 0, 40px 0;
+        background-repeat: no-repeat;
+        margin-bottom: 0.75rem;
+        opacity: 0.8;
       }
       
       blockquote {
@@ -184,6 +208,77 @@ const { title, description = "Michael Liu's personal blog" } = Astro.props;
       img {
         max-width: 100%;
         height: auto;
+      }
+
+      /* Syntax Highlighting */
+      pre code .token.comment,
+      pre code .token.prolog,
+      pre code .token.doctype,
+      pre code .token.cdata {
+        color: #64748b;
+        font-style: italic;
+      }
+      
+      pre code .token.keyword,
+      pre code .token.atrule,
+      pre code .token.attr-value,
+      pre code .token.selector {
+        color: #c084fc;
+      }
+      
+      pre code .token.function,
+      pre code .token.class-name,
+      pre code .token.property {
+        color: #60a5fa;
+      }
+      
+      pre code .token.string,
+      pre code .token.char,
+      pre code .token.attr-name,
+      pre code .token.builtin {
+        color: #4ade80;
+      }
+      
+      pre code .token.number,
+      pre code .token.boolean,
+      pre code .token.constant {
+        color: #fbbf24;
+      }
+      
+      pre code .token.operator,
+      pre code .token.entity,
+      pre code .token.url,
+      pre code .token.variable,
+      pre code .token.punctuation {
+        color: #94a3b8;
+      }
+      
+      pre code .token.tag,
+      pre code .token.namespace {
+        color: #f472b6;
+      }
+      
+      pre code .token.important,
+      pre code .token.bold {
+        font-weight: bold;
+      }
+      
+      pre code .token.italic {
+        font-style: italic;
+      }
+      
+      /* Code block language label */
+      pre[class*="language-"]::after,
+      pre[data-language]::after {
+        content: attr(data-language);
+        position: absolute;
+        top: 0.75rem;
+        right: 1rem;
+        font-size: 0.75rem;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 500;
       }
 
       /* KaTeX adjustments for clean look */

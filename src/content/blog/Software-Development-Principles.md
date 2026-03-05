@@ -24,7 +24,7 @@ Asynchronous (Asynchronous) programming is a way of executing program without wa
 During program execution, some operations—such as network requests, file reading and writing, or database access—may take a long time. If these operations are executed synchronously, the program may become stuck at that step, and the user interface may appear to "freeze." With asynchronous execution, however, the program can send a request without blocking the main thread and process the result later when it arrives. This makes the program more efficient and responsive.
 
 A Python Example
-```
+```python
 import asyncio
 
 async def fetch_data():
