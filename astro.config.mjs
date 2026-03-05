@@ -15,7 +15,6 @@ export default defineConfig({
     syntaxHighlight: 'shiki',
     shikiConfig: {
       theme: 'github-dark',
-      wrap: true,
     },
   },
   // Optional: Configure output directory
