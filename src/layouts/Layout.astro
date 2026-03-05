@@ -172,13 +172,32 @@ const { title, description = "Michael Liu's personal blog" } = Astro.props;
         display: block;
         width: 52px;
         height: 12px;
-        background-image: radial-gradient(circle, #ff5f56 6px, transparent 6px),
-                          radial-gradient(circle, #ffbd2e 6px, transparent 6px),
-                          radial-gradient(circle, #27c93f 6px, transparent 6px);
+        background-image: radial-gradient(circle, #64748b 6px, transparent 6px),
+                          radial-gradient(circle, #64748b 6px, transparent 6px),
+                          radial-gradient(circle, #64748b 6px, transparent 6px);
         background-position: 0 0, 20px 0, 40px 0;
         background-repeat: no-repeat;
         margin-bottom: 0.75rem;
-        opacity: 0.8;
+        opacity: 0.6;
+      }
+      
+      /* Override Shiki colors - remove red and yellow */
+      pre code span[style*="#F97583"] {
+        color: #7dd3fc !important;
+      }
+      
+      pre code span[style*="#79B8FF"] {
+        color: #a5b4fc !important;
+      }
+      
+      /* Remove line breaks between lines */
+      pre code .line {
+        display: inline;
+      }
+      
+      pre code .line::after {
+        content: '\A';
+        white-space: pre;
       }
       
       blockquote {
