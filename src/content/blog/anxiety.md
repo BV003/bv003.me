@@ -29,6 +29,18 @@ Today is February 14, 2026, and it has been four months since I wrote down the a
 
 One thing that makes me very angry is that many people have received offers from the UCSD. Among them, many come from universities that are not very strong. Some students from 211 universities received offers, but as a student from a 985 university, I still haven't received one.[^2] I feel that my efforts in undergraduate study were meaningless.
 
+---
+
+### 2026/3/5
+
+Well, the situation is not very good right now. I received some rejection letters from universities. Let's wait and see what will happen.
+
+One thing that makes me feel angry is what the admission committee does. I believe Charlie Munger's opinion that there are many smart people in universities whose wisdom can be used in the real world. But they also do some shitty and stupid things, like admissions.
+
+Based on my observation, the admission criteria are very unfair and unclear. They don't value undergraduate school ranking and have a preference for overseas universities (overseas here means outside China). However, Chinese students in China usually have a better level of science and engineering than Chinese students overseas. I know there are many excellent students who are receiving their undergraduate education overseas. Sorry about that; I am not offending you. I am expressing an overall average phenomenon.
+
+In this way, universities can't announce that they have the best young people of their generation. There is a systematic bias. Only the real world can be the final judge.
+
 [^1]: Thank God.
 
 [^2]: In China, 985 and 211 refer to groups of universities, and 985 universities are generally considered better than 211 universities.
