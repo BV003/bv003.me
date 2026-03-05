@@ -12,8 +12,10 @@ export default defineConfig({
   markdown: {
     remarkPlugins: [remarkMath],
     rehypePlugins: [rehypeKatex],
+    syntaxHighlight: 'shiki',
     shikiConfig: {
-      theme: 'github-light',
+      theme: 'github-dark',
+      wrap: true,
     },
   },
   // Optional: Configure output directory
