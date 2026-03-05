@@ -268,9 +268,8 @@ const { title, description = "Michael Liu's personal blog" } = Astro.props;
       }
       
       /* Code block language label */
-      pre[class*="language-"]::after,
-      pre[data-language]::after {
-        content: attr(data-language);
+      pre[class*="language-"]::after {
+        content: attr(class);
         position: absolute;
         top: 0.75rem;
         right: 1rem;
@@ -279,6 +278,27 @@ const { title, description = "Michael Liu's personal blog" } = Astro.props;
         text-transform: uppercase;
         letter-spacing: 0.05em;
         font-weight: 500;
+      }
+
+      /* Terminal/Output block styling */
+      pre[class*="language-text"],
+      pre[class*="language-output"] {
+        background: #0f172a;
+        border: 1px solid #334155;
+      }
+      
+      pre[class*="language-text"] code,
+      pre[class*="language-output"] code {
+        color: #4ade80;
+        text-shadow: 0 0 2px rgba(74, 222, 128, 0.3);
+      }
+      
+      pre[class*="language-text"]::before,
+      pre[class*="language-output"]::before {
+        background-image: radial-gradient(circle, #22c55e 6px, transparent 6px),
+                          radial-gradient(circle, #22c55e 6px, transparent 6px),
+                          radial-gradient(circle, #22c55e 6px, transparent 6px);
+        opacity: 0.6;
       }
 
       /* KaTeX adjustments for clean look */
