@@ -164,9 +164,9 @@ const { title, description = "Michael Liu's personal blog" } = Astro.props;
         padding: 0;
         color: #e2e8f0;
         font-size: 0.875em;
-        line-height: 1;
+        line-height: 1.7;
       }
-      
+
       pre::before {
         content: '';
         display: block;
@@ -180,24 +180,14 @@ const { title, description = "Michael Liu's personal blog" } = Astro.props;
         margin-bottom: 0.75rem;
         opacity: 0.8;
       }
-      
+
       /* Override Shiki colors - remove red and yellow */
       pre code span[style*="#F97583"] {
         color: #7dd3fc !important;
       }
-      
+
       pre code span[style*="#79B8FF"] {
         color: #a5b4fc !important;
-      }
-      
-      /* Remove line breaks between lines */
-      pre code .line {
-        display: inline;
-      }
-      
-      pre code .line::after {
-        content: '\A';
-        white-space: pre;
       }
       
       blockquote {
