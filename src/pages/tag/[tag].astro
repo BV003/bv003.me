@@ -1,0 +1,74 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getCollection } from 'astro:content';
+import { getReadingTime } from '../../utils/readingTime';
+
+export async function getStaticPaths() {
+  const tags = ['Tech', 'Money', 'Life'];
+  return tags.map((tag) => ({
+    params: { tag: tag.toLowerCase() },
+    props: { tag },
+  }));
+}
+
+const { tag } = Astro.props;
+
+const allPosts = await getCollection('blog');
+
+const posts = allPosts
+  .filter((post) => post.data.tags?.includes(tag))
+  .map((post) => ({
+    ...post,
+    readingTime: getReadingTime(post.body || ''),
+  }))
+  .sort((a, b) => {
+    if (a.data.pinned && !b.data.pinned) return -1;
+    if (!a.data.pinned && b.data.pinned) return 1;
+    return b.data.pubDate.getTime() - a.data.pubDate.getTime();
+  });
+---
+
+<Layout title={`${tag} - Michael Liu`} description={`Posts tagged with ${tag}`}>
+  <Header />
+  
+  <main style="max-width: 680px; margin: 0 auto; padding: 1rem 1.5rem 3rem;">
+    <div style="margin-bottom: 2rem;">
+      <a href="/" style="text-decoration: none; color: #666; font-size: 0.875rem;">← Back to all posts</a>
+    </div>
+    
+    <h1 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 1.5rem;">
+      <span
+        style="
+          display: inline-block;
+          padding: 0.25rem 0.75rem;
+          font-size: 0.875rem;
+          border: 1px solid #000;
+          color: #000;
+          font-weight: 500;
+          margin-right: 0.5rem;
+        "
+      >
+        {tag}
+      </span>
+    </h1>
+    
+    {posts.length === 0 ? (
+      <p style="color: #666;">No posts found with this tag.</p>
+    ) : (
+      <div>
+        {posts.map((post) => (
+          <PostCard
+            title={post.data.title}
+            slug={post.data.slug}
+            pubDate={post.data.pubDate}
+            description={post.data.description}
+            readingTime={post.readingTime}
+            pinned={post.data.pinned}
+          />
+        ))}
+      </div>
+    )}
+  </main>
+</Layout>

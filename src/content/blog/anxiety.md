@@ -4,6 +4,7 @@ slug: "anxiety"
 pubDate: 2025-10-19
 description: ""
 subtitle: "My struggles while preparing for graduate school applications and internship hunting."
+tags: ["Life"]
 ---
 ### 2025/10/19
 

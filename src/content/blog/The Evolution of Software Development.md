@@ -4,6 +4,7 @@ slug: "The-Evolution-of-Software-Development"
 pubDate: 2026-3-8
 description: ""
 subtitle: ""
+tags: ["Tech"]
 ---
 
 ### Claude code and Opencode

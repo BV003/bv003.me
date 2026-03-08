@@ -4,6 +4,7 @@ slug: "Professionals-self-media"
 pubDate: 2025-10-12
 description: ""
 subtitle: ""
+tags: ["Life"]
 ---
 
 In today’s world, individuals have many ways to spread their influence. From a format perspective, there are text, audio, images, and video. From a content perspective, there are professional, popular, and somewhere in between. Today, I’d like to sort through these options.

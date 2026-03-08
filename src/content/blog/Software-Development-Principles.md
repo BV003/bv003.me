@@ -5,6 +5,7 @@ pubDate: 2026-01-18
 description: "An exploration of overloading, inheritance, polymorphism, and asynchronous programming principles."
 subtitle: "Michael Liu | Jan 18, 2026"
 pinned: true
+tags: ["Tech"]
 ---
 
 In software development, principles such as overloading, inheritance, and polymorphism are more than just technical terms—they shape the way we think about building systems. This article explores the essence of these principles and shows how thoughtful design can transform ordinary code into a robust architecture.
