@@ -38,20 +38,8 @@ const posts = allPosts
       <a href="/" style="text-decoration: none; color: #666; font-size: 0.875rem;">← Back to all posts</a>
     </div>
     
-    <h1 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 1.5rem;">
-      <span
-        style="
-          display: inline-block;
-          padding: 0.25rem 0.75rem;
-          font-size: 0.875rem;
-          border: 1px solid #000;
-          color: #000;
-          font-weight: 500;
-          margin-right: 0.5rem;
-        "
-      >
-        {tag}
-      </span>
+    <h1 style="font-size: 1.5rem; font-weight: 400; margin-bottom: 1.5rem; color: #000;">
+      #{tag}
     </h1>
     
     {posts.length === 0 ? (
