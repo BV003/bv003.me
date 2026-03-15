@@ -14,6 +14,14 @@ One thing to watch out for is being hidden within the collective. The work you d
 ### Build a Personal Brand
 Google Scholar, GitHub, blog—I connect them all through my personal website.
 
+### Build Durable Engineering Capabilities Early
+
+In the early stage of a career, the goal should be to build a strong capability structure rather than chasing specific job titles. Focus on developing system fundamentals (operating systems, networking, distributed systems), performance engineering (concurrency, memory, low-latency optimization), infrastructure skills (cluster management, scheduling, monitoring), and the ability to abstract complex systems. These foundational capabilities retain value for over a decade and are broadly applicable across fields such as AI infrastructure, cloud computing, quantitative systems, and large-scale distributed platforms.
+
+### Applying the Barbell Strategy to a Technical Career
+
+Inspired by the Barbell Strategy proposed by Nassim Nicholas Taleb, a balanced technical path can combine stability and exploration. Allocate roughly 80% of time to building solid engineering capabilities—developing systems, infrastructure, and production-grade software—while reserving the remaining 20% for exploratory research, new ideas, and emerging technologies. This approach provides a strong practical foundation while maintaining exposure to innovation and intellectual upside.
+
 ### Learn New Technologies the Market Needs
 Lifelong learning. Spend some time exploring new technologies, maybe create a simple demo and put it on GitHub, or write a blog post, or even record a video. Finding peers to discuss with is also a good option.
 
