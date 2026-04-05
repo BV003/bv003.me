@@ -6,10 +6,9 @@ description: ""
 subtitle: "My struggles while preparing for graduate school applications and internship hunting."
 tags: ["Life"]
 ---
-### 2025/10/19
-
 > 胜人者有力，自胜者强。  ——老子
 
+### 2025/10/19
 The Stoic school emphasizes that a person should be able to take control of their own life. I think I really need to do that now.
 
 I plan to pursue a graduate degree in the U.S. in Fall 2026, so I’ve started preparing my applications recently. The first step is choosing the schools. Unexpectedly, I began to feel anxious at this stage. There are several great programs—about three or four, such as UT Austin and Georgia Tech—and I really want to get into them. I can’t even imagine how happy I would be if I got admitted. The prestige of these schools would also greatly help me when looking for jobs in the future.
