@@ -42,6 +42,17 @@ Based on my observation, the admission criteria are very unfair and unclear. The
 
 In this way, universities can't announce that they have the best young people of their generation. There is a systematic bias. Only the real world can be the final judge.
 
+---
+
+### 2026/4/5
+It has been a month since I last wrote in this blog, and a lot has changed.
+The first update is about WISC CSPMP. One morning, when I woke up in bed, I suddenly wanted to check my email on my MacBook—something I had never done before. That’s when I saw the offer email from the University of Wisconsin–Madison—my first offer! I was so happy that day; it was the happiest moment during the entire application process.
+The second offer came from Georgia Tech, which was very exciting as well. Several days later, I received offers from UIUC and UW Seattle. In the end, things seem to have turned out well.
+
+In fact, I was quite torn about which school to choose. I liked both UW Seattle and Georgia Tech. Georgia Tech has lower tuition fees, and living in Atlanta is cheaper than in Seattle. However, I don’t like the heavy mathematical focus and large workload in Georgia Tech’s CSE program, so I decided to join UW.Both schools are great, and now it’s time to focus on the next stage.
+
+So this blog, from October 19, 2025 to April 5, 2026, comes to an end. It’s been a great journey, and now it’s time to move on to new challenges. I hope I can succeed.
+
 [^1]: Thank God.
 
 [^2]: In China, 985 and 211 refer to groups of universities, and 985 universities are generally considered better than 211 universities.
