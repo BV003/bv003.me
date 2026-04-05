@@ -1,5 +1,5 @@
 ---
-title: "Anxiety"
+title: "Applying for a Master’s Degree in the U.S."
 slug: "anxiety"
 pubDate: 2025-10-19
 description: ""
