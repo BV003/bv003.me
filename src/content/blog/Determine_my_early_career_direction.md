@@ -6,7 +6,8 @@ description: ""
 subtitle: "Finding my technical focus for the next three years"
 tags: ["Tech"]
 ---
-## Mar 12 2026
+
+### Mar 12 2026
 
 ### What AI Won't Replace
 
@@ -58,7 +59,8 @@ Sometimes interesting new products—like browsers or VS Code—are happy accide
 | AI Research Engineer | Research and develop AI algorithms; propose new methods and optimizations, improve existing models | Frameworks: TensorFlow, PyTorch, JAX<br>Languages: Python, C++, R<br>Optimization: Optuna, Hyperopt, Ray Tune | Python: algorithm development<br>C++: performance optimization<br>R: statistical analysis<br>Julia: high-performance computing |
 
 
-
-## Apr 12 2026
+---
+### Apr 12 2026
 
 ### Understanding about AI infra
+
