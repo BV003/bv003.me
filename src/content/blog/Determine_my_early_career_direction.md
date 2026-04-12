@@ -6,6 +6,7 @@ description: ""
 subtitle: "Finding my technical focus for the next three years"
 tags: ["Tech"]
 ---
+## Mar 12 2026
 
 ### What AI Won't Replace
 
@@ -55,3 +56,9 @@ Sometimes interesting new products—like browsers or VS Code—are happy accide
 | Cloud Architect | Design and manage AI cloud architecture; ensure high availability, elasticity, fault tolerance, and security | Platforms: AWS, GCP, Azure<br>Storage: S3, Google Cloud Storage, Azure Blob<br>Tools: Terraform, CloudFormation | Python: automation & integration<br>Go: resource management<br>Bash/Shell: cloud ops<br>Java: cloud applications |
 | System Architect | Design overall AI system architecture; coordinate compute, storage, and network resources efficiently | Distributed: Apache Kafka, Spark, Kubernetes<br>Design Tools: UML, ArchiMate<br>Databases: SQL, NoSQL, GraphDB | Python: automation & optimization<br>Go: distributed systems<br>Java: large-scale architecture<br>C/C++: low-level optimization |
 | AI Research Engineer | Research and develop AI algorithms; propose new methods and optimizations, improve existing models | Frameworks: TensorFlow, PyTorch, JAX<br>Languages: Python, C++, R<br>Optimization: Optuna, Hyperopt, Ray Tune | Python: algorithm development<br>C++: performance optimization<br>R: statistical analysis<br>Julia: high-performance computing |
+
+
+
+## Apr 12 2026
+
+### Understanding about AI infra
