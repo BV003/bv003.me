@@ -62,5 +62,8 @@ Sometimes interesting new products—like browsers or VS Code—are happy accide
 ---
 ### Apr 12 2026
 
-### Understanding about AI infra
+### Understanding about AI Infra
 
+I’m currently most interested in AI infrastructure. In my view, AI infrastructure is about maximizing the capabilities of underlying hardware and systems, while building a solid foundation that enables higher-level software to operate efficiently. As AI continues to develop, more industries will rely on AI-driven software, which makes infrastructure—the backbone of AI—both critical and promising.  
+In addition, I’m more inclined toward engineering than research. Ideally, I would like to spend around 80% of my time on engineering work and 20% on exploring and learning new technologies.  
+Of course, there may be more cutting-edge and exciting areas than AI infrastructure. However, as a junior, I believe it’s reasonable to stay focused on AI infrastructure while keeping an open mind toward new and evolving engineering fields.
