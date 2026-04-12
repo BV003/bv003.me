@@ -45,6 +45,10 @@ Use github.
 ### Investing
 Using spare time (such as Saturdays) to invest and keep detailed records is highly valuable. This practice helps develop skills relevant for transitions into hedge funds or investment firms. Over the long term, disciplined investing can also enable financial independence, making it unnecessary to work solely for money.
 
+### Big picture perspective
+
+As the saying goes, everything happens for a reason. However, I believe we can be more proactive in shaping that meaning. Every internship, every program, and every job can be connected into a larger narrative—like chapters coming together to form a piece of music, revealing a unified theme.
+
 ### References
 1. Sonmez, J. (2015). Soft Skills: The Software Developer’s Life Manual. New York: Manning Publications. (Paperback, January 6, 2015)
 
