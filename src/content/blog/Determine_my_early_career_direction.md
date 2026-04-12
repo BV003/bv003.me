@@ -9,7 +9,7 @@ tags: ["Tech"]
 
 ### Mar 12 2026
 
-### What AI Won't Replace
+#### What AI Won't Replace
 
 When I started using vibe coding, I realized something profound was happening. No wonder so many PMs keep saying they'll replace programmers—I’ve actually seen colleagues with zero experience ship web apps. 
 
@@ -19,7 +19,7 @@ AI suggests focusing on complex tasks or domain-specific work. I'm not particula
 
 Small-scale software development and frontend work feel increasingly pointless.
 
-### Infrastructure
+#### Infrastructure
 
 I've suddenly become obsessed with infrastructure. I like applying the barbell strategy to engineering work with high certainty.
 
@@ -29,19 +29,19 @@ Personally, I feel infrastructure engineering is deeply technical, and the syste
 
 Plus, infrastructure skills transfer well from tech companies to quant dev roles. I just need solid financial markets knowledge, which is exactly what I'm planning to spend Saturdays learning.
 
-### Current Focus
+#### Current Focus
 
 Learning complex applications while looking for opportunities to work on complex system architecture.
 
 Dedicating an hour daily to personal project preparation.
 
-### Stay Open
+#### Stay Open
 
 Keep an open mind.
 
 Sometimes interesting new products—like browsers or VS Code—are happy accidents. You can't plan everything rationally; you need intuition too. Everything is change.
 
-### AI Infrastructure Roles Breakdown
+#### AI Infrastructure Roles Breakdown
 
 | Role | Responsibilities | Tech Stack | Languages |
 |------|------------------|------------|-----------|
@@ -62,10 +62,12 @@ Sometimes interesting new products—like browsers or VS Code—are happy accide
 ---
 ### Apr 12 2026
 
-### Understanding about AI Infra
+#### Understanding about AI Infra
 
 I’m currently most interested in AI infrastructure. In my view, AI infrastructure is about maximizing the capabilities of underlying hardware and systems, while building a solid foundation that enables higher-level software to operate efficiently. As AI continues to develop, more industries will rely on AI-driven software, which makes infrastructure—the backbone of AI—both critical and promising. 
 
 In addition, I’m more inclined toward engineering than research. Ideally, I would like to spend around 80% of my time on engineering work and 20% on exploring and learning new technologies.  
 
 Of course, there may be more cutting-edge and exciting areas than AI infrastructure. However, as a junior, I believe it’s reasonable to stay focused on AI infrastructure while keeping an open mind toward new and evolving engineering fields.
+
+I really hope we can use local llm, cause I am too worry about openai and claude code have too many power. With the development of opensource llm and hardware, I hope we can do that.
