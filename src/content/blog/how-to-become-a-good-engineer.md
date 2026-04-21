@@ -12,15 +12,21 @@ A good career is one where compounding exists. The work you do now will lead to 
 One thing to watch out for is being hidden within the collective. The work you do may not receive clear external feedback. This has two sides: on the positive side, even if your work isn’t outstanding, you won’t be criticized; but on the negative side, you can’t improve yourself based on external feedback. You need to actively join the game.
 
 ### Build a Personal Brand
-Google Scholar, GitHub, blog—I connect them all through my personal website.
+Google Scholar, GitHub, blog, I connect them all through my personal website.
+
+And just like a sale, sell yourself.
 
 ### Build Durable Engineering Capabilities Early
 
-In the early stage of a career, the goal should be to build a strong capability structure rather than chasing specific job titles. Focus on developing system fundamentals (operating systems, networking, distributed systems), performance engineering (concurrency, memory, low-latency optimization), infrastructure skills (cluster management, scheduling, monitoring), and the ability to abstract complex systems. These foundational capabilities retain value for over a decade and are broadly applicable across fields such as AI infrastructure, cloud computing, quantitative systems, and large-scale distributed platforms.
+In the early stage of a career, the goal should be to build a strong capability structure rather than chasing specific job titles.
+
+For example, I think doing interesting and challenging things with a good vibe at a small company is better than being a code monkey in big tech.
 
 ### Applying the Barbell Strategy to a Technical Career
 
-Inspired by the Barbell Strategy proposed by Nassim Nicholas Taleb, a balanced technical path can combine stability and exploration. Allocate roughly 80% of time to building solid engineering capabilities—developing systems, infrastructure, and production-grade software—while reserving the remaining 20% for exploratory research, new ideas, and emerging technologies. This approach provides a strong practical foundation while maintaining exposure to innovation and intellectual upside.
+Inspired by the Barbell Strategy proposed by Nassim Nicholas Taleb, a balanced technical path can combine stability and exploration. Allocate roughly 80% of time to building solid engineering capabilities while reserving the remaining 20% for exploratory research, new ideas, and emerging technologies. 
+
+This approach provides a strong practical foundation while maintaining exposure to innovation and intellectual upside.
 
 ### Learn New Technologies the Market Needs
 Lifelong learning. Spend some time exploring new technologies, maybe create a simple demo and put it on GitHub, or write a blog post, or even record a video. Finding peers to discuss with is also a good option.
@@ -39,15 +45,15 @@ Stay humble, and don’t boast about your achievements when luck is on your side
 ### Elegance
 Let’s build something beautiful, beautifully.
 
-### Marketing
-Use github.
-
 ### Investing
 Using spare time (such as Saturdays) to invest and keep detailed records is highly valuable. This practice helps develop skills relevant for transitions into hedge funds or investment firms. Over the long term, disciplined investing can also enable financial independence, making it unnecessary to work solely for money.
 
-### Big picture perspective
+### Big Picture Perspective
 
 As the saying goes, everything happens for a reason. However, I believe we can be more proactive in shaping that meaning. Every internship, every program, and every job can be connected into a larger narrative—like chapters coming together to form a piece of music, revealing a unified theme.
+
+### Some Good Habits
+- Have a work notebook, draw and put something in there.
 
 ### References
 1. Sonmez, J. (2015). Soft Skills: The Software Developer’s Life Manual. New York: Manning Publications. (Paperback, January 6, 2015)
