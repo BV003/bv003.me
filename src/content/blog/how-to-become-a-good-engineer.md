@@ -55,7 +55,7 @@ Using spare time (such as Saturdays) to invest and keep detailed records is high
 As the saying goes, everything happens for a reason. However, I believe we can be more proactive in shaping that meaning. Every internship, every program, and every job can be connected into a larger narrative—like chapters coming together to form a piece of music, revealing a unified theme.
 
 ### Some Good Habits
-- Keep a work notebook, jot down ideas and put things in it.
+Keep a work notebook, jot down ideas and put things in it.
 
 
 ### References
