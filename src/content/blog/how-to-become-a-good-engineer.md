@@ -11,6 +11,8 @@ tags: ["Tech"]
 A good career is one where compounding exists. The work you do now will lead to better opportunities in the future. For me at this stage, internships (work) and research in trending areas of industry are useful things.
 One thing to watch out for is being hidden within the collective. The work you do may not receive clear external feedback. This has two sides: on the positive side, even if your work isn’t outstanding, you won’t be criticized; but on the negative side, you can’t improve yourself based on external feedback. You need to actively join the game.
 
+Don't waste a single day.
+
 ### Build a Personal Brand
 Google Scholar, GitHub, blog, I connect them all through my personal website.
 
@@ -53,7 +55,8 @@ Using spare time (such as Saturdays) to invest and keep detailed records is high
 As the saying goes, everything happens for a reason. However, I believe we can be more proactive in shaping that meaning. Every internship, every program, and every job can be connected into a larger narrative—like chapters coming together to form a piece of music, revealing a unified theme.
 
 ### Some Good Habits
-- Have a work notebook, draw and put something in there.
+- Keep a work notebook, jot down ideas and put things in it.
+
 
 ### References
 1. Sonmez, J. (2015). Soft Skills: The Software Developer’s Life Manual. New York: Manning Publications. (Paperback, January 6, 2015)
