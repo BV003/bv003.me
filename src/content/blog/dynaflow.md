@@ -7,7 +7,8 @@ tags: ["Tech"]
 
 ### DYNAFLOW
 
-The paper named 'DYNAFLOW: TRANSPARENT AND FLEXIBLE INTRA-DEVICE PARALLELISM VIA PROGRAMMABLE OPERATOR SCHEDULING'. And the link is https://arxiv.org/abs/2605.21603. The work is done by people from UW and SJTU.
+The paper named 'DYNAFLOW: TRANSPARENT AND FLEXIBLE INTRA-DEVICE PARALLELISM VIA PROGRAMMABLE OPERATOR SCHEDULING'.
+And the link is https://arxiv.org/abs/2605.21603. The work is done by people from UW and SJTU.
 
 
 ### Motivation
