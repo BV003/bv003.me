@@ -2,8 +2,6 @@
 title: "What I Learned from University"
 slug: "what-i-learned-from-university"
 pubDate: 2025-10-6
-description: ""
-subtitle: ""
 tags: ["Life"]
 ---
 > 过而不改，是谓过矣 — Confucius

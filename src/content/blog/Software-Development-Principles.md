@@ -2,8 +2,6 @@
 title: "Software Development Principles"
 slug: "software-development-principles"
 pubDate: 2026-01-18
-description: "An exploration of overloading, inheritance, polymorphism, and asynchronous programming principles."
-subtitle: "Michael Liu | Jan 18, 2026"
 tags: ["Tech"]
 ---
 

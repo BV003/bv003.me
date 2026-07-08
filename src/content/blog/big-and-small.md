@@ -2,8 +2,6 @@
 title: "Big and Small"
 slug: "big-and-small"
 pubDate: 2026-4-24
-description: ""
-subtitle: ""
 tags: ["Tech"]
 ---
 

@@ -5,12 +5,11 @@ interface Props {
   title: string;
   slug: string;
   pubDate: Date;
-  description?: string;
   readingTime?: number;
   pinned?: boolean;
 }
 
-const { title, slug, pubDate, description, readingTime, pinned } = Astro.props;
+const { title, slug, pubDate, readingTime, pinned } = Astro.props;
 ---
 
 <article style="margin-bottom: 1.5rem;">

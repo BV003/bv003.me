@@ -2,8 +2,6 @@
 title: "The Evolution of Software Development"
 slug: "the-evolution-of-software-development"
 pubDate: 2026-3-8
-description: ""
-subtitle: ""
 tags: ["Tech"]
 ---
 

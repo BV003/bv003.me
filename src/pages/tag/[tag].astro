@@ -30,7 +30,7 @@ const posts = allPosts
   });
 ---
 
-<Layout title={`${tag} - Michael Liu`} description={`Posts tagged with ${tag}`}>
+<Layout title={`${tag} - Michael Liu`}>
   <Header />
   
   <main style="max-width: 680px; margin: 0 auto; padding: 1rem 1.5rem 3rem;">
@@ -51,7 +51,6 @@ const posts = allPosts
             title={post.data.title}
             slug={post.data.slug}
             pubDate={post.data.pubDate}
-            description={post.data.description}
             readingTime={post.readingTime}
             pinned={post.data.pinned}
           />

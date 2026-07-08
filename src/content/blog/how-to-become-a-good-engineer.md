@@ -2,8 +2,6 @@
 title: "How to Become a Good Engineer"
 slug: "how-to-become-a-good-engineer"
 pubDate: 2025-10-1
-description: ""
-subtitle: "This article is about how to become a good engineer, written mainly for myself. Since my understanding is constantly evolving, this piece will also keep changing."
 pinned: true
 tags: ["Tech"]
 ---

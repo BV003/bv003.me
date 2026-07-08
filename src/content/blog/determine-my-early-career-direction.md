@@ -2,8 +2,6 @@
 title: "Determining My Early Career Direction"
 slug: "determine-my-early-career-direction"
 pubDate: 2026-3-12
-description: ""
-subtitle: "Finding my technical focus for the next three years"
 tags: ["Tech"]
 ---
 

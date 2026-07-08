@@ -19,7 +19,7 @@ const sortedPosts = posts
   });
 ---
 
-<Layout title="Blog - Michael Liu" description="Personal blog of Michael Liu - AI research, engineering, and more.">
+<Layout title="Blog - Michael Liu">
   <Header />
   
   <main style="max-width: 680px; margin: 0 auto; padding: 1rem 1.5rem 3rem;">
@@ -32,7 +32,6 @@ const sortedPosts = posts
             title={post.data.title}
             slug={post.data.slug}
             pubDate={post.data.pubDate}
-            description={post.data.description}
             readingTime={post.readingTime}
             pinned={post.data.pinned}
           />

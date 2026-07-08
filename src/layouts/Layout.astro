@@ -1,10 +1,9 @@
 ---
 export interface Props {
   title: string;
-  description?: string;
 }
 
-const { title, description = "Michael Liu's personal blog" } = Astro.props;
+const { title } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -12,7 +11,7 @@ const { title, description = "Michael Liu's personal blog" } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content={description} />
+    <meta name="description" content="Michael Liu's personal blog - AI research, engineering, and more." />
     <link rel="icon" type="image/png" href="/profile.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="/rss.xml" />
