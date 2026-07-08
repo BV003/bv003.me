@@ -5,7 +5,3 @@ export function formatDate(date: Date): string {
     day: 'numeric',
   });
 }
-
-export function formatDateISO(date: Date): string {
-  return date.toISOString();
-}
