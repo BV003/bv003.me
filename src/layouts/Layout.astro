@@ -165,19 +165,7 @@ const { title } = Astro.props;
         line-height: 1.7;
       }
 
-      pre::before {
-        content: '';
-        display: block;
-        width: 60px;
-        height: 12px;
-        background-image: radial-gradient(circle, #ff5f56 5px, transparent 6px),
-                          radial-gradient(circle, #ffbd2e 5px, transparent 6px),
-                          radial-gradient(circle, #27c93f 5px, transparent 6px);
-        background-position: -20px 0, 0px 0, 20px 0;
-        background-repeat: no-repeat;
-        margin-bottom: 0.75rem;
-        opacity: 0.8;
-      }
+
 
       /* Override Shiki colors - remove red and yellow */
       pre code span[style*="#F97583"] {
