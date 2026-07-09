@@ -77,6 +77,9 @@ DynaFlow addresses this conflict by applying static optimization techniques at t
 
 ### Evaluation
 
+Use lines of code(LOC) to evaluate frontend effectiveness.
+
+We evaluate the benefits brought by its backend design of low-level optimization compatibility by measuring the CPU execution time of different DynaFlow configurations.
 
 
 ### Takeaways
