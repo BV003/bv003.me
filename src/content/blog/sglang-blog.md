@@ -18,8 +18,6 @@ tags: ["Tech"]
 }
 ```
 
-### 
-
 ### Backend: Automatic KV Cache Reuse with RadixAttention
 KV cache reuse means different prompts with the same prefix can share the intermediate KV cache and avoid redundant memory and computation. To systematically exploit these reuse opportunities, we introduce RadixAttention, a novel technique for automatic KV cache reuse during runtime.
 
