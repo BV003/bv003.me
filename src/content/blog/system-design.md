@@ -5,8 +5,9 @@ pubDate: 2026-07-16
 tags: ["Tech"]
 ---
 
-### Citation
-Record about learn book 'System Design Interview'.
+### Reference Book Overview
+Learning notes and core insights from 'System Design Interview' by Alex Xu.
+
 
 ### Proximity Service
 
@@ -44,7 +45,6 @@ High-level design
 Algorithms to find nearby businesses
 Data model
 
-#### API Design
 
 #### High-level design
 primary-secondary(主从结构)
@@ -57,3 +57,23 @@ Use GeoHash
 
 However, the reverse is not true: two locations can be very close but
 have no shared prefix at all.
+
+#### Design Deep Dive
+
+**Scale the database**
+The data for the business table may not all fit in one server, so it is a good candidate for sharding. The easiest approach is to shard everything by business ID. 
+
+There are two ways to structure the table. Option 1: For each geohash key, there is a JSON array of business IDs in a single row. Option 2: If there are multiple businesses in the same geohash,
+there will be multiple rows, one for each business. 
+
+**Scale the geospatial index**
+In our case, the full dataset for the geospatial index table is not large. However, depending on the read volume, a single database server might not have enough CPU or network bandwidth to handle all read requests. If that is the case, it is necessary to spread the read load among multiple database servers. We can add read replicas, or shard the database. A better approach, in this case, is to have a series of read replicas to help with the read load.
+
+**Caching**
+If you find out that caching does fit the business requirements, then you can proceed with discussions about caching strategy. Since business data is relatively stable, we precompute the list of business IDs for a given geohash and store it in a key-value store such as Redis. 
+
+We can get away with one modern Redis server from the memory usage perspective, but to ensure high availability and reduce cross continent latency, we deploy the Redis cluster across the globe.
+
+Makes users physically “closer” to the system. Users from the US West are connected to the data centers in that region, and users from Europe are connected with data centers in Europe.
+
+### Nearby Friends
