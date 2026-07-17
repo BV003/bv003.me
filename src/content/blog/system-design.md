@@ -77,3 +77,26 @@ We can get away with one modern Redis server from the memory usage perspective, 
 Makes users physically “closer” to the system. Users from the US West are connected to the data centers in that region, and users from Europe are connected with data centers in Europe.
 
 ### Nearby Friends
+
+In proximity services, the addresses for businesses are static as their locations do not change, while in "nearby friends" data is more dynamic because user locations change frequently. 
+
+#### Step 1 - Understand the Problem and Establish Design Scope
+Before starting with the design, we need to ask clarification questions to narrow down the scope.
+
+**Functional requirements** Users should be able to see nearby friends on their mobile apps. Each entry in the nearby friend list has a distance and a timestamp indicating when the distance was last updated. Nearby friend lists should be updated every few seconds.
+
+**Non-functional requirements** Low latency. It’s important to receive location updates from friends without too much delay. Reliability. The system needs to be reliable overall, but occasional data point loss is acceptable. 
+
+#### Step 2 - Propose High-Level Design and Get Buy-In
+
+High-level design Peer-to-peer is not practical for a mobile device with sometimes flaky connections and a tight power consumption budget, but the idea sheds some light on the general design direction. 
+
+HTTP is a basic communication rule that works in a simple one-shot way. Every time your browser or app needs data, it sends a separate request to the server, the server sends back one single response, and then their connection shuts down immediately. The server can never send you new information on its own—you have to keep making new requests repeatedly to get updates, and each request carries extra repeated data that wastes small amounts of bandwidth.
+
+WebSocket builds on HTTP to create a long-lasting, two-way connection after one initial setup request. Once this connection opens, it stays active until either side closes it. Both your device and the server can send messages to each other at any moment without starting a new request every time. There is far less extra repeated data sent with each message, so it works much faster for real-time things like live chats, game updates, or live data feeds.
+
+**Load balancer** The load balancer sits in front of the RESTful API servers and the stateful, bi-directional WebSocket servers. It distributes traffic across those servers to spread out load evenly.
+
+**Websocket servers** This is a cluster of stateful servers that handles the near real-time update of friends’ locations. Each client maintains one persistent WebSocket connection to one of these servers. Note “WebSocket connection” and “WebSocket connection handler” are interchangeable in this chapter.
+
+**Redis pub/sub server**
