@@ -1,0 +1,62 @@
+---
+title: "Paper Notes: UniCache"
+slug: "dynaflow"
+pubDate: 2026-07-20
+tags: ["Tech"]
+---
+
+### UniCache
+
+The paper named "UniCache: Unifying Prefix Cache Eviction for Heterogeneous LLM Serving Workloads" The work is done by people from Rice.
+
+### Motivation
+
+
+
+### Background
+
+### Key Ideas
+
+### How It Works
+
+### Evaluation
+
+### Takeaways
+
+### Key Techniques
+
+#### PagedAttention
+
+传统推理框架（PagedAttention 出现之前）给每个请求的 KV Cache 分配的是一整块连续显存，而且要按”这个请求可能生成的最大长度”来预留。这带来：内部碎片（Internal Fragmentation）：一个请求最大可能生成 2048 个 Token，就先占好 2048 个 Token 的空间，但它实际可能只生成了 100 个就遇到 EOS 停了。剩下 1948 个 Token 的空间被这个请求”锁着”却没用上，其它请求也进不来。外部碎片（External Fragmentation）：不同请求预留的大块之间会留下大小不一的空隙，这些零碎空间加起来可能不小，但因为每一块都不够放下一个完整请求，等于全废了。
+
+操作系统几十年前就遇到过一模一样的问题：进程需要连续的内存地址空间，但物理内存被各种进程切得七零八落。操作系统的解法是虚拟内存分页——进程看到的是连续的”虚拟地址”，操作系统在背后通过页表（Page Table）把它们映射到任意分散的”物理页”上。进程感觉自己占着一整块连续内存，实际上物理上是东一块西一块拼起来的。
+
+PagedAttention 把这套机制原样搬到了 KV Cache 上：把 KV Cache 切成固定大小的 KV Block（块），每个块存固定数量 Token 的 Key 和 Value（这个数量由 block_size 决定，vLLM 中常见取值为 16）。一个请求的 KV Cache 在逻辑上是连续的”逻辑块”序列，物理上却可以散落在显存的任意位置。用一张 **Block Table**（块表） 记录”这个请求的第几个逻辑块，对应物理显存里的哪一个物理块”。
+
+分页机制还顺带解锁了一个连续分配时代做不到的能力：多个请求共享同一份物理块。共享前缀：一批请求用了相同的 System Prompt，或从同一个 Prompt 并行采样多个回答（n > 1）。它们的前缀 KV 完全相同，就没必要各存一份——让它们的块表都指向同一批物理块即可。
+
+#### Prefix Cache 共享前缀
+
+真实业务里，海量请求往往共享同一段开头——同一个几百 Token 的 System Prompt、同一份 Few-shot 示例、多轮对话里不断重复的历史。每来一个请求就把这段共享前缀重新 Prefill 一遍，是巨大的浪费。Prefix Cache 就是把这段共享前缀的 KV Cache 缓存下来、后续请求直接复用的技术。这些场景的共同点是：大量 Token 在不同请求间完全相同，且位置也相同（都在序列开头）。而Prefill 是 Compute Bound 的重活。把同一段 800 Token 的前缀对每个请求都重新 Prefill 一遍，等于反复做同样的昂贵计算。
+
+Attention 的因果性决定了一个 Token 的 Key/Value 只取决于它自己和它前面的 Token。所以两个请求只要前缀完全一致，这段前缀每个 Token 算出来的 KV 就一模一样，完全可以只算一次、大家共用。
+
+前缀能复用的前提，是显存管理支持”多个请求指向同一份 KV”。这正是上一节 PagedAttention 打下的地基:KV Cache 以固定大小的块存储，请求通过块表间接引用物理块。只要两个请求的某些前缀块内容相同，就让它们的块表指向同一个物理块，配合引用计数记录有几个请求在用。一旦某请求在共享块之后要写入不同内容，Copy-on-Write 保证互不干扰。所以 Prefix Cache 本质上是把”共享前缀块”这件事从’同时并存的请求之间’扩展到’先后到达的请求之间’：前一个请求算完的前缀块，先不急着扔，留在缓存里；后来的请求如果前缀匹配，直接复用这些块，跳过对应的 Prefill 计算。
+
+Prefix Cache = 跨请求、跨时间地复用前缀 KV 块。 PagedAttention 的块共享是空间维度（并存请求共享），Prefix Cache 把它延伸到时间维度（先后请求复用）。
+
+#### vLLM 的 Automatic Prefix Caching
+
+怎么快速判断一个新请求的某个前缀块，和缓存里的某个块”内容相同”？vLLM 的做法是给每个填满的块算一个哈希值，这个哈希由三部分组成：父块的哈希（也就是它前面所有前缀块的哈希），本块内 Token 的序列，额外标识（如 LoRA ID、多模态输入的哈希、cache salt 等）。
+
+新请求进来时，vLLM 逐块计算前缀哈希，拿去缓存表（hash → block ID 的映射）里查：命中：对应的物理块还在缓存里，直接把请求的块表指向它、增加引用计数，跳过这部分 Prefill。未命中：正常 Prefill 计算，算完后把新块的哈希登记进缓存，供后续请求复用。命中前缀缓存能直接砍掉那部分 Prefill 的计算，最直接的收益是大幅降低 TTFT（首 Token 更快出来），同时省下的算力还能服务更多请求。共享前缀越长、命中率越高，收益越大。
+
+缓存空间有限，物理块用完了就得淘汰旧的。vLLM 的策略结合了引用计数和 LRU（最近最少使用）：正在被使用的块不能淘汰：引用计数 > 0 的块（还有请求在用）受保护。空闲块按 LRU 淘汰：请求结束后，它的块引用计数归零、进入空闲队列，但内容和哈希先保留着——万一马上有匹配的新请求来，还能命中复用。当显存吃紧需要腾地方时，才真正回收最久没被用到的空闲块。
+
+#### SGLang 的 RadixAttention
+
+vLLM 的 Hash 方案高效，但它有个隐含限制：匹配是”块对齐”且”线性前缀”的——按块边界比对一条从头开始的前缀。
+
+SGLang 提出的 RadixAttention 用一棵 Radix Tree（基数树/压缩前缀树） 来管理 KV Cache 的复用：树的每条边代表一段 Token 序列，从根到某节点的路径就是一段前缀，对应缓存的 KV。新请求到来时，沿树做最长前缀匹配，匹配到的路径部分直接复用 KV，只对分叉之后的新内容做计算。
+
+想吃到前缀缓存的红利，Prompt 工程上要有意识地”把公共内容前置”——固定不变的指令、示例、上下文放最前面，变化的用户输入放最后。这是一条几乎零成本却常被忽视的优化。

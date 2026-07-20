@@ -7,8 +7,7 @@ tags: ["Tech"]
 
 ### DYNAFLOW
 
-The paper named 'DYNAFLOW: TRANSPARENT AND FLEXIBLE INTRA-DEVICE PARALLELISM VIA PROGRAMMABLE OPERATOR SCHEDULING'.
-And the link is https://arxiv.org/abs/2605.21603. The work is done by people from UW and SJTU.
+The paper named 'DYNAFLOW: TRANSPARENT AND FLEXIBLE INTRA-DEVICE PARALLELISM VIA PROGRAMMABLE OPERATOR SCHEDULING'. And the link is https://arxiv.org/abs/2605.21603. The work is done by people from UW and SJTU.
 
 
 ### Motivation
@@ -232,3 +231,23 @@ It is always executed alongside the routed unique experts to improve model quali
 │                                               │
 └───────────────────────────────────────────────┘
 ```
+
+#### Attention后端
+
+当模型不大、Batch 也不大时，还有一个更隐蔽的瓶颈会冒出来：CPU 发射 Kernel 的开销。GPU 自己不会主动干活，它每做一个操作（一次矩阵乘、一次 LayerNorm、一次激活……），都要由 CPU 通过一次”启动（launch）“命令告诉它。跑一遍 Transformer，有成百上千个这样的小操作，就对应成百上千次 CPU→GPU 的启动调用。每次启动本身有固定的 CPU 开销（构造参数、驱动调度、提交队列），量级在微秒级。
+
+平时这点开销不算什么——因为 Prefill 一步要处理成千 Token，每个 GPU Kernel 一跑就是几百微秒甚至毫秒，CPU 那点启动开销被淹没了。但 Decode 每步只处理 1 个（或很少几个）Token，每个 Kernel 的实际计算可能就几微秒，结果CPU 发射这个 Kernel 的时间比 GPU 执行它的时间还长。于是 GPU 干几微秒就停下来，眼巴巴等 CPU 发下一条命令——算力再次闲置，只不过这次不是等数据，是等指令。
+
+Attention 是 Transformer 里最重、最讲究的算子，它的 Kernel 实现直接决定推理速度。vLLM 的设计哲学是不绑死一种实现，而是提供可插拔的 Attention 后端，根据硬件、模型结构和场景自动或手动选择最优的那一个。Attention 后端是同一个数学操作的不同工程实现。它们算出的结果在数学上等价，区别在于访存模式、并行策略、对特定硬件指令和模型结构的适配程度。选对后端，同样的卡能跑出明显不同的吞吐。
+
+vLLM V1 的统一调度器会把 Prefill 的 Chunk 和 Decode 请求塞进同一步——那么这一步的 Attention 该怎么算？毕竟 Prefill 部分要算”一整段新 Token 之间 + 对历史的注意力”，Decode 部分只算”1 个新 Token 对全部历史的注意力”，两者的计算形态不一样。
+
+这就要求 Attention 后端原生支持混合批次（mixed prefill/decode batch）：在一次 Kernel 调用里，同时正确处理批中既有 Prefill 又有 Decode 的请求。FlashAttention 3 等现代后端正是为此设计的——它能接受变长的、混合阶段的输入，用统一的 Kernel 高效算完，而不需要把 Prefill 和 Decode 拆成两次 Kernel 调用。
+
+#### CUDA Graph
+
+CUDA Graph 是 NVIDIA 提供的解药：把一连串固定的 GPU 操作录制（capture）成一张”图”，之后只需一条命令重放（replay）整张图，GPU 就会依次执行录好的所有 Kernel——成百上千次 CPU 启动被压缩成一次。但 CUDA Graph 有个硬性前提：录制的操作序列和张量形状必须固定。这对 Decode 是天作之合——每步都是”处理固定 Batch 个 Token”，形状稳定，可以针对不同的 Batch Size 分别录制好图，运行时按当前 Batch Size 选对应的图重放。
+
+#### torch.compile
+
+能不能把很多小 Kernel 本身合并成更少、更大的 Kernel？ 这就是 torch.compile 干的事——它把模型的前向计算编译成优化后的图，通过算子融合（fusion）等手段减少 Kernel 数量。
