@@ -1,6 +1,6 @@
 ---
 title: "Paper Notes: UniCache"
-slug: "dynaflow"
+slug: "unicache"
 pubDate: 2026-07-20
 tags: ["Tech"]
 ---
