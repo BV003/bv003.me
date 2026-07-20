@@ -7,6 +7,21 @@
       Michael Liu's Blog
     </a>
     <div style="display: flex; gap: 1.5rem; align-items: center;">
+      <!-- Search -->
+      <div style="position: relative;">
+        <input
+          id="search-input"
+          type="text"
+          placeholder="Search posts..."
+          autocomplete="off"
+          style="font-size: 0.875rem; padding: 0.25rem 0.5rem; border: 1px solid #ccc; border-radius: 4px; outline: none; width: 140px; background: transparent;"
+        />
+        <div
+          id="search-results"
+          style="display: none; position: absolute; top: 100%; left: 0; right: 0; margin-top: 0.5rem; background: white; border: 1px solid #e5e5e5; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); z-index: 100; max-height: 320px; overflow-y: auto;"
+        ></div>
+      </div>
+      <!-- Tags -->
       <div style="position: relative;">
         <button 
           id="tags-toggle" 
@@ -36,6 +51,7 @@
 </header>
 
 <script>
+  // --- Tags dropdown close on outside click ---
   document.addEventListener('click', function(event) {
     const dropdown = document.getElementById('tags-dropdown');
     const toggle = document.getElementById('tags-toggle');
@@ -44,4 +60,71 @@
       dropdown.style.display = 'none';
     }
   });
+
+  // --- Search ---
+  (async function() {
+    const input = document.getElementById('search-input') as HTMLInputElement | null;
+    const results = document.getElementById('search-results');
+    if (!input || !results) return;
+
+    let index: { title: string; slug: string; pubDate: string; body: string }[] = [];
+
+    // Fetch the search index once
+    try {
+      const resp = await fetch('/search-index.json');
+      index = await resp.json();
+    } catch (e) {
+      console.error('Failed to load search index', e);
+      return;
+    }
+
+    function renderResults(items: typeof index) {
+      if (items.length === 0) {
+        results.innerHTML = '<div style="padding: 0.75rem 1rem; color: #999; font-size: 0.8rem;">No posts found</div>';
+        results.style.display = 'block';
+        return;
+      }
+      results.innerHTML = items.slice(0, 10).map(p => {
+        const date = new Date(p.pubDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+        return `<a href="/blog/${p.slug}" style="display: block; padding: 0.6rem 1rem; text-decoration: none; color: #000; font-size: 0.85rem; border-bottom: 1px solid #f0f0f0;"><span style="font-weight: 500;">${escapeHtml(p.title)}</span><span style="color: #999; font-size: 0.75rem; margin-left: 0.5rem;">${date}</span></a>`;
+      }).join('');
+      results.style.display = 'block';
+    }
+
+    function escapeHtml(s: string) {
+      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    input.addEventListener('input', function() {
+      const q = input.value.trim().toLowerCase();
+      if (q.length === 0) {
+        results.style.display = 'none';
+        results.innerHTML = '';
+        return;
+      }
+      const matches = index.filter(p =>
+        p.title.toLowerCase().includes(q) || p.body.toLowerCase().includes(q)
+      );
+      renderResults(matches);
+    });
+
+    // Close on outside click
+    document.addEventListener('click', function(e) {
+      const target = e.target as Node;
+      if (!input.contains(target) && !results.contains(target)) {
+        results.style.display = 'none';
+      }
+    });
+
+    // Reopen if input already has text on focus
+    input.addEventListener('focus', function() {
+      const q = input.value.trim().toLowerCase();
+      if (q.length > 0 && index.length > 0) {
+        const matches = index.filter(p =>
+          p.title.toLowerCase().includes(q) || p.body.toLowerCase().includes(q)
+        );
+        renderResults(matches);
+      }
+    });
+  })();
 </script>
