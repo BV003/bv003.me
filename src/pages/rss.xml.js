@@ -14,6 +14,8 @@ export async function GET(context) {
       title: post.data.title,
       pubDate: post.data.pubDate,
       link: `/blog/${post.data.slug}/`,
+      description: post.body ? post.body.slice(0, 300).replace(/[#*`\[\]>!\-]/g, '').replace(/\n+/g, ' ').trim() : '',
+      content: post.body ? post.body.slice(0, 2000) : '',
     })),
   });
 }
