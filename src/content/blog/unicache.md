@@ -46,8 +46,10 @@ Split all KV blocks into 4 separate queues. All blocks go into one queue based o
 - Two multi-turn session queues (chat queue + agent queue): We know the gap between two rounds of one chat follows a log-normal distribution. Local priority score formula: 1 - IntervalCDF(time since last use). 
 - Structural-reuse single-turn queue: For single requests with fixed structured prompts (tool calling, code generation). Their prefix blocks are tightly linked: deleting an early block breaks all later shared prefixes. Local priority score: 1 - (block offset / max offset).
 
+
 Global cross-queue weighting to pick which queue sacrifices blocks. Each queue’s local scores use different metrics. The system adds a weight α_q for every queue to unify scores into a global score G_q = α_q × local_score s_q.
 
+### Key Techniques
 
 #### PagedAttention
 
