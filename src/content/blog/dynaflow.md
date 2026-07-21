@@ -91,10 +91,6 @@ TorchDynamo 整图 → TorchInductor 串行编译 → 小块静态子图单独�
 TorchDynamo 整图 → 前端按 Module/mark 切分逻辑子图 → 后端静态分析（依赖 + 内存元数据）→ 每个子图独立 Inductor 编译 / 独立 CUDA Graph 录制（分微批次隔离）→ 异步乱序并行执行（后端自动筛选就绪子图并发跑）
 ```
 
-### System Paper
-
-I have done some research in AI, but this is my first time reading a system paper.
-
 
 ### Key Techniques
 

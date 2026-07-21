@@ -99,4 +99,35 @@ WebSocket builds on HTTP to create a long-lasting, two-way connection after one 
 
 **Websocket servers** This is a cluster of stateful servers that handles the near real-time update of friends’ locations. Each client maintains one persistent WebSocket connection to one of these servers. Note “WebSocket connection” and “WebSocket connection handler” are interchangeable in this chapter.
 
-**Redis pub/sub server**
+**Redis pub/sub server** Redis pub/sub is a very lightweight message bus. Channels in Redis pub/sub are very cheap to create. A modern Redis server with GBs of memory could hold millions of channels. 
+
+Study Figure7 and Figure8. These images are amazing.
+
+**API design** 
+WebSocket: Users send and receive location updates through the WebSocket protocol. At the minimum, we need the following APIs. 
+1. Periodic location update
+Request: Client sends latitude, longitude, and timestamp.
+Response: Nothing.
+2. Client receives location updates
+Data sent: Friend location data and timestamp.
+3. WebSocket initialization
+Request: Client sends latitude, longitude, and timestamp.
+Response: Client receives friends’ location data.
+4. Subscribe to a new friend
+Request: WebSocket server sends friend ID.
+Response: Friend’s latest latitude, longitude, and timestamp.
+5. Unsubscribe a friend
+Request: WebSocket server sends friend ID.
+Response. Nothing.
+
+HTTP requests: the API servers handle tasks like adding/removing friends, updating user profiles, etc.
+
+**Data model**: The “nearby friends” feature only cares about the current location of a user. Therefore, we only need to store one location per user. Redis is an excellent choice because it provides super-fast read and write operations. It supports TTL, which we use to auto-purge users
+from the cache who are no longer active. The current locations do not need to be durably stored. If the Redis instance goes down, we could replace it with an empty new instance and let the cache be filled as new location updates stream in. The active users could miss location updates from friends for an update cycle or two while the new cache warms. It is an acceptable tradeoff. In the deep dive
+section, we will discuss ways to lessen the impact on users when the cache gets replaced.
+
+#### Step 3 - Design Deep Dive
+
+**How well does each component scale?**
+
+**WebSocket servers** However, the WebSocket servers are stateful, so care must be taken when removing existing nodes.
