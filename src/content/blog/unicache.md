@@ -27,11 +27,27 @@ Inspired by these observations, we propose UniCache, a unified prefix cache evic
 
 ### How It Works
 
-### Evaluation
+#### The Simulator Architecture
 
-### Takeaways
+The core component of vLLM is an LLMEngine, which orchestrates a Scheduler running on CPUs and one or multiple Workers typically running on GPUs. 
 
-### Key Techniques
+The scheduler performs request admission, scheduling, and KV cache bookkeeping (e.g., KV block allocation and mapping). In particular, it records KV block IDs, the token IDs stored in the KV block, and a hash computed from the block’s token content. 
+
+The worker executes the model on the GPU and comprises a CacheEngine, which manages KV cache in GPU memory, and a ModelRunner, which initializes the model and performs inference. 
+
+One challenge here is how to model the inference time, which is related to the batch size and sequence length. We solve this problem by modeling the prefill and decode time separately. For decode time, we model the average time per output token (i.e., TPOT) as a constant.
+
+We evaluated the fidelity and efficiency of our simulator by comparing KV cache reuse under the same workload on real GPU execution and our simulation.
+
+#### The Optimal Eviction Policy
+
+Split all KV blocks into 4 separate queues. All blocks go into one queue based on what kind of request they belong to:
+- Evict-first queue (highest priority to delete): Holds blocks almost never reused, like Single-turn non-template prompt prefill blocks,All decode blocks from single-turn requests. We always delete blocks here first before touching any other queue.
+- Two multi-turn session queues (chat queue + agent queue): We know the gap between two rounds of one chat follows a log-normal distribution. Local priority score formula: 1 - IntervalCDF(time since last use). 
+- Structural-reuse single-turn queue: For single requests with fixed structured prompts (tool calling, code generation). Their prefix blocks are tightly linked: deleting an early block breaks all later shared prefixes. Local priority score: 1 - (block offset / max offset).
+
+Global cross-queue weighting to pick which queue sacrifices blocks. Each queue’s local scores use different metrics. The system adds a weight α_q for every queue to unify scores into a global score G_q = α_q × local_score s_q.
+
 
 #### PagedAttention
 
