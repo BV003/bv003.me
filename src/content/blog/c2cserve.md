@@ -7,8 +7,7 @@ tags: ["Tech"]
 
 ### Citation
 
-The paper named "C2CServe: Leveraging NVLink-C2C for Elastic
-Serverless LLM Serving on MIG" The work is done by people from UVA.
+The paper named "C2CServe: Leveraging NVLink-C2C for Elastic Serverless LLM Serving on MIG" The work is done by people from UVA.
 
 
 ### Motivation
@@ -30,9 +29,7 @@ Superchip GEMM performance is bottleneck dependent: MIG partitioning changes the
 
 #### Cross-Instance C2C Contention
 
-**Impact of Parameter Footprint** As a result, parameter
-footprint becomes a first-order determinant of C2C traffic
-intensity.
+**Impact of Parameter Footprint** As a result, parameter footprint becomes a first-order determinant of C2C traffic intensity.
 
 
 ### Key Ideas
@@ -43,13 +40,16 @@ Together, MIG and C2C make LLM serverless practical: MIG provides fine-grained c
 
 Realizing this design requires rethinking two assumptions in today’s GPU software stack. First, existing general matrix multiplication (GEMM) kernels such as cuBLAS and CUTLASS assume HBM-resident operands. Second, C2C sharing weakens MIG isolation. Co-resident MIG instances may stream CPU-resident weights concurrently, so each tenant’s effective C2C bandwidth depends on aggregate demand rather than its own partition. 
 
-Specifically, C2CServe introduces HybridGEMM with key insight to trade C2C traffic for HBM traffic. HybridGEMM splits execution between an output-stationary（驻留） path that
-preserves GEMM efficiency and a weight-stationary path that reuses CPU-resident weights to reduce repeated C2C fetches.
-### How It Works
+Specifically, C2CServe introduces HybridGEMM with key insight to trade C2C traffic for HBM traffic. HybridGEMM splits execution between an output-stationary（驻留） path that preserves GEMM efficiency and a weight-stationary path that reuses CPU-resident weights to reduce repeated C2C fetches.
+
+
+<!-- ### How It Works
 
 ### Evaluation
 
-### Takeaways
+### Takeaways -->
+
+
 
 ### Key Techniques
 
