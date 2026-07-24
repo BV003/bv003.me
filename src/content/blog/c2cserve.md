@@ -29,25 +29,39 @@ Superchip GEMM performance is bottleneck dependent: MIG partitioning changes the
 
 #### Cross-Instance C2C Contention
 
-**Impact of Parameter Footprint** As a result, parameter footprint becomes a first-order determinant of C2C traffic intensity.
+**Impact of Parameter Footprint** As a result, parameter footprint becomes a first-order determinant of C2C traffic intensity. We quantify cross-instance interference as the gap between the sum of solo-run throughput and the co-run throughput. However, the co-run case degrades much more sharply than the solo baseline, and the interference gap widens from 28% to 42%. This is because larger colocated models generate more concurrent parameter-fetch traffic over C2C, increasing the likelihood of overlapping fetch streams across MIG instances.
+
+This trend shows that larger parameter footprints cre-
+ate greater pressure on the shared C2C link, making model
+footprint a useful signal for scheduling. An intelligent sched-uler should therefore avoid co-locating models with large CPU-resident parameters on the same GPU, and instead use footprint-aware placement to reduce C2C contention and improve aggregate throughput.
+
+**Impact of Execution Granularity** 
 
 
 ### Key Ideas
 
-We observe that high-bandwidth CPU–GPU interconnects, such as NVLink-C2C (C2C) in NVIDIA GH200 and GB200 Superchips, change the memory constraint: model weights can reside in CPU memory and be streamed on demand to MIG instances, shifting model residency from scarce HBM to abundant host memory. 
+We observe that high-bandwidth CPU–GPU interconnects, such as NVLink-C2C (C2C) in NVIDIA GH200 and GB200 Superchips, change the memory constraint: model weights can reside in CPU memory and be streamed on demand to MIG instances ,shifting model residency from scarce HBM to abundant host memory. 
 
 Together, MIG and C2C make LLM serverless practical: MIG provides fine-grained compute, while C2C extends each MIG instance beyond its private HBM partition to a larger CPU memory weight store.
 
-Realizing this design requires rethinking two assumptions in today’s GPU software stack. First, existing general matrix multiplication (GEMM) kernels such as cuBLAS and CUTLASS assume HBM-resident operands. Second, C2C sharing weakens MIG isolation. Co-resident MIG instances may stream CPU-resident weights concurrently, so each tenant’s effective C2C bandwidth depends on aggregate demand rather than its own partition. 
+Realizing this design requires rethinking two assumptions in today’s GPU software stack. First existing general matrix multiplication (GEMM) kernels such as cuBLAS and CUTLASS assume HBM-resident operands. Second, C2C sharing weakens MIG isolation. Co-resident MIG instances may stream CPU-resident weights concurrently, so each tenant’s effective C2C bandwidth depends on aggregate demand rather than its own partition. 
 
 Specifically, C2CServe introduces HybridGEMM with key insight to trade C2C traffic for HBM traffic. HybridGEMM splits execution between an output-stationary（驻留） path that preserves GEMM efficiency and a weight-stationary path that reuses CPU-resident weights to reduce repeated C2C fetches.
 
 
-<!-- ### How It Works
+### How It Works
 
-### Evaluation
+![C2CServe Architecture](/images/architecture-c2cserve.png)
 
-### Takeaways -->
+HybridGEMM therefore selects an execution mix that matches the current HBM–C2C band-width balance. The two paths run on different SMs and write disjoint columns of 𝑂, so they require no interstream synchronization. 
+
+The optimal 𝛼 is runtime-dependent. 
+
+
+
+<!-- ### Evaluation
+
+### Takeaways  -->
 
 
 
