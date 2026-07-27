@@ -54,7 +54,46 @@ That N × N attention matrix S (and its softmax P) is the culprit — for N = 4K
 
 Now, which of these three steps actually need the tiling trick?
 
-- **S = QKᵀ**: Matrix multiplication is naturally blockable. Load a block (Bᵣ rows) of Q, a block (Bc columns) of Kᵀ, compute a Bᵣ × Bc tile of S — no need for the full N×N matrix.
+- **S = QKᵀ**: Matrix multiplication is naturally blockable.
+
+  Here's why. Each element S[i][j] is an independent dot product: row i of Q × column j of Kᵀ (i.e., row j of K). No element needs to see any other element to be computed:
+
+  ```
+  S[i][j] = dot(query_of_token_i, key_of_token_j)
+          = "how much does token i attend to token j?"
+  ```
+
+  So we can break the N×N matrix into smaller tiles. Partition Q into row blocks (each contains Bᵣ tokens' queries) and Kᵀ into column blocks (each contains Bc tokens' keys):
+
+  ```
+            Kᵀ (each column = one token's key, length d)
+       ┌────────┬────────┐
+       │  K₀    │   K₁   │    ← column blocks: 3 tokens' keys each
+       └────────┴────────┘
+  
+  Q: ┌────────┐
+     │  Q₀    │  ← row block: 3 tokens' queries
+     ├────────┤
+     │  Q₁    │  ← row block: 3 tokens' queries
+     └────────┘
+  
+  S = ┌─────────────┬─────────────┐
+      │  Q₀K₀ᵀ (3×3) │  Q₀K₁ᵀ (3×3) │  ← each tile computed independently
+      ├─────────────┼─────────────┤
+      │  Q₁K₀ᵀ (3×3) │  Q₁K₁ᵀ (3×3) │
+      └─────────────┴─────────────┘
+  ```
+
+  To compute one tile, say Q₀K₀ᵀ: load Q₀ (3×d) and K₀ (3×d) into SRAM, do a small matrix multiply, produce a 3×3 tile of S. Then move to the next tile. The full N×N matrix never exists in memory all at once — we only need a Bᵣ × Bc tile at any moment.
+
+  The underlying math is simply:
+
+  $$
+  S = QK^\top = \begin{bmatrix} Q_0 \\ Q_1 \end{bmatrix} \begin{bmatrix} K_0^\top & K_1^\top \end{bmatrix} = \begin{bmatrix} Q_0 K_0^\top & Q_0 K_1^\top \\ Q_1 K_0^\top & Q_1 K_1^\top \end{bmatrix}
+  $$
+
+  Standard attention didn't do this — not because it couldn't, but because it was pointless. After computing a tile of S, you'd have to dump it to HBM anyway, since the next step (softmax) needs the entire row. The tiling only becomes useful once softmax itself is also made blockable.
+
 - **P = softmax(S)**: This is the *only* step that blocks tiling. softmax needs the entire row to compute the denominator Σexp(sᵢ). That's why standard attention dumps the full N×N matrix to HBM.
 - **O = PV**: Also naturally blockable. Once you have a row of P, multiply with the corresponding column block of V.
 
