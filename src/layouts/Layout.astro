@@ -211,57 +211,30 @@ const { title } = Astro.props;
         border-collapse: collapse;
         margin: 2rem 0;
         font-size: 0.9rem;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
-        border-radius: 8px;
-        overflow: hidden;
       }
 
       thead {
-        background: #f8fafc;
-        border-bottom: 2px solid #e2e8f0;
+        border-bottom: 2px solid var(--color-text);
       }
 
       th {
-        padding: 1rem 0.75rem;
+        padding: 0.75rem 0;
+        padding-right: 1rem;
         text-align: left;
         font-weight: 600;
-        color: #1e293b;
         font-size: 0.85rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
       }
 
       td {
-        padding: 0.875rem 0.75rem;
-        border-bottom: 1px solid #e2e8f0;
+        padding: 0.75rem 0;
+        padding-right: 1rem;
+        border-bottom: 1px solid var(--color-border);
         vertical-align: top;
         line-height: 1.6;
       }
 
       tbody tr:last-child td {
         border-bottom: none;
-      }
-
-      tbody tr:hover {
-        background: #f8fafc;
-      }
-
-      /* First column emphasis */
-      td:first-child {
-        font-weight: 500;
-        color: #1e293b;
-        white-space: nowrap;
-      }
-
-      /* Responsive table */
-      @media (max-width: 768px) {
-        table {
-          font-size: 0.8rem;
-        }
-        
-        th, td {
-          padding: 0.625rem 0.5rem;
-        }
       }
 
 
