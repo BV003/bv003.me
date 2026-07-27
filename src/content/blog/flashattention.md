@@ -40,6 +40,18 @@ The key insight: make attention IO-aware. Fuse all operations into one CUDA kern
 
 ### Key Techniques
 
+#### What Are We Computing? (Q, K, V Attention)
+
+Given input sequences Q, K, V, all of shape N × d (N = sequence length, d = head dimension), standard scaled dot-product attention is:
+
+$$
+S = QK^\top \in \mathbb{R}^{N \times N}, \quad
+P = \text{softmax}(S) \in \mathbb{R}^{N \times N}, \quad
+O = PV \in \mathbb{R}^{N \times d}
+$$
+
+That N × N attention matrix S (and its softmax P) is the culprit — for N = 4K tokens, that's a 16M-element matrix per head, per layer. FlashAttention's goal is to compute O exactly without ever storing S or P in full.
+
 #### Tiling: Block-by-Block Softmax
 
 The core challenge: softmax requires the entire row of the attention matrix to compute denominators, so naively you'd need the full N×N matrix in memory. FlashAttention solves this by decomposing softmax to work incrementally on blocks.
