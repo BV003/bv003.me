@@ -78,9 +78,9 @@ Now, which of these three steps actually need the tiling trick?
      └────────┘
   
   S = ┌─────────────┬─────────────┐
-      │  Q₀K₀ᵀ (3×3) │  Q₀K₁ᵀ (3×3) │  ← each tile computed independently
+      │Q₀K₀ᵀ (3×3)  │ Q₀K₁ᵀ (3×3) │  ← each tile computed independently
       ├─────────────┼─────────────┤
-      │  Q₁K₀ᵀ (3×3) │  Q₁K₁ᵀ (3×3) │
+      │Q₁K₀ᵀ (3×3)  │ Q₁K₁ᵀ (3×3) │
       └─────────────┴─────────────┘
   ```
 
@@ -127,6 +127,60 @@ $$
 $$
 
 This means: as long as we keep (m, ℓ) per row as running statistics, we can process Q block by block against K/V blocks, rescale the partial output, and get the exact same result as if we had the full matrix. No need to ever materialize the N×N attention matrix in slow HBM.
+
+#### The Complete Algorithm in Pseudocode
+
+Putting it all together. Outer loop iterates over Q row blocks, inner loop iterates over K/V column blocks. All S and P tiles live and die entirely within SRAM:
+
+```
+# Outer loop: iterate over Q row blocks, one block loaded into SRAM at a time
+for Q_block_idx in range(Tr):
+    # ---- HBM → SRAM: load one Q block ----
+    Q_block = load_from_HBM(Q, block_idx=Q_block_idx)
+
+    # Per-row running stats, kept in SRAM throughout the inner loop
+    for row in range(Br):
+        m_global[row] = -inf
+        l_global[row] = 0.0
+        O_acc[row] = zeros(d)
+
+    # Inner loop: iterate over K/V column blocks
+    for KV_block_idx in range(Tc):
+        # ---- HBM → SRAM: load one K block, one V block ----
+        K_block = load_from_HBM(K, block_idx=KV_block_idx)
+        V_block = load_from_HBM(V, block_idx=KV_block_idx)
+
+        # Step 1: compute local S tile (Br × Bc) in SRAM
+        S_local = Q_block @ K_block.T   # on-chip matmul
+
+        # Step 2: compute local softmax stats per row
+        for row in range(Br):
+            m_local[row] = max(S_local[row, :])
+            f_local[row] = exp(S_local[row, :] - m_local[row])
+            l_local[row] = sum(f_local[row])
+
+        # Step 3: online softmax rescaling — merge local stats into global
+        for row in range(Br):
+            m_new = max(m_global[row], m_local[row])
+            scale_old = exp(m_global[row] - m_new)
+            scale_new = exp(m_local[row] - m_new)
+            l_global[row] = scale_old * l_global[row] + scale_new * l_local[row]
+            m_global[row] = m_new
+
+        # Step 4: compute weighted output and accumulate into O_acc
+        for row in range(Br):
+            P_local = scale_new * f_local[row] / l_global[row]
+            O_local = P_local @ V_block    # on-chip matmul
+            O_acc[row] = scale_old * O_acc[row] + O_local
+
+        # S_local, m_local, f_local, l_local — freed, never leave SRAM
+
+    # Inner loop done — O_acc for this Q block is final
+    # ---- SRAM → HBM: write output block ----
+    write_to_HBM(O_acc, O, block_idx=Q_block_idx)
+```
+
+Key data movement: Q, K, V blocks flow HBM → SRAM once. S_local and P_local tiles live entirely in SRAM. Only the final O blocks flow SRAM → HBM. The N×N attention matrix never exists in HBM.
 
 #### Worked Example: End-to-End with Q, K, V
 
