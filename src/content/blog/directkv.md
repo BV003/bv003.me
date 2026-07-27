@@ -28,6 +28,10 @@ DirectKV asks: **Can we make zero-copy practical by redesigning attention kernel
 
 ### Background
 
+Target hardware is the **NVIDIA Grace-Hopper (GH200)** superchip: a tightly coupled CPU-GPU architecture where the GPU connects to CPU memory via **NVLink-C2C** (~450 GB/s per direction). While much faster than PCIe, this bandwidth is still ~10× lower than HBM (~4 TB/s). The chip also provides **zero-copy** memory access — the GPU can directly read CPU-pinned memory without explicit `cudaMemcpyAsync` calls.
+
+In standard LLM inference, each transformer layer produces **key (K) and value (V)** tensors during the attention step. These are stored in a **KV cache** to avoid recomputing them for every subsequent token. The KV cache size = `2 × num_layers × hidden_dim × sequence_length`. For a Llama-8B model at 32K context, this alone can consume tens of GB — pushing GPU memory to its limit.
+
 
 ### Key Ideas
 
