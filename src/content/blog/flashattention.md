@@ -52,9 +52,17 @@ $$
 
 That N × N attention matrix S (and its softmax P) is the culprit — for N = 4K tokens, that's a 16M-element matrix per head, per layer. FlashAttention's goal is to compute O exactly without ever storing S or P in full.
 
+Now, which of these three steps actually need the tiling trick?
+
+- **S = QKᵀ**: Matrix multiplication is naturally blockable. Load a block (Bᵣ rows) of Q, a block (Bc columns) of Kᵀ, compute a Bᵣ × Bc tile of S — no need for the full N×N matrix.
+- **P = softmax(S)**: This is the *only* step that blocks tiling. softmax needs the entire row to compute the denominator Σexp(sᵢ). That's why standard attention dumps the full N×N matrix to HBM.
+- **O = PV**: Also naturally blockable. Once you have a row of P, multiply with the corresponding column block of V.
+
+So the bottleneck is solely softmax. If we can make softmax work incrementally on blocks, we can fuse the whole pipeline (QKᵀ → softmax → PV) into a single kernel that never writes the N×N matrix to slow memory.
+
 #### Tiling: Block-by-Block Softmax
 
-The core challenge: softmax requires the entire row of the attention matrix to compute denominators, so naively you'd need the full N×N matrix in memory. FlashAttention solves this by decomposing softmax to work incrementally on blocks.
+Softmax couples columns of K — the denominator forces you to see the whole row. FlashAttention breaks this by maintaining running statistics (m, ℓ) per row, so it can rescale partial results as new blocks arrive.
 
 For a vector x, the numerically stable softmax is:
 
@@ -81,49 +89,55 @@ $$
 
 This means: as long as we keep (m, ℓ) per row as running statistics, we can process Q block by block against K/V blocks, rescale the partial output, and get the exact same result as if we had the full matrix. No need to ever materialize the N×N attention matrix in slow HBM.
 
-#### Worked Example: Softmax Over Two Blocks
+#### Worked Example: End-to-End with Q, K, V
 
-Let's make this concrete. Say we have a row with 4 scores split into two blocks:
-
-Block 1: scores = [2, 1]
-Block 2: scores = [3, 0]
-
-First, process Block 1 alone:
+Let's trace through a tiny example. Suppose N=2, d=2, with these values:
 
 ```
-m₁ = max(2, 1) = 2
-f₁ = [e^(2-2), e^(1-2)] = [1, 0.368]
-ℓ₁ = 1 + 0.368 = 1.368
-partial_output₁ = f₁ / ℓ₁ = [0.731, 0.269]
+Q = [[1, 0],        K = [[1, 2],       V = [[1, 0],
+     [0, 1]]             [3, 4]]            [0, 1]]
+
+token 0, row 0          token 0, row 0      token 0
+         row 1                 row 1             token 1
 ```
 
-Now Block 2 arrives. Combine with stats from Block 1:
+**Step 1: S = QKᵀ** — compute tile-by-tile, never store full N×N.
+
+Load Q block (both rows since tiny) and K block → compute S on-chip:
 
 ```
-m₂ = max(3, 0) = 3
-m_new = max(m₁, m₂) = max(2, 3) = 3
+S = Q × Kᵀ = [[1,0],    [[1,3],    = [[1×1+0×2, 1×3+0×4],   = [[1, 3],
+              [0,1]] ×   [2,4]]      [0×1+1×2, 0×3+1×4]]      [2, 4]]
 
-// Rescale old stats to align with the new max:
-ℓ_new = e^(2-3) × ℓ₁ + e^(3-3) × (e^(3-3) + e^(0-3))
-      = e^(-1) × 1.368 + 1 × (1 + e^(-3))
-      = 0.368 × 1.368 + 1 × 1.050
-      = 0.503 + 1.050 = 1.553
-
-f_new = [e^(2-3) × f₁,  e^(3-3) × f₂]
-      = [0.368 × (1, 0.368),  1 × (1, 0.050)]
-      = [(0.368, 0.135),  (1, 0.050)]
-
-final_softmax = f_new / ℓ_new
-              = [0.237, 0.087, 0.644, 0.032]
+Row 0: S₀ = [1, 3]
+Row 1: S₁ = [2, 4]
 ```
 
-Let's verify against the naive approach — softmax([2, 1, 3, 0]) all at once:
+S stays on-chip. Standard attention would write this to HBM now; FlashAttention keeps it in SRAM.
+
+**Step 2: Softmax — the tiling trick.** Each row independently:
+
+Row 0: scores = [1, 3]
+```
+m = max(1, 3) = 3
+f = [e^(1-3), e^(3-3)] = [e⁻², 1] = [0.135, 1.0]
+ℓ = 0.135 + 1.0 = 1.135
+P₀ = [0.135/1.135, 1.0/1.135] = [0.119, 0.881]
+```
+
+Row 1: scores = [2, 4]
+```
+m = 4, f = [e⁻², 1] = [0.135, 1.0], ℓ = 1.135
+P₁ = [0.119, 0.881]
+```
+
+P stays on-chip.
+
+**Step 3: O = PV** — multiply on-chip, then write result to HBM.
 
 ```
-e²=7.389, e¹=2.718, e³=20.086, e⁰=1
-sum = 31.193
-result = [7.389/31.193, 2.718/31.193, 20.086/31.193, 1/31.193]
-       = [0.237, 0.087, 0.644, 0.032] ✓ Identical!
+O = P × V = [[0.119, 0.881],    [[1, 0],    = [[0.119, 0.881],
+             [0.119, 0.881]] ×   [0, 1]]      [0.119, 0.881]]
 ```
 
-The key takeaway: by keeping just two numbers (m, ℓ) as running state, we can stream through blocks one at a time, rescaling on the fly, and get the exact same softmax answer. This is what lets FlashAttention keep everything in fast SRAM — each block computes its piece, rescales the accumulated output, and moves on. No N×N matrix ever hits slow memory.
+**Key point:** S (N×N) and P (N×N) lived entirely in fast SRAM. Only Q, K, V (N×d) were loaded from HBM, and only O (N×d) was written back. For real-world N, this is the difference between O(N²) and O(N) memory traffic.
