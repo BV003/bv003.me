@@ -48,8 +48,37 @@ tags: ["Tech"]
 
 
 
-
 #### API design
+
+所有接口通过 `Authorization: Bearer <jwt_token>` 统一鉴权，核心接口响应 ≤150ms。
+
+Skill 相关
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| `GET` | `/api/v1/skills` | 搜索 / 筛选 Skill 列表 |
+| `GET` | `/api/v1/skills/:id` | 获取 Skill 详情（含版本、安全报告） |
+| `GET` | `/api/v1/skills/:id/versions` | 获取所有版本 |
+| `POST` | `/api/v1/skills/:id/install` | CLI 安装 Skill（下发数据源模板） |
+
+
+统计
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| `GET` | `/api/v1/skills/:id/stats` | 单个 Skill 下载量 / 版本使用率 |
+| `GET` | `/api/v1/stats/dashboard` | 平台总览（总 Skill 数、总下载量等） |
+
+用户 & 权限
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| `GET` | `/api/v1/user/profile` | 当前用户信息及角色 |
+| `GET` | `/api/v1/admin/users` | (管理员) 用户列表 |
+| `POST` | `/api/v1/admin/users/:id/role` | (管理员) 修改用户角色 |
+| `POST` | `/api/v1/admin/skills/:id/permission` | (管理员) 设置私有 Skill 下载权限 |
+
+
 
 ### Step 3 - Design Deep Dive
 
