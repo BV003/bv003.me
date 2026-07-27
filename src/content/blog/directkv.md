@@ -35,6 +35,8 @@ In standard LLM inference, each transformer layer produces **key (K) and value (
 
 ### System Architecture
 
+![System Architecture](/images/directkv.png)
+
 DirectKV consists of four components that work together across both **prefill** (processing input prompts) and **decode** (generating one token at a time) phases:
 
 **Kernel Generator (Offline).** Compiles a rich set of CUDA kernel candidates ahead of time using C++ template instantiations specialized for different combinations of `<data_type, head_dim, tile_size>`. This avoids runtime compilation overhead while ensuring each variant is fully optimized. All candidates are stored in an offline repository.
