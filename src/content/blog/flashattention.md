@@ -49,8 +49,18 @@ FlashAttention has two core ideas:
 The result: exact attention (no approximation), linear memory O(N) instead of O(N²), and wall-clock speedup up to 7.6× on attention alone.
 
 
-### How It Works
+### Experiments & Results
 
+Key numbers to remember:
+
+- GPT-2 small: **3.5× faster** training vs HuggingFace, **1.8×** vs Megatron-LM (same perplexity)
+- BERT-large: **15% faster** than the MLPerf 1.1 training speed record
+- Long-Range Arena: **2.4× faster** than standard attention
+- Attention forward pass alone: up to **7.6× speedup** on GPT-2 medium
+- Memory: **O(N) instead of O(N²)** — linear in sequence length, enabling sequences up to 64K tokens
+- Block-sparse variant: **2-4× faster** than dense FlashAttention, proportional to sparsity ratio
+
+All experiments on A100 GPUs. The IO complexity analysis also proves FlashAttention achieves Θ(N²d²/M) HBM accesses versus Θ(Nd + N²) for standard attention — up to 9× fewer HBM accesses in practice.
 
 ### Key Techniques
 
