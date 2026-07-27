@@ -104,3 +104,110 @@ tags: ["Tech"]
 
 ### Step 3 - Design Deep Dive
 
+#### 1. 多仓库同步机制
+
+平台需要接入多种外部仓库（GitHub、GitLab、内部 Git 服务），核心原则是**只拉取元数据，不存储源码**。Sync Worker 从仓库中读取 Skill 的描述文件（如 `skill.yaml`），解析后写入 Skill DB Primary，源码 URL 保留在元数据中供 CLI 安装时按需拉取。
+
+##### 同步策略
+
+| 类型 | 触发方式 | 频率 | 说明 |
+|------|---------|------|------|
+| 全量同步 | Cron 定时 | 每日凌晨 | 遍历所有接入仓库，拉取全部 Skill 元数据 |
+| 增量同步 | Cron 定时 | 每 2 小时 | 仅拉取自上次同步后有变更的仓库 (基于 commit hash 比对) |
+| 手动同步 | 管理员触发 | 按需 | 通过 `POST /api/v1/admin/repos/:id/sync` 触发 |
+
+##### 同步流程
+
+1. **Cron Scheduler** 按配置频率向 Message Queue 投递同步 Job
+2. **Sync Worker** 消费 Job，逐个仓库执行 `git pull` / `git clone`（仅克隆 `--depth=1` 或按 tag 增量）
+3. 遍历仓库中的 Skill 描述文件，校验格式合法性
+4. 将解析后的元数据（名称、版本、描述、标签、入口 URL 等）写入 Skill DB Primary
+5. 同步完成后向 Message Queue 投递 **安全扫描 Job**，触发 Security Scanner
+6. 同步结果（成功 / 失败 / 新增 / 变更数量）写入操作日志
+
+##### 元数据标准化
+
+为统一不同仓库的 Skill 描述格式，约定一份标准的 `skill.yaml` schema：
+
+```yaml
+name: my-skill
+description: A helpful coding skill
+version: 1.2.0
+author:
+  name: maintainer-name
+  email: dev@example.com
+tags: [python, linting]
+homepage: https://github.com/example/my-skill
+source: https://github.com/example/my-skill.git
+entry:
+  install: ./install.sh
+  main: skill.py
+```
+
+Sync Worker 负责将各仓库的 `skill.yaml` 统一解析到上述 schema，不兼容的仓库需维护者适配后方可接入。
+
+#### 2. 安全扫描流水线
+
+每个 Skill 在元数据同步完成后都会被自动投递到安全扫描流水线，由 Security Scanner 消费 Message Queue 中的扫描 Job 执行静态代码分析。扫描结果直接影响 Skill 的分发状态。
+
+##### 扫描维度
+
+| 检测项 | 说明 | 
+|--------|------|
+| 恶意脚本 | 检测 `exec`、`eval`、`os.system`、`subprocess` 等危险调用模式 | 
+| 硬编码密钥 | 正则匹配 API Key、Token、密码等敏感字符串 | 
+| 网络外连 | 检测向外部未知地址的请求代码 | 
+| 文件操作 | 检测敏感路径读写（`/etc/passwd`、`~/.ssh` 等） | 
+| 依赖漏洞 | 解析 `requirements.txt` / `package.json` 等，调用漏洞库比对已知 CVE | 
+
+##### 扫描流程
+
+1. Message Queue 投递扫描 Job（含 Skill ID + 版本号 + 源码 URL）
+2. **Security Scanner** 从源码 URL 拉取代码到**沙箱容器**中
+3. 运行静态分析规则引擎（AST 解析 + 正则匹配 + 依赖漏洞比对）
+4. 生成扫描报告，写入 **Skill DB Primary**（扫描状态、风险等级、详情）
+5. 完整报告 PDF/JSON 存入 **Object Storage**，供前端下载查看
+6. 若判定为高危，将 Skill 标记为 `blocked`，前端不可见、CLI 不可安装
+7. 所有扫描操作写入审计日志
+
+##### 沙箱隔离
+
+Security Scanner 在独立的**沙箱容器**中执行代码分析，容器具备以下限制：
+
+- 无网络访问权限（除白名单镜像源）
+- 只读文件系统挂载
+- CPU / 内存资源上限限制
+- 超时自动终止（单 Skill 最长 60 秒）
+- 扫描完成后容器自动销毁
+
+##### 审计日志
+
+所有安全相关操作记录留存，支持按时间、Skill、操作类型检索：
+
+| 日志字段 | 说明 |
+|---------|------|
+| `timestamp` | 操作时间 |
+| `skill_id` | Skill ID |
+| `action` | 操作类型：scan / block / unblock / override |
+| `operator` | 操作人（系统自动 / 管理员） |
+| `detail` | 详情：扫描结果摘要、风险等级变更等 |
+
+#### 3. CLI 安装流程
+
+CLI 工具是用户获取 Skill 的主要入口，提供登录、浏览、安装、更新、卸载一站式操作。
+
+**安装步骤：**
+
+1. CLI 发起 `POST /api/v1/skills/:id/install`，携带 JWT Token
+2. API Gateway 校验身份后转发请求至 Skill Service
+3. Skill Service 检查用户对该 Skill 的下载权限
+4. 权限通过后，从 Skill DB 读取元数据与安装脚本，从 Object Storage 获取数据源模板
+5. 将模板及安装脚本组装返回给 CLI
+6. CLI 本地执行 `install.sh`，`git clone` 源码到本地，完成后上报安装统计
+
+**更新与卸载**同理，CLI 调用对应 API 获取新版本信息或执行卸载脚本。可通过 `GET /api/v1/user/installed` 批量查看已安装 Skill 及可更新版本。
+
+##### 更新检测
+
+CLI 本地记录已安装 Skill 的当前版本。每次执行 `update` 命令时，CLI 向服务端查询最新版本号，若不一致则拉取新版本模板并更新。也可通过定时轮询 `GET /api/v1/user/installed` 批量检测更新。
+
