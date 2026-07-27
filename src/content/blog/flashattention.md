@@ -39,3 +39,32 @@ The key insight: make attention IO-aware. Fuse all operations into one CUDA kern
 
 
 ### Key Techniques
+
+#### Tiling: Block-by-Block Softmax
+
+The core challenge: softmax requires the entire row of the attention matrix to compute denominators, so naively you'd need the full N×N matrix in memory. FlashAttention solves this by decomposing softmax to work incrementally on blocks.
+
+For a vector x, the numerically stable softmax is:
+
+$$
+m(x) = \max_i x_i, \quad
+f(x) = \big[e^{x_1 - m(x)}, \dots, e^{x_B - m(x)}\big], \quad
+\ell(x) = \sum_i f(x)_i, \quad
+\text{softmax}(x) = \frac{f(x)}{\ell(x)}
+$$
+
+Now given two blocks of scores x<sup>(1)</sup> and x<sup>(2)</sup>, we can combine them without recomputing from scratch:
+
+$$
+m(x) = \max(m(x^{(1)}), m(x^{(2)}))
+$$
+
+$$
+f(x) = \big[ e^{m(x^{(1)}) - m(x)} \cdot f(x^{(1)}), \; e^{m(x^{(2)}) - m(x)} \cdot f(x^{(2)}) \big]
+$$
+
+$$
+\ell(x) = e^{m(x^{(1)}) - m(x)} \cdot \ell(x^{(1)}) + e^{m(x^{(2)}) - m(x)} \cdot \ell(x^{(2)})
+$$
+
+This means: as long as we keep (m, ℓ) per row as running statistics, we can process Q block by block against K/V blocks, rescale the partial output, and get the exact same result as if we had the full matrix. No need to ever materialize the N×N attention matrix in slow HBM.
