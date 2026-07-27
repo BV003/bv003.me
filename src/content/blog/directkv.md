@@ -35,6 +35,16 @@ In standard LLM inference, each transformer layer produces **key (K) and value (
 
 ### Key Ideas
 
+DirectKV proposes three techniques that work together to make zero-copy KV cache offloading practical:
+
+**① CPU-Memory-Aware Tiling.** Standard matrix multiplication tiling assumes all tensors are in GPU HBM and re-fetches both A and B tiles repeatedly. DirectKV flips this pattern: when a tile comes from slow CPU memory (like KV cache), it is treated as **stationary** — fetched once and reused across all inner-loop iterations. The extra reload cost is pushed onto HBM-resident tensors, where bandwidth is 10× higher. This reduces CPU–GPU transfer volume by up to 50%.
+
+**② Kernel Fusion (Projection + Attention).** Instead of launching separate kernels for K/V projection and attention, DirectKV fuses them into a single CUDA kernel. Generated K/V tiles stay in shared memory (SMEM) and are immediately consumed by the attention computation — no redundant writes to CPU memory, no re-fetches. The fused design sustains up to 3.5× higher HBM throughput and 2.5–3.0× lower latency compared to separate kernels.
+
+**③ Warp-Level Pipelining.** Within each fused kernel, warp groups are specialized into producer, consumer, and storer roles. While one warp group computes on the current tile, another prefetches the next tile from memory, and a third writes results to CPU. This overlap hides memory latency and keeps compute units busy. The Hopper GPU's Tensor Memory Accelerator (TMA) further accelerates the async data movement.
+
+These three ideas share a common philosophy: **shift bandwidth pressure from the CPU–GPU interconnect onto HBM**, where the extra traffic can be absorbed without becoming a bottleneck.
+
 
 ### Experiments & Results
 
