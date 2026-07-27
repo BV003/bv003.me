@@ -54,6 +54,30 @@ The result: exact attention (no approximation), linear memory O(N) instead of O(
 
 ### Key Techniques
 
+#### Forward vs. Backward Pass — A Quick Primer
+
+Training a neural network has two phases each iteration:
+
+**Forward pass:** Input data flows through the network, layer by layer. Each operation (matmul, softmax, etc.) produces an output. You keep intermediate values because the backward pass needs them.
+
+```
+Input → Layer1 → Layer2 → ... → Output → Loss
+         ↑ intermediate values saved for backward ↑
+```
+
+**Backward pass:** Starting from the loss, you compute gradients flowing backward through the network. Each operation needs the forward pass's intermediate values to compute its gradient. The gradient tells you how to update parameters (Q, K, V projection weights) to reduce the loss.
+
+```
+Loss → ∇LayerN → ... → ∇Layer2 → ∇Layer1 → update weights
+        ↑ uses saved intermediate values from forward ↑
+```
+
+For attention specifically:
+- Forward needs to save S (N×N) and P (N×N) for backward to compute gradients w.r.t. Q, K, V
+- This is the O(N²) memory cost — not output O (N×d), but the intermediates S and P
+
+FlashAttention in the backward pass: instead of loading giant S and P from HBM, it re-runs the forward computation block-by-block in SRAM using stored O and (m, ℓ) to reconstruct S and P on the fly. Same gradients, no O(N²) storage.
+
 #### What Are We Computing? (Q, K, V Attention)
 
 Given input sequences Q, K, V, all of shape N × d (N = sequence length, d = head dimension), standard scaled dot-product attention is:
