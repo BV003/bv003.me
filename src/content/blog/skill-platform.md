@@ -52,7 +52,7 @@ tags: ["Tech"]
 
 所有接口通过 `Authorization: Bearer <jwt_token>` 统一鉴权，核心接口响应 ≤150ms。
 
-##### 1. Skill 浏览
+- **1. Skill 浏览**
 
 | 方法 | 路径 | 说明 |
 |------|------|------|
@@ -60,7 +60,7 @@ tags: ["Tech"]
 | `GET` | `/api/v1/skills/:id` | Skill 详情（元数据、版本、安全报告） |
 | `GET` | `/api/v1/skills/:id/versions` | Skill 全部版本列表 |
 
-##### 2. CLI 操作
+- **2. CLI 操作**
 
 | 方法 | 路径 | 说明 |
 |------|------|------|
@@ -69,7 +69,7 @@ tags: ["Tech"]
 | `POST` | `/api/v1/skills/:id/uninstall` | 卸载 Skill |
 | `GET` | `/api/v1/user/installed` | 当前用户已安装 Skill 列表 |
 
-##### 3. 安全报告
+- **3. 安全报告**
 
 | 方法 | 路径 | 说明 |
 |------|------|------|
@@ -77,14 +77,14 @@ tags: ["Tech"]
 | `GET` | `/api/v1/skills/:id/reports/:version` | 指定版本扫描报告详情 |
 | `GET` | `/api/v1/admin/audit-logs` | (管理员) 审计日志查询 |
 
-##### 4. 统计看板
+- **4. 统计看板**
 
 | 方法 | 路径 | 说明 |
 |------|------|------|
 | `GET` | `/api/v1/skills/:id/stats` | 单个 Skill 下载量 / 版本使用率 |
 | `GET` | `/api/v1/stats/dashboard` | 平台总览（总 Skill 数、总下载量等） |
 
-##### 5. 用户与权限
+- **5. 用户与权限**
 
 | 方法 | 路径 | 说明 |
 |------|------|------|
@@ -93,7 +93,7 @@ tags: ["Tech"]
 | `POST` | `/api/v1/admin/users/:id/role` | (管理员) 修改用户角色 |
 | `POST` | `/api/v1/admin/skills/:id/permission` | (管理员) 设置私有 Skill 下载权限 |
 
-##### 6. 仓库管理
+- **6. 仓库管理**
 
 | 方法 | 路径 | 说明 |
 |------|------|------|
@@ -108,7 +108,7 @@ tags: ["Tech"]
 
 平台需要接入多种外部仓库（GitHub、GitLab、内部 Git 服务），核心原则是**只拉取元数据，不存储源码**。Sync Worker 从仓库中读取 Skill 的描述文件（如 `skill.yaml`），解析后写入 Skill DB Primary，源码 URL 保留在元数据中供 CLI 安装时按需拉取。
 
-##### 同步策略
+- **同步策略**
 
 | 类型 | 触发方式 | 频率 | 说明 |
 |------|---------|------|------|
@@ -116,7 +116,7 @@ tags: ["Tech"]
 | 增量同步 | Cron 定时 | 每 2 小时 | 仅拉取自上次同步后有变更的仓库 (基于 commit hash 比对) |
 | 手动同步 | 管理员触发 | 按需 | 通过 `POST /api/v1/admin/repos/:id/sync` 触发 |
 
-##### 同步流程
+- **同步流程**
 
 1. **Cron Scheduler** 按配置频率向 Message Queue 投递同步 Job
 2. **Sync Worker** 消费 Job，逐个仓库执行 `git pull` / `git clone`（仅克隆 `--depth=1` 或按 tag 增量）
@@ -125,7 +125,7 @@ tags: ["Tech"]
 5. 同步完成后向 Message Queue 投递 **安全扫描 Job**，触发 Security Scanner
 6. 同步结果（成功 / 失败 / 新增 / 变更数量）写入操作日志
 
-##### 元数据标准化
+- **元数据标准化**
 
 为统一不同仓库的 Skill 描述格式，约定一份标准的 `skill.yaml` schema：
 
@@ -150,7 +150,7 @@ Sync Worker 负责将各仓库的 `skill.yaml` 统一解析到上述 schema，�
 
 每个 Skill 在元数据同步完成后都会被自动投递到安全扫描流水线，由 Security Scanner 消费 Message Queue 中的扫描 Job 执行静态代码分析。扫描结果直接影响 Skill 的分发状态。
 
-##### 扫描维度
+- **扫描维度**
 
 | 检测项 | 说明 | 
 |--------|------|
@@ -160,7 +160,7 @@ Sync Worker 负责将各仓库的 `skill.yaml` 统一解析到上述 schema，�
 | 文件操作 | 检测敏感路径读写（`/etc/passwd`、`~/.ssh` 等） | 
 | 依赖漏洞 | 解析 `requirements.txt` / `package.json` 等，调用漏洞库比对已知 CVE | 
 
-##### 扫描流程
+- **扫描流程**
 
 1. Message Queue 投递扫描 Job（含 Skill ID + 版本号 + 源码 URL）
 2. **Security Scanner** 从源码 URL 拉取代码到**沙箱容器**中
@@ -170,7 +170,7 @@ Sync Worker 负责将各仓库的 `skill.yaml` 统一解析到上述 schema，�
 6. 若判定为高危，将 Skill 标记为 `blocked`，前端不可见、CLI 不可安装
 7. 所有扫描操作写入审计日志
 
-##### 沙箱隔离
+- **沙箱隔离**
 
 Security Scanner 在独立的**沙箱容器**中执行代码分析，容器具备以下限制：
 
@@ -180,7 +180,7 @@ Security Scanner 在独立的**沙箱容器**中执行代码分析，容器具�
 - 超时自动终止（单 Skill 最长 60 秒）
 - 扫描完成后容器自动销毁
 
-##### 审计日志
+- **审计日志**
 
 所有安全相关操作记录留存，支持按时间、Skill、操作类型检索：
 
@@ -207,7 +207,7 @@ CLI 工具是用户获取 Skill 的主要入口，提供登录、浏览、安装
 
 **更新与卸载**同理，CLI 调用对应 API 获取新版本信息或执行卸载脚本。可通过 `GET /api/v1/user/installed` 批量查看已安装 Skill 及可更新版本。
 
-##### 更新检测
+- **更新检测**
 
 CLI 本地记录已安装 Skill 的当前版本。每次执行 `update` 命令时，CLI 向服务端查询最新版本号，若不一致则拉取新版本模板并更新。也可通过定时轮询 `GET /api/v1/user/installed` 批量检测更新。
 
