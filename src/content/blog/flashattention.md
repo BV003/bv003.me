@@ -80,3 +80,50 @@ $$
 $$
 
 This means: as long as we keep (m, ℓ) per row as running statistics, we can process Q block by block against K/V blocks, rescale the partial output, and get the exact same result as if we had the full matrix. No need to ever materialize the N×N attention matrix in slow HBM.
+
+#### Worked Example: Softmax Over Two Blocks
+
+Let's make this concrete. Say we have a row with 4 scores split into two blocks:
+
+Block 1: scores = [2, 1]
+Block 2: scores = [3, 0]
+
+First, process Block 1 alone:
+
+```
+m₁ = max(2, 1) = 2
+f₁ = [e^(2-2), e^(1-2)] = [1, 0.368]
+ℓ₁ = 1 + 0.368 = 1.368
+partial_output₁ = f₁ / ℓ₁ = [0.731, 0.269]
+```
+
+Now Block 2 arrives. Combine with stats from Block 1:
+
+```
+m₂ = max(3, 0) = 3
+m_new = max(m₁, m₂) = max(2, 3) = 3
+
+// Rescale old stats to align with the new max:
+ℓ_new = e^(2-3) × ℓ₁ + e^(3-3) × (e^(3-3) + e^(0-3))
+      = e^(-1) × 1.368 + 1 × (1 + e^(-3))
+      = 0.368 × 1.368 + 1 × 1.050
+      = 0.503 + 1.050 = 1.553
+
+f_new = [e^(2-3) × f₁,  e^(3-3) × f₂]
+      = [0.368 × (1, 0.368),  1 × (1, 0.050)]
+      = [(0.368, 0.135),  (1, 0.050)]
+
+final_softmax = f_new / ℓ_new
+              = [0.237, 0.087, 0.644, 0.032]
+```
+
+Let's verify against the naive approach — softmax([2, 1, 3, 0]) all at once:
+
+```
+e²=7.389, e¹=2.718, e³=20.086, e⁰=1
+sum = 31.193
+result = [7.389/31.193, 2.718/31.193, 20.086/31.193, 1/31.193]
+       = [0.237, 0.087, 0.644, 0.032] ✓ Identical!
+```
+
+The key takeaway: by keeping just two numbers (m, ℓ) as running state, we can stream through blocks one at a time, rescaling on the fly, and get the exact same softmax answer. This is what lets FlashAttention keep everything in fast SRAM — each block computes its piece, rescales the accumulated output, and moves on. No N×N matrix ever hits slow memory.
