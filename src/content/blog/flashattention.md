@@ -31,6 +31,12 @@ The key insight: make attention IO-aware. Fuse all operations into one CUDA kern
 
 ### Background
 
+The standard way to speed up memory-bound ops is **kernel fusion** — if you apply multiple operations to the same input, load it once, do all the ops, write once. Compilers can fuse elementwise ops (activation, dropout, mask) automatically.
+
+But kernel fusion doesn't save attention. Why? Training needs the backward pass. Even if you fuse QKᵀ → softmax → PV in the forward pass, you still have to save S and P to HBM for the backward pass to compute gradients. Naive fusion just defers the write, it doesn't eliminate it.
+
+FlashAttention's second trick (beyond tiling) is **recomputation**. Instead of storing S and P for backward, store only the output O and the softmax stats (m, ℓ). During backward, recompute S and P on-the-fly from Q, K, V blocks in SRAM. More FLOPs, but far fewer HBM accesses — and on modern GPUs, memory is the bottleneck, not compute.
+
 
 ### Key Ideas
 
