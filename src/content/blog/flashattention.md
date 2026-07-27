@@ -40,6 +40,14 @@ FlashAttention's second trick (beyond tiling) is **recomputation**. Instead of s
 
 ### Key Ideas
 
+FlashAttention has two core ideas:
+
+1. **IO-aware tiling.** Split Q, K, V into blocks. Compute attention block-by-block entirely in fast SRAM using the online softmax trick. The N×N attention matrix never touches slow HBM.
+
+2. **Recomputation for backward pass.** Traditional training saves the N×N matrices S and P forward for backward. FlashAttention only stores O and (m, ℓ) per row — then recomputes S and P on-the-fly in SRAM during backward. More FLOPs, but massively less HBM traffic.
+
+The result: exact attention (no approximation), linear memory O(N) instead of O(N²), and wall-clock speedup up to 7.6× on attention alone.
+
 
 ### How It Works
 
