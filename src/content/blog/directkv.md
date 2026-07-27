@@ -7,7 +7,7 @@ tags: ["Tech"]
 
 ### Citation
 
-The paper named "No Buffer, No Bottleneck: Efficient Zero-Copy KV Cache Offloading for Long-Context LLMs" is authored by Shutian Luo and Haiying Shen from University of Virginia. Published at OSDI 2026.
+The paper named "No Buffer, No Bottleneck: Efficient Zero-Copy KV Cache Offloading for Long-Context LLMs" is authored from University of Virginia. Published at OSDI 2026.
 
 ### Motivation
 
