@@ -33,6 +33,22 @@ Target hardware is the **NVIDIA Grace-Hopper (GH200)** superchip: a tightly coup
 In standard LLM inference, each transformer layer produces **key (K) and value (V)** tensors during the attention step. These are stored in a **KV cache** to avoid recomputing them for every subsequent token. The KV cache size = `2 × num_layers × hidden_dim × sequence_length`. For a Llama-8B model at 32K context, this alone can consume tens of GB — pushing GPU memory to its limit.
 
 
+### System Architecture
+
+DirectKV consists of four components that work together across both **prefill** (processing input prompts) and **decode** (generating one token at a time) phases:
+
+** Kernel Generator (Offline).** Compiles a rich set of CUDA kernel candidates ahead of time using C++ template instantiations specialized for different combinations of `<data_type, head_dim, tile_size>`. This avoids runtime compilation overhead while ensuring each variant is fully optimized. All candidates are stored in an offline repository.
+
+** Kernel Adaptor (Runtime).** At inference time, selects the best pre-compiled kernel by matching the current request's precision (FP16/BF16), head dimension, tile size, and execution phase (prefill: multi-token vs. decode: single-token). The selection is lightweight — just substituting template parameters.
+
+** Attention Fusion Engine.** Fuses K/V projection and attention score computation into a single CUDA kernel launch. This is where the three key ideas (CPU-aware tiling, kernel fusion, warp-level pipelining) execute. It has distinct strategies for prefill vs. decode:
+- **Prefill phase**: iterate over Q (stored in HBM) for each (K,V) tile fetched from CPU memory — since KV cache lives in slow CPU memory, reuse it maximally.
+- **Decode phase**: iterate over all cached (K,V) for the single new query token — since Q is only one token, avoid repeatedly reading intermediate output from HBM.
+
+** KV Cache Manager.** Allocates pinned host memory (`cudaHostAlloc`) for KV tensors, making them directly accessible to the GPU via zero-copy pointers. Once written, KV tensors stay in these buffers and are reused across decoding iterations — no staging, no recomputation.
+
+A key constraint driving kernel design is **SMEM capacity**. Each SM's shared memory is logically split into projection buffers (for X, Wk, Wv tiles) and attention buffers (for K, V, Q, O tiles). To save space, buffers for Wk and Wv are reused to store newly generated K and V. SMEM allocation must satisfy `α·P ≥ 3·m·size(T)·(Dim·N)`, where P is the L1/SMEM pool size, m is pipeline stages (default 2), and N is the tile size. This constraint determines which `<T, Dim, N>` configurations are feasible, guiding offline kernel pre-building.
+
 ### Key Ideas
 
 DirectKV proposes three techniques that work together to make zero-copy KV cache offloading practical:
