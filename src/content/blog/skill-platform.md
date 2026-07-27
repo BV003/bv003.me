@@ -52,24 +52,39 @@ tags: ["Tech"]
 
 所有接口通过 `Authorization: Bearer <jwt_token>` 统一鉴权，核心接口响应 ≤150ms。
 
-Skill 相关
+##### 1. Skill 浏览
 
 | 方法 | 路径 | 说明 |
 |------|------|------|
 | `GET` | `/api/v1/skills` | 搜索 / 筛选 Skill 列表 |
-| `GET` | `/api/v1/skills/:id` | 获取 Skill 详情（含版本、安全报告） |
-| `GET` | `/api/v1/skills/:id/versions` | 获取所有版本 |
-| `POST` | `/api/v1/skills/:id/install` | CLI 安装 Skill（下发数据源模板） |
+| `GET` | `/api/v1/skills/:id` | Skill 详情（元数据、版本、安全报告） |
+| `GET` | `/api/v1/skills/:id/versions` | Skill 全部版本列表 |
 
+##### 2. CLI 操作
 
-统计
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| `POST` | `/api/v1/skills/:id/install` | 安装 Skill，下发数据源模板 |
+| `POST` | `/api/v1/skills/:id/update` | 更新 Skill 到指定版本 |
+| `POST` | `/api/v1/skills/:id/uninstall` | 卸载 Skill |
+| `GET` | `/api/v1/user/installed` | 当前用户已安装 Skill 列表 |
+
+##### 3. 安全报告
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| `GET` | `/api/v1/skills/:id/reports` | Skill 安全扫描报告列表 |
+| `GET` | `/api/v1/skills/:id/reports/:version` | 指定版本扫描报告详情 |
+| `GET` | `/api/v1/admin/audit-logs` | (管理员) 审计日志查询 |
+
+##### 4. 统计看板
 
 | 方法 | 路径 | 说明 |
 |------|------|------|
 | `GET` | `/api/v1/skills/:id/stats` | 单个 Skill 下载量 / 版本使用率 |
 | `GET` | `/api/v1/stats/dashboard` | 平台总览（总 Skill 数、总下载量等） |
 
-用户 & 权限
+##### 5. 用户与权限
 
 | 方法 | 路径 | 说明 |
 |------|------|------|
@@ -78,7 +93,14 @@ Skill 相关
 | `POST` | `/api/v1/admin/users/:id/role` | (管理员) 修改用户角色 |
 | `POST` | `/api/v1/admin/skills/:id/permission` | (管理员) 设置私有 Skill 下载权限 |
 
+##### 6. 仓库管理
 
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| `GET` | `/api/v1/admin/repos` | (管理员) 已接入仓库列表 |
+| `POST` | `/api/v1/admin/repos` | (管理员) 新增同步仓库 |
+| `DELETE` | `/api/v1/admin/repos/:id` | (管理员) 移除仓库 |
+| `POST` | `/api/v1/admin/repos/:id/sync` | (管理员) 手动触发全量同步 |
 
 ### Step 3 - Design Deep Dive
 
