@@ -12,6 +12,20 @@ The paper named "C2CServe: Leveraging NVLink-C2C for Elastic Serverless LLM Serv
 
 ### Motivation
 
+Modern LLM serving is increasingly **serverless** in shape. A single cloud tenant may register dozens of domain-specialized fine-tunes, periodically refreshed checkpoints, and expert mixtures behind a unified endpoint. Production traces from Alibaba (89 models over three weeks) show the pattern: 83% of models are active in fewer than 20% of observed hours, with the median model idle 96% of the time. Yet these long-tail models must remain responsive to unpredictable, bursty invocations.
+
+This creates a structural mismatch with existing GPU serving systems:
+
+- **Dedicated-GPU allocation** keeps each model warm in HBM, avoiding cold starts — but wastes scarce GPU memory when traffic is sparse. Under long-tail demand, most GPUs sit idle.
+
+- **GPU time sharing** multiplexes multiple models on one GPU, improving utilization — but when the active model changes, the system must reload gigabytes of weights over PCIe and reinitialize inference-engine state (CUDA graphs, runtime buffers), adding heavy **cold-start latency**.
+
+The tension is clear: serverless LLM serving needs an allocation unit finer than a full GPU but stable enough to avoid cold starts. **NVIDIA Multi-Instance GPU (MIG)** seems ideal — it partitions one GPU into up to seven hardware-isolated slices, each with dedicated compute and HBM. But MIG has a fatal problem for LLMs: each slice's HBM is too small for modern model weights (a 70B model in BF16 needs ~140 GB, and even a full GH200 has only 96 GB).
+
+**The opportunity.** NVIDIA GH200/GB200 Superchips provide NVLink-C2C (~450 GB/s per direction), ~7× PCIe bandwidth. C2C is fast enough that model weights can remain in abundant CPU memory and be **streamed on demand** to MIG instances via zero-copy, without staging into HBM. This decouples model residency from scarce HBM: MIG provides fine-grained compute isolation; C2C makes CPU memory an active weight store. Cold starts no longer require loading weights into HBM, and idle models no longer occupy GPU memory.
+
+**The challenges.** Two problems arise. First, existing GEMM kernels (cuBLAS, CUTLASS) assume HBM-resident operands — when used naïvely with CPU-resident weights, they repeatedly re-fetch the same weight blocks over C2C, saturating the shared interconnect. Second, C2C bandwidth is shared across all MIG instances on the same Superchip, breaking MIG's isolation guarantee: one tenant's weight streaming degrades another's effective bandwidth. The core problem C2CServe solves is: **how to make MIG practical for serverless LLM serving given the shared C2C bottleneck**.
+
 ### Background
 
 Public model hubs already catalog over a million models, and production traces from large-scale inference platforms show a pronounced long tail: a small fraction of models receives most requests, while the remaining models must still remain responsive to unpredictable invocations. 
@@ -57,15 +71,11 @@ HybridGEMM therefore selects an execution mix that matches the current HBM–C2C
 
 The optimal 𝛼 is runtime-dependent. 
 
-
-
-<!-- ### Evaluation
-
-### Takeaways  -->
+### Experiments & Results
 
 
 
-### Key Techniques
+### Fundamental Underlying Technologies
 
 #### C2C
 
