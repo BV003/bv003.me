@@ -69,6 +69,23 @@ C2CServe has three runtime components:
 
 ### Experiments & Results
 
+**Setup.** GH200 Superchip (480 GB CPU, 96 GB HBM3, C2C ~900 GB/s), CUDA 12.8, PyTorch 2.7, built on mini-sglang. Models: Llama-3 (3B/8B/70B), Mixtral-8x7B, Qwen3-30B-A3B (BF16). Workload: Alibaba GenTD26 production trace (3.5M requests, 87 models, 3 weeks). Baselines: ServerlessLLM, Aegaeon (dense); MoE-Infinity, FineMoE (MoE). Metrics: p95 TTFT/TPOT, cold-start latency, model-switch latency.
+
+**Full-GPU serving (Fig. 9).** C2CServe matches or beats baselines on dense models and enables Llama-70B where ServerlessLLM and Aegaeon OOM. On MoE, TTFT improved 3.0–7.2× over baselines; TPOT competitive.
+
+**Cold-start latency (Fig. 10).** C2CServe reduces cold-start by up to 7.1× on dense models (vs. Aegaeon) and 4.6–5.0× on MoE (vs. MoE-Infinity/FineMoE). Also enables Llama-70B cold starts where others OOM.
+
+**Model-switch latency (Fig. 11).** Under MIG, C2CServe switches in 50 ms (dense) / 318 ms (MoE), vs. 1.7 s / 12 s for ServerlessLLM — one to three orders of magnitude faster. Weights stay in pinned CPU memory; only runtime state is reinitialized.
+
+**Dynamic workload (Fig. 12).** Under bursty trace replay, C2CServe keeps TTFT at 0.2–0.7 s (dense) and 0.5–0.8 s (MoE), meeting a 1 s SLO for 95% of requests. Baselines frequently spike to 2–10 s.
+
+**Ablations (Fig. 13, 14):**
+- **HybridGEMM alone** in existing systems: reduces TTFT 36–68%, enables Llama-70B on ServerlessLLM.
+- **Bandwidth-aware placement** vs. random: 1.94× p99 TTFT reduction (1.24 s → 0.64 s).
+- **Chunk-size control** vs. default: 2.83× p99 TTFT reduction (1.81 s → 0.64 s). Smoothes C2C burst pressure during prefill.
+- **HybridGEMM α tuning** vs. static: 1.48× p99 TTFT reduction (0.95 s → 0.64 s). Static α overloads either C2C or HBM; runtime tuning balances both.
+
+**Future hardware projection (Table 2).** C2CServe benefits from Superchip roadmap: Rubin's 3.2× CPU memory and 2× C2C bandwidth expand the CPU-resident model pool, offsetting the relative GEMM gap vs. HBM-resident execution.
 
 
 ### Fundamental Underlying Technologies
