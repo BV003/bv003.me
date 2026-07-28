@@ -24,41 +24,31 @@ Existing approaches both fail:
 
 **The challenge.** Existing GEMM kernels assume HBM-resident operands — naïvely pointing them at CPU-resident weights causes repeated C2C fetches, saturating the shared interconnect. Worse, C2C bandwidth is shared across all MIG instances on a Superchip, so one tenant's weight streaming degrades another's. C2CServe asks: how to make MIG practical for serverless LLM serving under the shared C2C bottleneck?
 
-### Background
+### Key Ideas
 
-Public model hubs already catalog over a million models, and production traces from large-scale inference platforms show a pronounced long tail: a small fraction of models receives most requests, while the remaining models must still remain responsive to unpredictable invocations. 
+C2CServe has three key ideas:
 
-Existing GPU-based serving systems struggle to provide both **fine-grained allocation** and **low cold-start** overhead NVIDIA Multi-Instance GPU(MIG) appears to offer such a middle ground for serverless LLM serving. 
+**① MIG + C2C for serverless LLM serving.** MIG provides fine-grained, hardware-isolated GPU slices for multi-tenant serving. C2C (~450 GB/s) extends each slice beyond its private HBM to a shared CPU-memory weight store. Model weights stay in CPU memory and are streamed on demand — no preloading, no HBM residency. Cold starts become cheap: just initialize runtime state, no weight transfer.
 
+**② HybridGEMM: adaptive GEMM for heterogeneous memory.** Existing GEMM kernels (cuBLAS, CUTLASS) assume HBM-resident operands and use a single fixed dataflow. C2CServe instead uses two complementary GEMM strategies running on different SMs of the same MIG instance:
+- **SymGEMM (output-stationary):** streams both X and W, writes partial O to HBM — stresses C2C but preserves GEMM efficiency.
+- **AsymGEMM (weight-stationary):** keeps W in SMEM/L2 and reuses it across input tiles, accumulates O in HBM — reduces C2C traffic at the cost of extra HBM traffic.
 
-#### GEMM on MIG-Partitioned Superchips
+A single knob α (the fraction of SMs assigned to SymGEMM) trades C2C traffic for HBM traffic per MIG slice, matching the current HBM/C2C bandwidth balance. The two paths write disjoint output columns so no synchronization is needed.
 
-Because the two operands come from different memory domains, matrix shape determines both HBM traffic and C2C pressure. O(M,N) = X(M,K) * W(K,N). Chunk Size directly corresponds to M (the partitioning dimension), while Total Size of Two Models (GB) corresponds to N and K (the dimensions of the weight matrices).
+**③ Hierarchical scheduling with feedback control.** C2C bandwidth is shared across MIG instances. The scheduler coordinates three decisions: model placement (avoid co-locating large models on the same GPU), input chunk size (larger chunks → more weight reuse → less C2C pressure), and the HybridGEMM knob α. A feedback controller monitors TPOT/TTFT at runtime and adjusts α and chunk size to maintain SLOs under contention.
 
-Superchip GEMM performance is bottleneck dependent: MIG partitioning changes the effective HBM C2C bandwidth balance, while matrix shape determines how well C2C traffic is amortized. High performance therefore requires an adaptive GEMM dataflow that jointly manages HBM and C2C traffic.
+#### GEMM Shape Matters
 
-根据不同尺寸的矩阵进行动态调整。
+For O(M,N) = X(M,K) × W(K,N) where X is in HBM and W is in CPU memory, M and N have opposite effects:
+- **Larger M** (more tokens per chunk): each fetched weight tile is reused more times → better C2C amortization → higher efficiency.
+- **Larger N** (hidden dimension): forces more weights to be fetched per tile → higher C2C pressure → C2C-bound.
+
+This means chunk size and model size directly determine the bottleneck, which guides the scheduler's decisions.
 
 #### Cross-Instance C2C Contention
 
-**Impact of Parameter Footprint** As a result, parameter footprint becomes a first-order determinant of C2C traffic intensity. We quantify cross-instance interference as the gap between the sum of solo-run throughput and the co-run throughput. However, the co-run case degrades much more sharply than the solo baseline, and the interference gap widens from 28% to 42%. This is because larger colocated models generate more concurrent parameter-fetch traffic over C2C, increasing the likelihood of overlapping fetch streams across MIG instances.
-
-This trend shows that larger parameter footprints cre-
-ate greater pressure on the shared C2C link, making model
-footprint a useful signal for scheduling. An intelligent sched-uler should therefore avoid co-locating models with large CPU-resident parameters on the same GPU, and instead use footprint-aware placement to reduce C2C contention and improve aggregate throughput.
-
-**Impact of Execution Granularity** 
-
-
-### Key Ideas
-
-We observe that high-bandwidth CPU–GPU interconnects, such as NVLink-C2C (C2C) in NVIDIA GH200 and GB200 Superchips, change the memory constraint: model weights can reside in CPU memory and be streamed on demand to MIG instances ,shifting model residency from scarce HBM to abundant host memory. 
-
-Together, MIG and C2C make LLM serverless practical: MIG provides fine-grained compute, while C2C extends each MIG instance beyond its private HBM partition to a larger CPU memory weight store.
-
-Realizing this design requires rethinking two assumptions in today’s GPU software stack. First existing general matrix multiplication (GEMM) kernels such as cuBLAS and CUTLASS assume HBM-resident operands. Second, C2C sharing weakens MIG isolation. Co-resident MIG instances may stream CPU-resident weights concurrently, so each tenant’s effective C2C bandwidth depends on aggregate demand rather than its own partition. 
-
-Specifically, C2CServe introduces HybridGEMM with key insight to trade C2C traffic for HBM traffic. HybridGEMM splits execution between an output-stationary（驻留） path that preserves GEMM efficiency and a weight-stationary path that reuses CPU-resident weights to reduce repeated C2C fetches.
+Experiments show the interference gap (solo-run vs. co-run throughput) widens from 28% to 42% as total colocated model size grows from 5 GB to 44 GB. Larger parameter footprints mean more concurrent C2C fetches from different MIG instances, saturating the shared link. The scheduler uses model footprint as a signal to avoid co-locating heavy models.
 
 
 ### How It Works
@@ -92,5 +82,3 @@ Input 是用户实时推理数据（一句话、一张图），流程是：用�
 #### Symmetric GEMM and Asymmetric GEMM
 
 Symmetric 对称的含义：系统对输入矩阵X和权重矩阵W一视同仁，平衡两者的搬运、读取开销，不会刻意固定其中一个数据不动。计算时会交替搬运X和W到 GPU 计算单元，两者访问频次、数据搬运量基本对半分。Asymmetric GEMM 非对称数据流矩阵乘，固定权重矩阵 W 驻留在 GPU 片上缓存，全程不重复加载；只持续流式传入输入 X、流式写出累加输出 O，两个矩阵访存策略完全不对称。
-
-#### 
