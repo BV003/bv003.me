@@ -55,9 +55,17 @@ Experiments show the interference gap (solo-run vs. co-run throughput) widens fr
 
 ![C2CServe Architecture](/images/architecture-c2cserve.png)
 
-HybridGEMM therefore selects an execution mix that matches the current HBM–C2C band-width balance. The two paths run on different SMs and write disjoint columns of 𝑂, so they require no interstream synchronization. 
+C2CServe has three runtime components:
 
-The optimal 𝛼 is runtime-dependent. 
+**① Offline Kernel Builder.** Pre-compiles HybridGEMM variants for different precision × shape × MIG partition combinations. Each variant exposes the α knob. At initialization, α starts at 0 (all AsymGEMM, C2C-frugal).
+
+**② Online Scheduler.** On each request, four steps:
+1. If the model is already active on a MIG instance, route directly (no setup).
+2. Else, pick an idle MIG instance — or evict a low-priority model if none is free. Placement respects a C2C budget: Σ BW_C2C(m) ≤ BW_avail, where BW_C2C(m) = S_m / TPOT_target.
+3. Select chunk size from an offline profiling table. Larger chunks → better GPU utilization but more C2C pressure. The constraint: estimated HBM demand must stay within the MIG slice's HBM bandwidth.
+4. Select initial α from the profiling table.
+
+**③ Runtime Controller.** A feedback loop monitors latency, HBM utilization, and C2C utilization (smoothed via EMA). The tuning rule: if C2C utilization exceeds HBM utilization by more than threshold τ, decrease α (favor AsymGEMM to reduce C2C pressure). If HBM is more saturated, increase α (favor SymGEMM). This keeps TTFT/TPOT within SLO under dynamic multi-tenant contention. 
 
 ### Experiments & Results
 
