@@ -12,19 +12,17 @@ The paper named "C2CServe: Leveraging NVLink-C2C for Elastic Serverless LLM Serv
 
 ### Motivation
 
-Modern LLM serving is increasingly **serverless** in shape. A single cloud tenant may register dozens of domain-specialized fine-tunes, periodically refreshed checkpoints, and expert mixtures behind a unified endpoint. Production traces from Alibaba (89 models over three weeks) show the pattern: 83% of models are active in fewer than 20% of observed hours, with the median model idle 96% of the time. Yet these long-tail models must remain responsive to unpredictable, bursty invocations.
+LLM serving is shifting toward **serverless**: large model catalogs, long-tail invocations, multi-tenant demand. Production traces (Alibaba, 89 models over three weeks) show 83% of models active <20% of the time, median model idle 96% — yet they must respond quickly to unpredictable bursts.
 
-This creates a structural mismatch with existing GPU serving systems:
+Existing approaches both fail:
+- **Dedicated-GPU**: model stays warm in HBM → no cold start, but wastes GPU memory under sparse traffic.
+- **GPU time sharing**: multiplexes models on one GPU → improves utilization, but switching models requires reloading GBs of weights over PCIe → heavy cold-start latency.
 
-- **Dedicated-GPU allocation** keeps each model warm in HBM, avoiding cold starts — but wastes scarce GPU memory when traffic is sparse. Under long-tail demand, most GPUs sit idle.
+**MIG** (Multi-Instance GPU) offers a middle ground: hardware-partition one GPU into up to seven isolated slices. But each slice has too little HBM for modern LLM weights (even a full 96 GB GH200 can't hold a 70B model in BF16).
 
-- **GPU time sharing** multiplexes multiple models on one GPU, improving utilization — but when the active model changes, the system must reload gigabytes of weights over PCIe and reinitialize inference-engine state (CUDA graphs, runtime buffers), adding heavy **cold-start latency**.
+**The opportunity.** GH200/GB200 Superchips provide NVLink-C2C (~450 GB/s, ~7× PCIe). Fast enough that model weights can stay in CPU memory and be streamed on-demand to MIG slices via zero-copy — no need to preload into HBM. This decouples model residency from scarce HBM: MIG gives fine-grained compute, C2C gives abundant weight storage.
 
-The tension is clear: serverless LLM serving needs an allocation unit finer than a full GPU but stable enough to avoid cold starts. **NVIDIA Multi-Instance GPU (MIG)** seems ideal — it partitions one GPU into up to seven hardware-isolated slices, each with dedicated compute and HBM. But MIG has a fatal problem for LLMs: each slice's HBM is too small for modern model weights (a 70B model in BF16 needs ~140 GB, and even a full GH200 has only 96 GB).
-
-**The opportunity.** NVIDIA GH200/GB200 Superchips provide NVLink-C2C (~450 GB/s per direction), ~7× PCIe bandwidth. C2C is fast enough that model weights can remain in abundant CPU memory and be **streamed on demand** to MIG instances via zero-copy, without staging into HBM. This decouples model residency from scarce HBM: MIG provides fine-grained compute isolation; C2C makes CPU memory an active weight store. Cold starts no longer require loading weights into HBM, and idle models no longer occupy GPU memory.
-
-**The challenges.** Two problems arise. First, existing GEMM kernels (cuBLAS, CUTLASS) assume HBM-resident operands — when used naïvely with CPU-resident weights, they repeatedly re-fetch the same weight blocks over C2C, saturating the shared interconnect. Second, C2C bandwidth is shared across all MIG instances on the same Superchip, breaking MIG's isolation guarantee: one tenant's weight streaming degrades another's effective bandwidth. The core problem C2CServe solves is: **how to make MIG practical for serverless LLM serving given the shared C2C bottleneck**.
+**The challenge.** Existing GEMM kernels assume HBM-resident operands — naïvely pointing them at CPU-resident weights causes repeated C2C fetches, saturating the shared interconnect. Worse, C2C bandwidth is shared across all MIG instances on a Superchip, so one tenant's weight streaming degrades another's. C2CServe asks: how to make MIG practical for serverless LLM serving under the shared C2C bottleneck?
 
 ### Background
 
