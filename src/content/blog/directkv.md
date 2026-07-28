@@ -67,4 +67,21 @@ These three ideas share a common philosophy: **shift bandwidth pressure from the
 ### Experiments & Results
 
 
-### Key Techniques
+### Fundamental Underlying Technologies
+
+#### Kernel Fusion (Projection + Attention)
+
+Kernel fusion is a classic GPU optimization: instead of launching separate kernels that each write their results to global memory (HBM) and have the next kernel read them back, multiple operations are merged into a single kernel that passes data through on-chip shared memory (SMEM).
+
+In the context of LLM inference, the standard path is:
+1. **Projection kernel**: `K = X·Wk`, `V = X·Wv` → write K, V to HBM
+2. **Attention kernel**: read K, V from HBM → compute `softmax(Q·Kᵀ/√d)·V`
+
+This means K and V make a **round-trip through HBM**: written by kernel 1, read back by kernel 2. HBM bandwidth (hundreds of GB/s to a few TB/s) is already the scarcest resource on a GPU, and this redundant traffic consumes it for no computational benefit.
+
+**How fusion helps.** By merging projection and attention into one kernel, K and V tiles are generated in registers/SMEM and immediately consumed by the attention computation — they never leave the on-chip memory hierarchy. This eliminates the HBM write-read round-trip for K/V, substantially reducing memory traffic and latency. The fused design typically sustains **higher HBM throughput** (since freed bandwidth can be used for useful data movement) and delivers **lower latency** (no kernel launch overhead between projection and attention, no redundant data movement).
+
+**Prerequisite: shared memory (SMEM).** Fusion is only feasible when the working set of both fused operations fits within SMEM. Each SM's SMEM is limited (e.g., ~228 KB on Hopper architectures), so tile sizes must be chosen so that projection buffers (X, Wk, Wv) and attention buffers (K, V, Q, O) together fit. This is a key constraint that guides kernel design — fatter tiles improve compute efficiency but risk SMEM overflow. Buffer reuse (e.g., overwriting Wk/Wv buffers with freshly computed K/V) helps reduce footprint.
+
+**Broader context.** Kernel fusion is widely used in high-performance attention implementations (FlashAttention, xFormers, etc.) and is not specific to any one paper. It is a general technique that applies whenever multiple GPU kernels touch the same intermediate data, and is especially impactful in memory-bound workloads like LLM inference.
+
