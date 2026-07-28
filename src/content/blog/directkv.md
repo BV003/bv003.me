@@ -66,6 +66,20 @@ These three ideas share a common philosophy: **shift bandwidth pressure from the
 
 ### Experiments & Results
 
+**Setup.** NVIDIA GH200 (Hopper GPU, 96 GB HBM3, NVLink-C2C), CUDA 12.4, PyTorch 2.3. Models: Llama-3.1-8B, OPT-13B, OPT-30B. Datasets: ShareGPT and Alpaca, Poisson arrivals up to 30 req/s, context lengths 1K–32K tokens. Baselines: SGLang (HBM-resident), Pie (swap-based offloading), Neo (CPU-GPU pipelining), FlexGen (multi-tier offloading with compression).
+
+**End-to-end latency (Fig. 10).** DirectKV achieves the lowest latency among all offloading systems. On Llama-8B at 30 req/s: 0.75s vs. 1.55–2.95s for baselines. When SGLang runs out of memory (OPT-13B and OPT-30B at high load), DirectKV continues to serve while maintaining low latency.
+
+**Context length scaling (Fig. 11a).** DirectKV maintains the lowest latency across all sequence lengths. At 32K tokens, Neo, Pie, and SGLang OOM; DirectKV remains efficient while FlexGen incurs much higher latency due to multi-tier offloading overhead.
+
+**GPU memory (Fig. 11b).** DirectKV uses 47 GB GPU memory on average — **43% less** than Neo (86 GB), Pie (88 GB), and FlexGen (74 GB). SGLang consumes 92 GB and OOMs at long contexts. Savings come from storing KV cache in CPU-pinned memory accessed via zero-copy, eliminating staging buffers.
+
+**CPU-aware tiling (Fig. 12).** Naïve zero-copy repeatedly fetches KV from CPU memory. CPU-aware tiling reorganizes access to maximize reuse of each fetched KV block, reducing CPU–GPU transfer volume by up to 50% and latency by up to 70%.
+
+**Fused kernel (Fig. 13).** Fusing projection and attention into one kernel sustains up to 3.5× higher HBM throughput and 2.5–3.0× lower latency vs. separate kernels.
+
+**NVLink-C2C vs. PCIe (Fig. 14).** NVLink-C2C reduces attention latency by up to 4.2× compared to PCIe. DirectKV benefits most from the higher bandwidth; competing systems remain bottlenecked by staging overhead.
+
 
 ### Fundamental Underlying Technologies
 
