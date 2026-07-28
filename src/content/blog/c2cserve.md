@@ -77,6 +77,12 @@ The optimal 𝛼 is runtime-dependent.
 
 ### Fundamental Underlying Technologies
 
+#### Serverless
+
+Serverless is a cloud execution model where the cloud provider dynamically manages resource allocation. Users deploy functions without provisioning or managing servers — the platform automatically scales resources up on demand and scales down to zero when idle. Key properties: **fine-grained billing** (pay per invocation, not per uptime), **auto-scaling** (elastic response to load spikes), and **cold starts** (latency penalty when an idle function is invoked, as the runtime must be initialized).
+
+In the LLM serving context, serverless maps naturally to long-tail model catalogs: most models sit idle most of the time, but must respond quickly to bursty requests. The cold-start problem for LLMs is particularly severe because "initialization" means loading gigabytes of model weights and constructing CUDA graphs — far heavier than a typical container startup.
+
 #### C2C
 
 NVLink-C2C, Chip to Chip，封装内芯粒互联（MCM 多芯片模块），GPU/CPU 裸片封装在同一个芯片外壳里，毫米级短距离走线。
@@ -88,3 +94,5 @@ Input 是用户实时推理数据（一句话、一张图），流程是：用�
 #### Symmetric GEMM and Asymmetric GEMM
 
 Symmetric 对称的含义：系统对输入矩阵X和权重矩阵W一视同仁，平衡两者的搬运、读取开销，不会刻意固定其中一个数据不动。计算时会交替搬运X和W到 GPU 计算单元，两者访问频次、数据搬运量基本对半分。Asymmetric GEMM 非对称数据流矩阵乘，固定权重矩阵 W 驻留在 GPU 片上缓存，全程不重复加载；只持续流式传入输入 X、流式写出累加输出 O，两个矩阵访存策略完全不对称。
+
+#### 
