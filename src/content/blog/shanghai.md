@@ -21,11 +21,6 @@ tags: ["Life"]
 </figure>
 
 <figure>
-  <img src="/images/shanghai/夕阳.webp" alt="劳动节前的夕阳，摄于公司一楼" />
-  <figcaption>劳动节前的夕阳，摄于公司一楼</figcaption>
-</figure>
-
-<figure>
   <img src="/images/shanghai/黄浦江夜景.webp" alt="黄浦江夜景" />
   <figcaption>黄浦江夜景</figcaption>
 </figure>
