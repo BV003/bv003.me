@@ -15,8 +15,8 @@ tags: ["Life"]
 
 我不会说我以后会决定定居上海，但是上海确实是一个很独特的地方。
 
-![世纪公园](/images/shanghai/世纪公园.webp)
+![世纪公园湖景](/images/shanghai/世纪公园.webp)
 
-![夕阳](/images/shanghai/夕阳.webp)
+![劳动节前的夕阳，摄于公司一楼](/images/shanghai/夕阳.webp)
 
 ![黄浦江夜景](/images/shanghai/黄浦江夜景.webp)
