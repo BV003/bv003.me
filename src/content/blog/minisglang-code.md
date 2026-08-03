@@ -9,8 +9,6 @@ mini-sglang can be understood as **three layers**: Frontend, Scheduler, and Engi
 
 ### Three-Layer Architecture
 
-![Three-Layer Architecture](/images/blog/minisglang-three-layer-architecture.png)
-
 #### Frontend Layer: user-facing
 
 Runs in independent processes, handles all interaction with the outside world:
