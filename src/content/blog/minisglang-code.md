@@ -7,6 +7,7 @@ tags: ["Tech"]
 
 mini-sglang can be understood as **three layers**: Frontend, Scheduler, and Engine. Layers communicate via ZMQ messages; GPUs communicate via NCCL.
 
+
 ### Three-Layer Architecture
 
 #### Frontend Layer: user-facing
