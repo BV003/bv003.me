@@ -16,6 +16,16 @@ Link: https://zhuanlan.zhihu.com/p/2079229753991741846
 - L2 swizzle大小
 - 是否swap AB
 
+Blackwell GEMM和Hopper GEMM相比，结构还是非常相似的，基本的优化概念包括：
+- warp specialization
+- multi-stage pipeline
+- epilogue dataflow
+
+除了这些基本概念稍微复习下，还有一些特殊的值得学习的点：
+- 2sm Tensor Core指令和编程思维模型
+- TMEM的理解和使用
+- swap AB优化方法
+
 
 
 https://siboehm.com/articles/22/CUDA-MMM
