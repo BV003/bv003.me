@@ -95,8 +95,62 @@ TMEM->TMEM
 
 TMEM本身是128行x512列，每个元素是4字节。行的访问是直接映射到thread的。每一个行只有一个thread可以访问。所以想要一口气访问128行，一般就要4个warp一起。
 
-###
-https://siboehm.com/articles/22/CUDA-MMM
+#### 2SM 编程思维模型
+
+2SM是真的把两个SM看成一组计算单元，在alloc TMEM，dealloc TMEM这些地方，都要用2SM版本的指令（cta_group::2）。
+
+### How to Optimize a CUDA Matmul Kernel for cuBLAS-like Performance: a Worklog
+
+Link: https://siboehm.com/articles/22/CUDA-MMM
+
+Start with a naive kernel and step-by-step apply optimizations until we get within 95% of the performance of cuBLAS.
+
+#### Kernel 1: Naive Implementation
+
+Threads that are in the same block have access to the same shared memory region (SMEM).
+
+#### Lower Bounding the Fastest Possible Runtime
+
+For a matrix multiplication of two 4092² matrices, followed by an addition of a 4092² matrix.
+
+- Total FLOPS: 2*4092³ + 4092² = 137 GFLOPS
+- Total data to read (minimum!): 3 * 4092² * 4B = 201MB
+- Total data to store: 4092² * 4B = 67MB
+
+
+The GPU is advertised with 30TFLOPs/s of fp32 compute throughput and 768GB/s of global memory bandwidth. If we achieved those numbers, we’d need 4.5ms for the calculation and 0.34ms for the memory transfers. So in our napkin math, the calculation takes ~10x more time than the memory accesses. 
+
+This means our final optimized kernel will be compute-bound, as long as we end up having to transfer <10x the absolute minimum memory volume of 278MB.
+
+#### Memory Access Pattern of the Naive Kernel
+
+In our kernel, two threads in the same block with ThreadIds (0, 0) and (0, 1) will load the same column of B but different rows of A. If we assume the worst case of zero caching, then each thread has to load 2*4092+1 floats from global memory. As we have 4092² threads total, this would result in 548GB of memory traffic.
+
+
+#### Kernel 2: Global Memory Coalescing
+
+The concept of a warp is relevant for this second kernel, as sequential memory accesses by threads that are part of the same warp can be grouped and executed as one. This is referred to as global memory coalescing. 
+
+#### Kernel 3: Shared Memory Cache-Blocking
+
+Physically, there’s one shared memory per SM.
+
+In CUDA parlance, increasing per-block SMEM utilization can decrease occupancy. Occupancy is defined as the ratio between the number of active warps per SM and the maximum possible number of active warps per SM.
+
+High occupancy is useful because it allows us to hide the high latency of our operations, by having a bigger pool of issue-able instructions available.
+
+So this kernel is limited by the number of threads per block, and the number of registers per thread. We cannot load more than one block per SM, giving us a final occupancy of 32 active warps / 48 max active warps = 66%.
+
+
+因此可以确定，我们的 warp 很大程度上是在等待 Shared Memory 访问完成。那么，如何让 kernel 发出更少的 Shared Memory 指令呢？一种方法是让每个 thread 计算多个 output element。这样，我们就可以把更多的计算和中间数据放到 register 中完成和保存，从而减少对 Shared Memory 的依赖。
+
+#### Kernel 4: 1D Blocktiling for Calculating Multiple Results per Thread
+
+Kernel 4 不再让“一个 thread 只算一个 C 元素”，而是让一个 thread 一次算 8 个 C 元素，从而大量减少 SMEM（Shared Memory）的重复读取，并把更多中间数据放进寄存器。一个 thread 不再只负责一个 C 元素，而是负责连续的 8 个 C 元素。B 只从 Shared Memory 读取一次，然后在寄存器里复用 8 次。
+
+#### Kernel 5: Increasing Arithmetic Intensity via 2D Blocktiling
+
+
 
 ###
 https://cudaforfun.substack.com/p/outperforming-cublas-on-h100-a-worklog
