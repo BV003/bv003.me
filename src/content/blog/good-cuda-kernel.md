@@ -150,7 +150,22 @@ Kernel 4 不再让“一个 thread 只算一个 C 元素”，而是让一个 th
 
 #### Kernel 5: Increasing Arithmetic Intensity via 2D Blocktiling
 
+The basic idea for kernel 5 will be to compute a grid of 8*8 elements of C per thread. The first stage of the kernel is for all threads to work together to populate the SMEM cache. 
 
+#### Kernel 6: Vectorize SMEM and GMEM Accesses
 
-###
-https://cudaforfun.substack.com/p/outperforming-cublas-on-h100-a-worklog
+The first optimization that I already hinted at earlier is to transpose As. This will allow us to load from As using vectorized SMEM loads. Next, we’ll vectorize all loads and stores from/to GMEM using vector datatypes, namely float4. This leads to the 32b GMEM load instructions (LDG.E and STG.E) being replaced with 128b counterparts (LDG.E.128 and STG.E.128).
+
+#### Kernel 9: Autotuning
+
+We’ve accumulated a total of five template parameters:
+- BM, BN and BK, which specify how much data we cache from GMEM into SMEM.
+- TM and TN, which specify how much data we cache from SMEM into the registers.
+
+Autotuning works, every high-performance library uses it, but it also feels very unsatisfying.
+
+#### Kernel 10: Warptiling
+Divides each Block's work among Warps, and then each Warp's work among its Threads.
+
+### Outperforming cuBLAS on H100: a Worklog
+Link: https://cudaforfun.substack.com/p/outperforming-cublas-on-h100-a-worklog
