@@ -12,16 +12,38 @@ interface Props {
 const { title, slug, pubDate, readingTime, pinned } = Astro.props;
 ---
 
-<article style="margin-bottom: 1.5rem;">
-  <a href={`/blog/${slug}`} style="text-decoration: none; display: block;">
-    <h2 style="font-size: 1.125rem; font-weight: 500; margin-bottom: 0.25rem; line-height: 1.4; color: #000;">
+<article class="post-card">
+  <a href={`/blog/${slug}`} class="post-link">
+    <h2>
       {pinned && <span style="margin-right: 0.5rem;">📌</span>}{title}
     </h2>
   </a>
-  <div style="font-size: 0.8rem; color: #666;">
+  <div class="post-meta">
     <time datetime={pubDate.toISOString()}>{formatDate(pubDate)}</time>
     {readingTime && (
       <span> · {readingTime} min read</span>
     )}
   </div>
 </article>
+
+<style>
+  .post-card {
+    margin-bottom: 1.5rem;
+  }
+
+  .post-link {
+    display: block;
+  }
+
+  .post-link h2 {
+    margin-top: 0;
+    margin-bottom: 0.25rem;
+    font-size: 1.35rem;
+  }
+
+  .post-meta {
+    color: #666;
+    font-size: 0.85rem;
+    font-family: Arial, sans-serif;
+  }
+</style>

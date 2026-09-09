@@ -20,11 +20,12 @@ const { title } = Astro.props;
     <title>{title}</title>
     <style is:global>
       :root {
-        --color-text: #000;
-        --color-bg: #fff;
-        --color-border: #e5e5e5;
+        --color-text: #111;
+        --color-bg: #fffff8;
+        --color-border: #c8c5bc;
+        --color-accent: #a00000;
       }
-      
+
       * {
         margin: 0;
         padding: 0;
@@ -32,12 +33,13 @@ const { title } = Astro.props;
       }
       
       html {
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-family: Georgia, 'Times New Roman', serif;
         font-size: 16px;
-        line-height: 1.6;
+        line-height: 1.45;
         color: var(--color-text);
         background: var(--color-bg);
         -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
       
       body {
@@ -45,49 +47,41 @@ const { title } = Astro.props;
       }
       
       a {
-        color: var(--color-text);
-        text-decoration: underline;
-        text-underline-offset: 2px;
-      }
-      
-      a:hover {
+        color: var(--color-accent);
         text-decoration: none;
       }
-      
-      /* Beautiful Typography Hierarchy */
+
+      a:hover {
+        text-decoration: underline;
+      }
+
       h1, h2, h3, h4, h5, h6 {
-        font-weight: 700;
-        line-height: 1.2;
-        letter-spacing: -0.02em;
-        margin-top: 2.5rem;
-        margin-bottom: 1rem;
+        font-weight: 400;
+        line-height: 1.15;
+        letter-spacing: 0;
+        margin-top: 1.9rem;
+        margin-bottom: 0;
       }
       
       h1 {
-        font-size: 2.5rem;
-        margin-top: 0;
+        font-size: 2.35rem;
+        margin-top: 1.5rem;
         margin-bottom: 1.5rem;
-        letter-spacing: -0.03em;
       }
       
       h2 {
-        font-size: 1.875rem;
-        margin-top: 3rem;
-        margin-bottom: 1.25rem;
-        padding-bottom: 0.5rem;
-        border-bottom: 1px solid var(--color-border);
+        font-size: 1.95rem;
+        margin-top: 2rem;
       }
       
       h3 {
-        font-size: 1.25rem;
-        margin-top: 2.5rem;
-        margin-bottom: 1rem;
+        font-size: 1.65rem;
+        font-style: italic;
+        margin-top: 2.2rem;
       }
       
       h4 {
-        font-size: 1rem;
-        margin-top: 2rem;
-        margin-bottom: 0.875rem;
+        font-size: 1.25rem;
       }
       
       h5 {
@@ -106,8 +100,10 @@ const { title } = Astro.props;
       }
       
       p {
-        margin-bottom: 1.25rem;
-        line-height: 1.75;
+        margin: 1.1rem 0;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        text-align: justify;
       }
       
       /* First paragraph after heading */
@@ -116,9 +112,8 @@ const { title } = Astro.props;
       }
       
       ul, ol {
-        margin-bottom: 1.5rem;
-        margin-top: 1rem;
-        padding-left: 1.75rem;
+        margin: 1.1rem 0;
+        padding-left: 1.5rem;
       }
 
       ol {
@@ -127,7 +122,9 @@ const { title } = Astro.props;
       
       li {
         margin-bottom: 0.5rem;
-        line-height: 1.7;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        text-align: justify;
       }
       
       li > ul, li > ol {
@@ -137,32 +134,29 @@ const { title } = Astro.props;
       
       code {
         font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Courier New', monospace;
-        font-size: 0.875em;
-        background: #f1f5f9;
-        color: #334155;
-        padding: 0.2rem 0.4rem;
+        font-size: 0.85em;
+        background: #fffef8;
+        color: #222;
+        padding: 0.1rem 0.25rem;
         border-radius: 4px;
-        border: 0px solid #e2e8f0;
       }
       
       pre {
-        background: #1e293b;
-        padding: 1.25rem;
-        border-radius: 12px;
+        background: #fffef8;
+        padding: 0.6rem;
+        border: 1px solid #999;
+        border-radius: 4px;
         overflow-x: auto;
-        margin: 1.5rem 0;
+        margin: 1.4rem 0;
         position: relative;
-        box-shadow: 
-          0 4px 6px -1px rgba(0, 0, 0, 0.1),
-          0 2px 4px -1px rgba(0, 0, 0, 0.06);
       }
       
       pre code {
         background: none;
         padding: 0;
-        color: #e2e8f0;
-        font-size: 0.875em;
-        line-height: 1.7;
+        color: #111;
+        font-size: 0.85em;
+        line-height: 1.42;
       }
 
 
@@ -177,13 +171,11 @@ const { title } = Astro.props;
       }
       
       blockquote {
-        border-left: 3px solid var(--color-text);
-        padding: 0.5rem 0 0.5rem 1.5rem;
-        margin: 2rem 0;
+        border-left: 3px solid var(--color-accent);
+        padding: 0.5rem 0 0.5rem 1.25rem;
+        margin: 1.8rem 0;
         font-style: italic;
-        color: #444;
-        background: #fafafa;
-        border-radius: 0 4px 4px 0;
+        color: #333;
       }
       
       blockquote p {
@@ -224,29 +216,33 @@ const { title } = Astro.props;
       /* Table styles */
       table {
         width: 100%;
-        border-collapse: collapse;
-        margin: 2rem 0;
-        font-size: 0.9rem;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin: 1.8rem auto;
+        font-size: 0.95rem;
+        border-top: 2px solid #333;
+        border-bottom: 2px solid #333;
       }
 
       thead {
-        border-bottom: 2px solid var(--color-text);
+        border-bottom: 1px solid #333;
       }
 
       th {
-        padding: 0.75rem 0;
-        padding-right: 1rem;
+        padding: 0.55rem 0.5rem;
         text-align: left;
-        font-weight: 600;
-        font-size: 0.85rem;
+        font-weight: 400;
       }
 
       td {
-        padding: 0.75rem 0;
-        padding-right: 1rem;
-        border-bottom: 1px solid var(--color-border);
+        padding: 0.55rem 0.5rem;
+        border-bottom: 1px solid #ddd8cc;
         vertical-align: top;
-        line-height: 1.6;
+        line-height: 1.5;
+      }
+
+      tbody tr:nth-child(odd) {
+        background: #fbf7f0;
       }
 
       tbody tr:last-child td {
