@@ -6,7 +6,7 @@ import { getCollection } from 'astro:content';
 import { getReadingTime } from '../../utils/readingTime';
 
 export async function getStaticPaths() {
-  const tags = ['Tech', 'Money', 'Life'];
+  const tags = ['Tech', 'Money', 'Life', 'Fiction'];
   return tags.map((tag) => ({
     params: { tag: tag.toLowerCase() },
     props: { tag },

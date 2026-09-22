@@ -8,7 +8,7 @@ const blog = defineCollection({
     slug: z.string(),
     pubDate: z.coerce.date(),
     pinned: z.boolean().optional().default(false),
-    tags: z.enum(['Tech', 'Money', 'Life']).array().optional().default([]),
+    tags: z.enum(['Tech', 'Money', 'Life', 'Fiction']).array().optional().default([]),
   }),
 });
 
