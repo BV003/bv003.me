@@ -9,3 +9,6 @@ tags: ["Tech"]
 
 In fact, I feel concerned about Anthropic, OpenAI, and other similar companies. Aside from us paying to use their models, I often think they hold access to something far more valuable: our personal data. Although they claim they will never use user data without permission, it is hard to fully trust these promises. Imagine a company that knows almost everything about you—sometimes even better than you know yourself. They could easily leverage this information, along with inherent human weaknesses, for profit. I am not criticizing Anthropic or OpenAI; both are reputable companies. My only concern is that they possess an excessive amount of power.
 
+### Opensource Small Models
+
+So small, open-source models are a must.

@@ -125,9 +125,3 @@ HTTP requests: the API servers handle tasks like adding/removing friends, updati
 **Data model**: The “nearby friends” feature only cares about the current location of a user. Therefore, we only need to store one location per user. Redis is an excellent choice because it provides super-fast read and write operations. It supports TTL, which we use to auto-purge users
 from the cache who are no longer active. The current locations do not need to be durably stored. If the Redis instance goes down, we could replace it with an empty new instance and let the cache be filled as new location updates stream in. The active users could miss location updates from friends for an update cycle or two while the new cache warms. It is an acceptable tradeoff. In the deep dive
 section, we will discuss ways to lessen the impact on users when the cache gets replaced.
-
-#### Step 3 - Design Deep Dive
-
-**How well does each component scale?**
-
-**WebSocket servers** However, the WebSocket servers are stateful, so care must be taken when removing existing nodes.
