@@ -17,7 +17,7 @@ tags: ["Life"]
 
 <figure>
   <img src="/images/first-impressions-of-seattle/1.jpg" alt="Welcome to Seattle" />
-  <figcaption></figcaption>
+  <figcaption>Welcome to Seattle</figcaption>
 </figure>
 
 ### 自然风光
@@ -26,12 +26,12 @@ tags: ["Life"]
 
 <figure>
   <img src="/images/first-impressions-of-seattle/2.jpg" alt="uw的喷泉和远处的雪山" />
-  <figcaption></figcaption>
+  <figcaption>UW 的喷泉和远处的雪山</figcaption>
 </figure>
 
 <figure>
   <img src="/images/first-impressions-of-seattle/3.jpg" alt="太空针塔" />
-  <figcaption></figcaption>
+  <figcaption>太空针塔</figcaption>
 </figure>
 
 我住的公寓后面就是著名的 Burke-Gilman Trail。这条道路是专门用来骑自行车和跑步的，从我住的公寓，往西骑可以骑到学校去，往东骑可以沿着湖一直骑到 Bothell 去。道路两旁保留着大片自然生长的树林。生活在西雅图，可以很方便地接触大自然。
