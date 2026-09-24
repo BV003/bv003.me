@@ -16,11 +16,11 @@ tags: ["Life"]
 我不会说我以后会决定定居上海，但是上海确实是一个很独特的地方。
 
 <figure>
-  <img src="/images/shanghai/世纪公园.webp" alt="世纪公园湖景" />
+  <img src="/images/shanghai/世纪公园.jpg" alt="世纪公园湖景" />
   <figcaption>世纪公园湖景</figcaption>
 </figure>
 
 <figure>
-  <img src="/images/shanghai/黄浦江夜景.webp" alt="黄浦江夜景" />
+  <img src="/images/shanghai/黄浦江夜景.jpg" alt="黄浦江夜景" />
   <figcaption>黄浦江夜景</figcaption>
 </figure>
