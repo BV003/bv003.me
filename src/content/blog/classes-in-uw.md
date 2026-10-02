@@ -9,7 +9,7 @@ tags: ["Tech"]
 
 #### EE P 500 B: Papers Read
 
-I need to submit 8 reviews total. And the best thing I think is to use the 8 reviews to combine one bigger theme.
+I need to submit 8 reviews in total, so I decided to connect them all under one bigger theme: [Local and Private AI](/blog/paper-reviews).
 
 #### EE P 500 E: Robot Tutor Project
 
