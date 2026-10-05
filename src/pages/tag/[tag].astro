@@ -15,7 +15,7 @@ export async function getStaticPaths() {
 
 const { tag } = Astro.props;
 
-const allPosts = await getCollection('blog');
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
 
 const posts = allPosts
   .filter((post) => post.data.tags?.includes(tag))
