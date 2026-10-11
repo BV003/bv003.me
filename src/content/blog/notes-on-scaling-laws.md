@@ -2,7 +2,6 @@
 title: "Notes on Scaling Laws"
 slug: "notes-on-scaling-laws"
 pubDate: 2026-10-05
-draft: true
 tags: ["Tech"]
 ---
 
