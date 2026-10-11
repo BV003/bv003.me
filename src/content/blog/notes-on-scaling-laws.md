@@ -43,6 +43,6 @@ Looking only at parameter count and pretraining, gains in model capability will 
 
 ### References
 
-1. [Claude has reached 25T parameters — why do Chinese models top out at 1T? (Zhihu answer, in Chinese)](https://www.zhihu.com/question/2029177725982613796/answer/2030759722475843817)
+1. [Claude has reached 25T parameters — why do Chinese models top out at 1T? (Zhihu answer)](https://www.zhihu.com/question/2029177725982613796/answer/2030759722475843817)
 2. [Training Compute-Optimal Large Language Models (Chinchilla)](https://arxiv.org/abs/2203.15556)
 3. [Will we run out of data? Limits of LLM scaling based on human-generated data (Epoch AI)](https://arxiv.org/abs/2211.04325)
