@@ -5,13 +5,15 @@ pubDate: 2026-10-05
 tags: ["Tech"]
 ---
 
-本文用 n 表示模型的参数量。目前前沿模型的参数量已经到了 T（万亿）级别。
+本文用 n 表示模型的参数量。目前前沿模型的参数量已经到了 T 级别。
 
 ### 算力与参数量
 
-训练一个模型需要的算力 C、训练数据量 D（token 数）和参数量 n 之间有一个经验公式：
+训练一个模型需要的算力 C、训练数据量 D 和参数量 n 之间有一个经验公式：
 
-$$C \approx 6nD$$
+$$
+C \approx 6nD
+$$
 
 每个参数处理一个 token，前向传播大约需要 2 次浮点运算，反向传播大约需要 4 次，合计 6 次。
 
@@ -21,7 +23,9 @@ Chinchilla 的研究发现，在算力固定的前提下，D 和 n 应该同比�
 
 训练阶段的损失（loss）和 n、D 的关系可以拟合为：
 
-$$L(n, D) = \underbrace{E}_{1.69} + \underbrace{\frac{406.4}{n^{0.34}}}_{\text{模型太小}} + \underbrace{\frac{410.7}{D^{0.28}}}_{\text{数据太少}}$$
+$$
+L(n, D) = \underbrace{E}_{1.69} + \underbrace{\frac{406.4}{n^{0.34}}}_{\text{模型太小}} + \underbrace{\frac{410.7}{D^{0.28}}}_{\text{数据太少}}
+$$
 
 E 是文本本身的不确定性，n 和 D 再大也降不下去。后两项分别是模型不够大、数据不够多带来的损失。n 和 D 同时扩大 10 倍，可以降低的那部分 loss（L − E）大约减半。
 
@@ -39,6 +43,6 @@ loss 和模型能力之间的关系并不确定。在已观测的范围内，los
 
 ### 参考
 
-1. [claude的参数都达到25t了，为何国产模型最多还只有1t？知乎回答](https://www.zhihu.com/question/2029177725982613796/answer/2030759722475843817)（注：Anthropic 未公开过 Claude 的参数量）
+1. [claude的参数都达到25t了，为何国产模型最多还只有1t？知乎回答](https://www.zhihu.com/question/2029177725982613796/answer/2030759722475843817)
 2. [Training Compute-Optimal Large Language Models（Chinchilla）](https://arxiv.org/abs/2203.15556)
 3. [Will we run out of data? Limits of LLM scaling based on human-generated data（Epoch AI）](https://arxiv.org/abs/2211.04325)
