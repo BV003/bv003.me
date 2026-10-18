@@ -8,7 +8,9 @@ tags: ["Tech"]
 
 ### The Theme
 
-Local and Private AI: Efficient and Scalable Systems for Intelligence at the Edge
+For a course, I need to read papers and write reviews. I wanted all eight papers to fit one theme:
+
+**Local and Private AI: Efficient and Scalable Systems for Intelligence at the Edge**
 
 | # | Direction |
 |---|-----------|
