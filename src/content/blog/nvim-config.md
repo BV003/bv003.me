@@ -20,6 +20,7 @@ vscode是微软的假开源，开源了一部分代码，然后又夹带私货�
 
 我选择切换到herdr和Nvim，两个终端。
 Nvim单纯负责手动的修改和查看部分。
-herdr部分同时运行多TUI Agent和实用性指令。
+herdr部分同时运行多TUI Agent和bash指令。
+
 
 
