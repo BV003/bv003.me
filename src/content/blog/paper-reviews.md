@@ -16,7 +16,7 @@ For a course, I need to read papers and write reviews. I wanted all eight papers
 |---|-----------|
 | 1 | Small but Capable Models |
 | 2 | Quantization & Model Compression |
-| 3 | Edge AI Accelerators |
+| 3 | Sparse & Efficient Architectures |
 | 4 | AI-Native Chips |
 | 5 | On-device LLM Inference |
 | 6 | Edge-Cloud Collaborative Inference |
@@ -35,7 +35,11 @@ I chose this paper because I am interested in how much intelligence can fit into
 
 I chose Deep Compression (ICLR 2016) because it is a foundational work in the area of model compression. It combines pruning, quantization, and Huffman coding to compress models dozens of times without loss of accuracy. It takes energy consumption as its starting point so that models can run efficiently on edge devices, which is highly consistent with this topic.
 
-### Review 3: Edge AI Accelerators
+### Review 3: Sparse & Efficient Architectures
+
+#### [Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity](https://arxiv.org/abs/2101.03961)
+
+I chose Switch Transformer because it is the foundational work behind sparse architectures: it established the Mixture-of-Experts design now widely adopted by DeepSeek, Qwen, and GPT. I want to understand how a model can hold a very large number of parameters while activating only a small subset of them for each token, which is exactly the trade-off that lets a large language model run locally under a tight compute budget.
 
 ### Review 4: AI-Native Chips
 
