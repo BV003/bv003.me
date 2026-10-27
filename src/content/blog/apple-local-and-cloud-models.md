@@ -8,7 +8,7 @@ tags: ["Tech"]
 ### The big idea
 
 Most AI apps send everything to the cloud. Apple does the opposite.
-It tries to run AI **on your phone first**.
+It tries to run AI on your phone first.
 It only uses the cloud when the phone can't do the job.
 
 There are three places a request can go.
@@ -50,14 +50,6 @@ So the phone doesn't just trust the cloud. It checks it first.
 4. Need world knowledge? → ask you, then send it to ChatGPT.
 
 The rule is simple: **use the most private and cheapest option that can do the job.**
-
-### For app developers
-
-Since iOS 26, apps can use the phone's model through the **Foundation Models** framework in Swift.
-
-- No API key, no cost.
-- You can ask for output in your own Swift type, and it always comes back in the right shape.
-- You can give the model functions from your app to call.
 
 ### What I learned
 
