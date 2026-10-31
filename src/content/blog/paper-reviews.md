@@ -43,6 +43,10 @@ I chose Switch Transformer because it is the foundational work behind sparse arc
 
 ### Review 4: AI-Native Chips
 
+#### [In-Datacenter Performance Analysis of a Tensor Processing Unit](https://arxiv.org/abs/1704.04760)
+
+I chose this paper because I want to understand local AI from the hardware perspective, and the TPU is a classic example of a chip dedicated to inference. Although it was built for datacenters rather than edge devices, it faces the same core question as local AI: what can a chip gain by giving up generality and doing only neural network inference? It also connects directly to Deep Compression. The TPU computes on 8-bit integers, relying on the same insight that neural networks tolerate low precision, so reading the two papers together shows how a software idea like quantization becomes a saving in silicon.
+
 ### Review 5: On-device LLM Inference
 
 ### Review 6: Edge-Cloud Collaborative Inference
