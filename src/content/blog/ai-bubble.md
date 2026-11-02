@@ -49,6 +49,27 @@ AI 行业也有类似的现象：供应商投资客户，客户再用这笔钱�
 
 ### 历史
 
+和今天最接近的，是 2000 年前后的电信泡沫。
+
+20 世纪 90 年代末，电信公司相信互联网流量会每 100 天翻一番，于是大量融资铺设光纤。朗讯、北电等设备商还为客户提供融资，让客户有钱购买自己的设备，这和今天的循环融资很像。（英伟达就是正在做这个事情）实际上，流量大约每年才翻一番。Global Crossing 和 WorldCom 在 2002 年前后相继破产，从 2000 年 3 月到 2002 年 10 月，纳斯达克指数下跌超过 75%。
+
+把两次放在一起对比：
+
+| 指标 | 电信（2000 年前后） | AI（2026 年） |
+|---|---|---|
+| 年度资本开支 | 约 1200 亿美元（美国电信业） | 约 7300 亿美元（四家公司） |
+| 占美国 GDP | 约 1.2% | 约 2.3% |
+| 供应商融资占 GDP | 约 0.25%（九家设备商 256 亿美元） | 约 0.47%（仅英伟达：479 亿美元持股加 1050 亿美元担保） |
+| 主要出钱的公司 | 高负债的电信新公司 | 现金流强劲的科技巨头 |
+| 产能使用情况 | 估计最多约 95% 的光纤闲置 | 算力仍然紧缺 |
+| 资产寿命 | 光纤可用几十年 | 芯片只能用几年 |
+
+这张表的结论分成两半。从规模看，这一次比当年更大，占 GDP 的比重约为当年的两倍，不过四家公司的开支是全球数字，所以实际差距会小一些。从质量看，这一次更稳健：出钱的公司更强，建好的算力也有人用。
+
+但是有两点比当年更危险。一是资产寿命，光纤在公司破产之后还能继续用很多年，芯片如果等不到需求，可能就过时了。二是集中度，这一次的需求和风险都集中在少数几家公司身上。
+
+当年的教训是：技术可以是真的，投资者依然可能亏钱。问题往往不在于需求会不会来，而在于它能不能在钱花完、债务到期之前到来。
+
 
 ### 参考数据
 
@@ -61,9 +82,16 @@ AI 行业也有类似的现象：供应商投资客户，客户再用这笔钱�
 - [Luminix：Anthropic 招股书季度收入与第三季度数据](https://www.useluminix.com/reports/company-overviews/anthropic-revenue-and-burn-rate)
 - [Investing.com：Anthropic 第三季度分析与月度增速估算](https://www.investing.com/analysis/anthropic-q3-spectacular-numbers-harder-questions-200689718)
 - [Michael Parekh：OpenAI 与 Anthropic 在云厂商未履行合同中的占比](https://michaelparekh.substack.com/p/ai-anthropic-and-opemai-half-of-2)
+- [Luminix：OpenAI 与 Anthropic 占云厂商收入比例的估算与核查](https://www.useluminix.com/reports/market-research/steve-eisman-ai-view/source/1)
 - [Phys.org：AI 行业的循环融资](https://phys.org/news/2026-10-paying-circular-money-machine-ai.html)
 - [Levelbox：英伟达和博通的循环融资](https://levelbox.ai/blog/ai-circular-financing-nvidia-broadcom-october-2026)
 - [CNBC：Anthropic 和 OpenAI 持股对企业盈利的影响](https://www.cnbc.com/2026/08/03/big-techs-anthropic-and-openai-stakes-distort-corporate-earnings.html)
 - [Motley Fool：亚马逊持有的 Anthropic 股权](https://www.fool.com/investing/2026/08/17/amazons-stake-in-anthropic-is-now-big-enough-to-mo/)
 - [Yahoo Finance：Anthropic 通过云平台销售的收入占比](https://finance.yahoo.com/technology/ai/articles/anthropic-relies-google-amazon-microsoft-175139044.html)
 - [NBC News：Anthropic 招股书与算力承诺](https://www.nbcnews.com/business/markets/anthropic-releases-ipo-filing-ahead-highly-anticipated-stock-debut-rcna605676)
+- [Meridian Report：电信与 AI 资本开支占 GDP 的对比](https://meridianreport.org/article/ai-infrastructure-capex-report-2026)
+- [Michel Johannsen：1999 年电信与 2026 年 AI 的供应商融资](https://www.micheljohannsen.com/blog/vendor-financing-loops-1999-vs-2026)
+- [7GC：AI 资本开支与电信泡沫对比](https://www.7gc.co/insights/ai-capex-and-the-telecom-bubble-a-comparative-analysis)
+- [Wikipedia：Telecoms crash](https://en.wikipedia.org/wiki/Telecoms_crash)
+- [Seattle Times：闲置的光纤（2002）](https://archive.seattletimes.com/archive/20020113/darkfiber130/fiber-optic-lines-languish-under-scarred-city-streets)
+- [ISE Magazine：互联网泡沫 25 周年回顾](https://www.isemag.com/professional-development-leadership/article/55293922/the-perils-of-irrational-exuberancethe-25th-anniversary-of-the-dot-com-boom)
