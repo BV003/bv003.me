@@ -51,9 +51,13 @@ AI 行业也有类似的现象：供应商投资客户，客户再用这笔钱�
 
 和今天最接近的，是 2000 年前后的电信泡沫。
 
-20 世纪 90 年代末，电信公司相信互联网流量会每 100 天翻一番，于是大量融资铺设光纤。朗讯、北电等设备商还为客户提供融资，让客户有钱购买自己的设备，这和今天的循环融资很像。（英伟达就是正在做这个事情）实际上，流量大约每年才翻一番。Global Crossing 和 WorldCom 在 2002 年前后相继破产，从 2000 年 3 月到 2002 年 10 月，纳斯达克指数下跌超过 75%。
+20 世纪 90 年代末，电信公司相信互联网流量会每 100 天翻一番，于是大量融资铺设光纤。朗讯、北电等设备商还为客户提供融资，让客户有钱购买自己的设备。今天英伟达投资和担保客户，也有类似的效果。实际上，流量大约每年才翻一番。
 
-把两次放在一起对比：
+崩溃不是一天发生的，而是一步步传导：2000 年 3 月纳斯达克见顶，融资开始变难；2001 年 4 月，客户 Winstar 破产，思科计提约 22.5 亿美元的库存损失；2002 年，Global Crossing 和 WorldCom 破产。从 2000 年 3 月到 2002 年 10 月，纳斯达克指数下跌超过 75%。
+
+当年的教训是：技术可以是真的，投资者依然可能亏钱。问题往往不在于需求会不会来，而在于它能不能在钱花完、债务到期之前到来。
+
+先对比两次的基本情况：
 
 | 指标 | 电信（2000 年前后） | AI（2026 年） |
 |---|---|---|
@@ -64,11 +68,22 @@ AI 行业也有类似的现象：供应商投资客户，客户再用这笔钱�
 | 产能使用情况 | 估计最多约 95% 的光纤闲置 | 算力仍然紧缺 |
 | 资产寿命 | 光纤可用几十年 | 芯片只能用几年 |
 
-这张表的结论分成两半。从规模看，这一次比当年更大，占 GDP 的比重约为当年的两倍，不过四家公司的开支是全球数字，所以实际差距会小一些。从质量看，这一次更稳健：出钱的公司更强，建好的算力也有人用。
+从规模看，这一次比当年更大，占 GDP 的比重约为当年的两倍，不过四家公司的开支是全球数字，所以实际差距会小一些。从质量看，这一次更稳健：出钱的公司更强，建好的算力也有人用。但是有两点比当年更危险：芯片的寿命比光纤短得多，如果等不到需求，可能就过时了；需求和风险也集中在少数几家公司身上。
 
-但是有两点比当年更危险。一是资产寿命，光纤在公司破产之后还能继续用很多年，芯片如果等不到需求，可能就过时了。二是集中度，这一次的需求和风险都集中在少数几家公司身上。
+再按当年崩溃的顺序，看 6 个信号走到了哪一步：
 
-当年的教训是：技术可以是真的，投资者依然可能亏钱。问题往往不在于需求会不会来，而在于它能不能在钱花完、债务到期之前到来。
+| 信号 | 当年 | 现在 | 状态 |
+|---|---|---|---|
+| 融资变难 | 投资者转向谨慎，融资渠道收紧 | 甲骨文 5 年期 CDS 创纪录，约 290 至 315 个基点；CoreWeave 超过 1000 个基点，债券收益率约 15% | 弱公司已亮 |
+| 增长不及预期 | 预期流量每 100 天翻一番，实际约每年翻一番 | Anthropic 环比增速从约 144% 降至约 45% | 开始出现 |
+| 供应商财务变差 | 朗讯的坏账拨备从 1999 年的 6600 万美元升至 2001 年的约 22.5 亿美元 | 英伟达回款天数从约 45 天升至 60 天，供应承诺从 1190 亿美元升至 2790 亿美元 | 开始出现 |
+| 产品价格下跌 | 带宽价格快速下跌 | H100 租金从 2025 年 12 月的每小时 2.00 美元升至 2.88 美元 | 未亮 |
+| 大客户破产 | Winstar、Global Crossing、WorldCom | 还没有大型 AI 公司破产 | 未亮 |
+| 大幅削减投资 | 需求消失，设备订单锐减 | 2027 年资本开支预计超过 1 万亿美元 | 未亮 |
+
+对比下来，融资端的警报已经响了，但主要在甲骨文和 CoreWeave 这些财务较弱的公司。需求端有放缓的迹象，但算力租金还在上涨，大客户也没有破产。也就是说，AI 还没有走到当年 2001 年的阶段。
+
+接下来最该盯住三件事：算力租金是否转为下跌，CoreWeave 这类公司能否继续融资，以及科技巨头是否开始下调资本开支。如果这三件事同时发生，就很接近当年的情况了。
 
 
 ### 参考数据
@@ -92,6 +107,12 @@ AI 行业也有类似的现象：供应商投资客户，客户再用这笔钱�
 - [Meridian Report：电信与 AI 资本开支占 GDP 的对比](https://meridianreport.org/article/ai-infrastructure-capex-report-2026)
 - [Michel Johannsen：1999 年电信与 2026 年 AI 的供应商融资](https://www.micheljohannsen.com/blog/vendor-financing-loops-1999-vs-2026)
 - [7GC：AI 资本开支与电信泡沫对比](https://www.7gc.co/insights/ai-capex-and-the-telecom-bubble-a-comparative-analysis)
+- [Cape Fear Advisors：朗讯坏账拨备等电信与 AI 对比](https://capefearadvisors.substack.com/p/adding-it-up-the-asset-stays-the)
+- [Cisco 10-K：2001 财年库存损失](https://www.sec.gov/Archives/edgar/data/0000858877/000109581101505065/f75710ex13.txt)
+- [Seeking Alpha / TradingView：甲骨文与 CoreWeave 的 CDS](https://www.tradingview.com/news/seekingalpha:542e5efb2094b:0-credit-stress-in-ai-trade-deepens-as-oracle-coreweave-cds-spreads-hit-record-levels/)
+- [Traders Union：CoreWeave 债券收益率](https://tradersunion.com/news/companies/show/3882979-coreweave-bond-yields-credit-risk/)
+- [Beancount：英伟达回款天数与供应承诺](https://beancount.io/blog/2026/08/26/nvidia-fy2027-q2-earnings-analysis)
+- [FourWeekMBA：H100 租金走势](https://fourweekmba.com/ai-nvidia-h100-rent-hits-2-88-an-hour-up-44-since-december/)
 - [Wikipedia：Telecoms crash](https://en.wikipedia.org/wiki/Telecoms_crash)
 - [Seattle Times：闲置的光纤（2002）](https://archive.seattletimes.com/archive/20020113/darkfiber130/fiber-optic-lines-languish-under-scarred-city-streets)
 - [ISE Magazine：互联网泡沫 25 周年回顾](https://www.isemag.com/professional-development-leadership/article/55293922/the-perils-of-irrational-exuberancethe-25th-anniversary-of-the-dot-com-boom)
