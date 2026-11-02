@@ -34,7 +34,17 @@ OpenAI 预计今年收入约 360 亿美元，2030 年达到 3500 亿美元，相
 
 ### 循环融资
 
-资本主义的会计学统计有时候会出现一点问题。我们举一个简单的例子，大家把钱互相借来借去，最后没有什么区别，但是在会计学上却有gdp的增长。
+资本主义的会计学统计有时候会出现一点问题。我们举一个简单的例子：甲花 100 元请乙修剪草坪，乙再花 100 元请甲修剪草坪。最后两个人手里的钱都没有变，但是在统计上，GDP 增加了 200 元，两个人也各有了 100 元收入。
+
+AI 行业也有类似的现象：供应商投资客户，客户再用这笔钱购买供应商的产品。钱转了一圈，供应商的收入增加了，客户的估值也提高了。
+
+最典型的是英伟达。它计划向 OpenAI 投资 300 亿美元，向 Anthropic 投资最多 100 亿美元，而这些公司都依赖英伟达的芯片。一年内，英伟达持有的非上市公司股权从 38 亿美元增至 479 亿美元。它还为 OpenAI 俄亥俄州数据中心的出租方提供了 1050 亿美元的担保，如果 OpenAI 违约，英伟达可能要承担赔付。
+
+云厂商也是如此。亚马逊向 Anthropic 投资了不到 200 亿美元，而 Anthropic 承诺在亚马逊的云服务上至少花费 1100 亿美元。谷歌既是 Anthropic 的投资者，也有约 1150 亿美元的算力合同。这些公司同时还是 Anthropic 的销售渠道：2026 年上半年，Anthropic 有 48% 的收入是通过云厂商的平台销售的。
+
+循环不只影响收入，也影响利润。Anthropic 的估值上涨后，持有其股份的公司可以确认账面收益，即使这些股份并没有卖出。2026 年第二季度，亚马逊确认了 534 亿美元的投资收益，主要来自 Anthropic。这让它的盈利同比增长超过 240%，而剔除投资收益后只有约 17%。同一季度，标普 500 的盈利增长约 48%，剔除这类收益后约为 29%。
+
+这不代表这些增长都是假的。芯片和数据中心是真实存在的，最终也确实有客户在为 AI 付费。问题在于，循环融资会让需求和利润看起来比实际更强，也把这些公司绑在了一起。如果 OpenAI 或 Anthropic 的增长不及预期，估值、收入、利润和担保可能会同时受到影响。
 
 
 ### 历史
@@ -51,3 +61,9 @@ OpenAI 预计今年收入约 360 亿美元，2030 年达到 3500 亿美元，相
 - [Luminix：Anthropic 招股书季度收入与第三季度数据](https://www.useluminix.com/reports/company-overviews/anthropic-revenue-and-burn-rate)
 - [Investing.com：Anthropic 第三季度分析与月度增速估算](https://www.investing.com/analysis/anthropic-q3-spectacular-numbers-harder-questions-200689718)
 - [Michael Parekh：OpenAI 与 Anthropic 在云厂商未履行合同中的占比](https://michaelparekh.substack.com/p/ai-anthropic-and-opemai-half-of-2)
+- [Phys.org：AI 行业的循环融资](https://phys.org/news/2026-10-paying-circular-money-machine-ai.html)
+- [Levelbox：英伟达和博通的循环融资](https://levelbox.ai/blog/ai-circular-financing-nvidia-broadcom-october-2026)
+- [CNBC：Anthropic 和 OpenAI 持股对企业盈利的影响](https://www.cnbc.com/2026/08/03/big-techs-anthropic-and-openai-stakes-distort-corporate-earnings.html)
+- [Motley Fool：亚马逊持有的 Anthropic 股权](https://www.fool.com/investing/2026/08/17/amazons-stake-in-anthropic-is-now-big-enough-to-mo/)
+- [Yahoo Finance：Anthropic 通过云平台销售的收入占比](https://finance.yahoo.com/technology/ai/articles/anthropic-relies-google-amazon-microsoft-175139044.html)
+- [NBC News：Anthropic 招股书与算力承诺](https://www.nbcnews.com/business/markets/anthropic-releases-ipo-filing-ahead-highly-anticipated-stock-debut-rcna605676)
