@@ -7,6 +7,8 @@ tags: ["Tech"]
 
 [llm-d](https://github.com/orgs/llm-d/repositories) is an open-source project for distributed LLM inference on Kubernetes. The organization has many repositories; here are the ones that matter.
 
+![llm-d Core Repositories](/images/llm-d.png)
+
 ### Core
 
 - [llm-d](https://github.com/llm-d/llm-d): The main repo with architecture docs and deployment guides. The entry point to the project.
@@ -21,3 +23,4 @@ tags: ["Tech"]
 - [llm-d-kv-cache](https://github.com/llm-d/llm-d-kv-cache): Supporting KV cache utilities, such as a tokenizer service and a PVC evictor. Its main parts have moved: the KV cache index to llm-d-router, and storage offloading upstream to vLLM.
 
 The remaining repos are archived, templates, CI, or the website. You don't need them to understand the project.
+
