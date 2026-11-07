@@ -24,6 +24,8 @@ herdr runs multiple TUI agents and bash commands at the same time.
 
 ### LeanVim
 
+Replace VSCode!
+
 So I built my own Neovim config, LeanVim, with one rule: only what's necessary.
 It has a file tree you can use with the mouse (right-click to create, rename, or delete),
 one key per feature (Space f for files, Space c for contents, Space g for git changes),
