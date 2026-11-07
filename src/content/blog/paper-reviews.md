@@ -18,7 +18,7 @@ For a course, I need to read papers and write reviews. I wanted all eight papers
 | 2 | Quantization & Model Compression |
 | 3 | Sparse & Efficient Architectures |
 | 4 | AI-Native Chips |
-| 5 | On-device LLM Inference |
+| 5 | Hardwired Model Chips |
 | 6 | Edge-Cloud Collaborative Inference |
 | 7 | Federated Learning |
 | 8 | Privacy-Preserving ML |
@@ -47,7 +47,11 @@ I chose Switch Transformer because it is the foundational work behind sparse arc
 
 I chose this paper because I want to understand local AI from the hardware perspective, and the TPU is a classic example of a chip dedicated to inference. Although it was built for datacenters rather than edge devices, it faces the same core question as local AI: what can a chip gain by giving up generality and doing only neural network inference? It also connects directly to Deep Compression. The TPU computes on 8-bit integers, relying on the same insight that neural networks tolerate low precision, so reading the two papers together shows how a software idea like quantization becomes a saving in silicon.
 
-### Review 5: On-device LLM Inference
+### Review 5: Hardwired Model Chips
+
+#### [Hardwired-Neurons Language Processing Units as General-Purpose Cognitive Substrates](https://arxiv.org/abs/2508.16151)
+
+I chose this paper because it pushes the TPU's idea of specialization to the extreme: instead of building a chip for neural networks in general, it hardwires the weights of one specific LLM into the chip, so the chip itself becomes the model. Since the weights never need to be fetched from memory, the biggest cost of LLM inference disappears. I first became interested in this direction through Taalas, a startup that etched Llama 3.1 8B into silicon and that AMD announced it would acquire in 2026. The paper targets a 120B model in the cloud, but the same approach applied to small models could make fast, low-power, and private AI chips for local devices.
 
 ### Review 6: Edge-Cloud Collaborative Inference
 
