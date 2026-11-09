@@ -313,6 +313,17 @@
       "backdatedTo": "2026-11-05T17:00:00.000Z",
       "file": "project-working-files.md",
       "hash": "8d2087dcad06cdbe"
+    },
+    "computer-use": {
+      "draftId": 224108880,
+      "title": "Thoughts on Computer Use",
+      "cover": "https://substack-post-media.s3.amazonaws.com/public/images/bf7107e9-af3c-4972-86ef-95eba626434e_1456x816.png",
+      "file": "computer-use.md",
+      "hash": "5b1b58cb0d4283a1",
+      "createdAt": "2026-11-09T05:25:20.854Z",
+      "publishedAt": "2026-11-09T05:25:21.578Z",
+      "emailSent": true,
+      "url": "thoughts-on-computer-use"
     }
   }
 }
