@@ -3,47 +3,58 @@
   "posts": {
     "what-i-learned-from-university": {
       "substackSlug": "what-i-learned-from-university",
-      "note": "existing"
+      "note": "existing",
+      "file": "what-i-learned-from-university.md"
     },
     "professionals-self-media": {
       "substackSlug": "professionals-self-media",
-      "note": "existing"
+      "note": "existing",
+      "file": "Professionals-self-media.md"
     },
     "anxiety": {
       "substackSlug": "anxiety",
-      "note": "existing"
+      "note": "existing",
+      "file": "anxiety.md"
     },
     "how-to-become-a-good-engineer": {
       "substackSlug": "how-to-become-a-good-engineer",
-      "note": "existing"
+      "note": "existing",
+      "file": "how-to-become-a-good-engineer.md"
     },
     "software-development-principles": {
       "substackSlug": "b0e",
-      "note": "existing (Chinese version: 软件开发思想)"
+      "note": "existing (Chinese version: 软件开发思想)",
+      "file": "Software-Development-Principles.md"
     },
     "determine-my-early-career-direction": {
       "substackSlug": "3fd",
-      "note": "existing (earlier Chinese version: 确定我的职业初期发展方向)"
+      "note": "existing (earlier Chinese version: 确定我的职业初期发展方向)",
+      "file": "determine-my-early-career-direction.md"
     },
     "the-evolution-of-software-development": {
       "substackSlug": "the-evolution-of-software-development",
-      "note": "existing"
+      "note": "existing",
+      "file": "the-evolution-of-software-development.md"
     },
     "first-impressions-of-seattle": {
       "substackSlug": "e9f",
-      "note": "existing"
+      "note": "existing",
+      "file": "first-impressions-of-seattle.md"
     },
     "use-ai-to-write-good-code": {
       "substackSlug": "use-ai-to-write-good-code",
-      "note": "existing"
+      "note": "existing",
+      "file": "use-ai-to-write-good-code.md"
     },
     "notes-on-scaling-laws": {
       "substackSlug": "notes-on-scaling-laws",
-      "note": "existing"
+      "note": "existing",
+      "file": "notes-on-scaling-laws.md"
     },
     "nvim-config": {
       "substackSlug": "replace-vscode",
-      "note": "existing (Replace VSCode!)"
+      "note": "existing (Replace VSCode!)",
+      "file": "nvim-config.md"
     },
     "skill-platform": {
       "draftId": 224105525,
@@ -54,7 +65,9 @@
       "emailSent": false,
       "url": "system-design-skill-platform",
       "backdatedTo": "2026-07-23T17:00:00.000Z",
-      "refreshedAt": "2026-11-09T04:51:03.282Z"
+      "refreshedAt": "2026-11-09T04:51:03.282Z",
+      "file": "skill-platform.md",
+      "hash": "c3d36160e64c31ad"
     },
     "big-and-small": {
       "draftId": 224105782,
@@ -64,7 +77,9 @@
       "publishedAt": "2026-11-09T04:38:24.006Z",
       "emailSent": false,
       "url": "big-and-small",
-      "backdatedTo": "2026-04-24T17:00:00.000Z"
+      "backdatedTo": "2026-04-24T17:00:00.000Z",
+      "file": "big-and-small.md",
+      "hash": "fd4e349e959094e3"
     },
     "2026-summer": {
       "draftId": 224105785,
@@ -74,7 +89,9 @@
       "publishedAt": "2026-11-09T04:38:28.056Z",
       "emailSent": false,
       "url": "2026-summer",
-      "backdatedTo": "2026-07-01T17:00:00.000Z"
+      "backdatedTo": "2026-07-01T17:00:00.000Z",
+      "file": "2026-summer.md",
+      "hash": "cecc30228e956a75"
     },
     "dynaflow": {
       "draftId": 224105788,
@@ -84,7 +101,9 @@
       "publishedAt": "2026-11-09T04:38:32.368Z",
       "emailSent": false,
       "url": "paper-notes-dynaflow",
-      "backdatedTo": "2026-07-08T17:00:00.000Z"
+      "backdatedTo": "2026-07-08T17:00:00.000Z",
+      "file": "dynaflow.md",
+      "hash": "9c1fbc439559efed"
     },
     "system-design": {
       "draftId": 224105798,
@@ -94,7 +113,9 @@
       "publishedAt": "2026-11-09T04:38:36.489Z",
       "emailSent": false,
       "url": "book-notes-system-design",
-      "backdatedTo": "2026-07-16T17:00:00.000Z"
+      "backdatedTo": "2026-07-16T17:00:00.000Z",
+      "file": "system-design.md",
+      "hash": "1ac95785030b7b54"
     },
     "unicache": {
       "draftId": 224105805,
@@ -104,7 +125,9 @@
       "publishedAt": "2026-11-09T04:38:40.633Z",
       "emailSent": false,
       "url": "paper-notes-unicache",
-      "backdatedTo": "2026-07-20T17:00:00.000Z"
+      "backdatedTo": "2026-07-20T17:00:00.000Z",
+      "file": "unicache.md",
+      "hash": "cd19ae8559418a6c"
     },
     "c2cserve": {
       "draftId": 224105812,
@@ -114,7 +137,9 @@
       "publishedAt": "2026-11-09T04:38:45.318Z",
       "emailSent": false,
       "url": "paper-notes-c2cserve",
-      "backdatedTo": "2026-07-22T17:00:00.000Z"
+      "backdatedTo": "2026-07-22T17:00:00.000Z",
+      "file": "c2cserve.md",
+      "hash": "2cd761885712fce7"
     },
     "first-paper": {
       "draftId": 224105816,
@@ -124,7 +149,9 @@
       "publishedAt": "2026-11-09T04:38:49.329Z",
       "emailSent": false,
       "url": "85c",
-      "backdatedTo": "2026-07-24T17:00:00.000Z"
+      "backdatedTo": "2026-07-24T17:00:00.000Z",
+      "file": "first-paper.md",
+      "hash": "c92282b5a9c2d904"
     },
     "directkv": {
       "draftId": 224105821,
@@ -134,7 +161,9 @@
       "publishedAt": "2026-11-09T04:38:53.988Z",
       "emailSent": false,
       "url": "paper-notes-directkv",
-      "backdatedTo": "2026-07-27T17:00:00.000Z"
+      "backdatedTo": "2026-07-27T17:00:00.000Z",
+      "file": "directkv.md",
+      "hash": "1fb4967ff3a15148"
     },
     "flashattention": {
       "draftId": 224105825,
@@ -145,7 +174,9 @@
       "emailSent": false,
       "url": "paper-notes-flashattention",
       "backdatedTo": "2026-07-27T17:00:00.000Z",
-      "refreshedAt": "2026-11-09T04:51:06.292Z"
+      "refreshedAt": "2026-11-09T04:51:06.292Z",
+      "file": "flashattention.md",
+      "hash": "c8a883cb1ab70d99"
     },
     "minisglang-code": {
       "draftId": 224105836,
@@ -156,7 +187,9 @@
       "emailSent": false,
       "url": "code-notes-mini-sglang",
       "backdatedTo": "2026-07-31T17:00:00.000Z",
-      "refreshedAt": "2026-11-09T04:51:12.941Z"
+      "refreshedAt": "2026-11-09T04:51:12.941Z",
+      "file": "minisglang-code.md",
+      "hash": "e4297f8aa3177aa7"
     },
     "shanghai": {
       "draftId": 224105838,
@@ -166,7 +199,9 @@
       "publishedAt": "2026-11-09T04:39:08.392Z",
       "emailSent": false,
       "url": "cb7",
-      "backdatedTo": "2026-08-02T17:00:00.000Z"
+      "backdatedTo": "2026-08-02T17:00:00.000Z",
+      "file": "shanghai.md",
+      "hash": "63707e9b29e0be1c"
     },
     "good-cuda-kernel": {
       "draftId": 224105841,
@@ -176,7 +211,9 @@
       "publishedAt": "2026-11-09T04:39:12.257Z",
       "emailSent": false,
       "url": "how-to-write-a-good-cuda-kernel",
-      "backdatedTo": "2026-09-05T17:00:00.000Z"
+      "backdatedTo": "2026-09-05T17:00:00.000Z",
+      "file": "good-cuda-kernel.md",
+      "hash": "e3c5c8a6e5dc972c"
     },
     "classes-in-uw": {
       "draftId": 224105847,
@@ -186,7 +223,9 @@
       "publishedAt": "2026-11-09T04:39:16.262Z",
       "emailSent": false,
       "url": "keep-a-record-of-all-the-classes",
-      "backdatedTo": "2026-09-28T17:00:00.000Z"
+      "backdatedTo": "2026-09-28T17:00:00.000Z",
+      "file": "classes-in-uw.md",
+      "hash": "db78c961d89c1844"
     },
     "paper-reviews": {
       "draftId": 224105854,
@@ -197,7 +236,9 @@
       "emailSent": false,
       "url": "local-and-private-ai-efficient-and",
       "backdatedTo": "2026-10-02T17:00:00.000Z",
-      "refreshedAt": "2026-11-09T04:51:16.120Z"
+      "refreshedAt": "2026-11-09T04:51:16.120Z",
+      "file": "paper-reviews.md",
+      "hash": "6b43ef727b8dffd3"
     },
     "shoot-experience-optimization": {
       "draftId": 224105861,
@@ -207,7 +248,9 @@
       "publishedAt": "2026-11-09T04:39:24.639Z",
       "emailSent": false,
       "url": "interview-prep-swe-shoot-experience",
-      "backdatedTo": "2026-10-23T17:00:00.000Z"
+      "backdatedTo": "2026-10-23T17:00:00.000Z",
+      "file": "shoot-experience-optimization.md",
+      "hash": "286aa40e989f7ab2"
     },
     "apple-local-and-cloud-models": {
       "draftId": 224105868,
@@ -217,7 +260,9 @@
       "publishedAt": "2026-11-09T04:39:28.813Z",
       "emailSent": false,
       "url": "how-apple-uses-local-models-and-cloud",
-      "backdatedTo": "2026-10-27T17:00:00.000Z"
+      "backdatedTo": "2026-10-27T17:00:00.000Z",
+      "file": "apple-local-and-cloud-models.md",
+      "hash": "8d386276cc8821f9"
     },
     "how-to-make-ai-chips": {
       "draftId": 224105874,
@@ -228,7 +273,9 @@
       "emailSent": false,
       "url": "how-to-make-ai-chips",
       "backdatedTo": "2026-10-29T17:00:00.000Z",
-      "refreshedAt": "2026-11-09T04:51:18.989Z"
+      "refreshedAt": "2026-11-09T04:51:18.989Z",
+      "file": "how-to-make-ai-chips.md",
+      "hash": "a4a8c3999cbec676"
     },
     "ai-bubble": {
       "draftId": 224105878,
@@ -239,7 +286,9 @@
       "emailSent": false,
       "url": "ai",
       "backdatedTo": "2026-11-01T17:00:00.000Z",
-      "refreshedAt": "2026-11-09T04:49:44.637Z"
+      "refreshedAt": "2026-11-09T04:49:44.637Z",
+      "file": "ai-bubble.md",
+      "hash": "eaabdc7139235701"
     },
     "llm-d": {
       "draftId": 224105886,
@@ -249,7 +298,9 @@
       "publishedAt": "2026-11-09T04:39:41.398Z",
       "emailSent": false,
       "url": "llm-d-preview",
-      "backdatedTo": "2026-11-04T17:00:00.000Z"
+      "backdatedTo": "2026-11-04T17:00:00.000Z",
+      "file": "llm-d.md",
+      "hash": "8a71479bc2376b9f"
     },
     "project-working-files": {
       "draftId": 224105892,
@@ -259,7 +310,9 @@
       "publishedAt": "2026-11-09T04:39:45.595Z",
       "emailSent": false,
       "url": "the-working-files-a-project-needs",
-      "backdatedTo": "2026-11-05T17:00:00.000Z"
+      "backdatedTo": "2026-11-05T17:00:00.000Z",
+      "file": "project-working-files.md",
+      "hash": "8d2087dcad06cdbe"
     }
   }
 }

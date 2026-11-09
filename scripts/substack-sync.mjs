@@ -13,6 +13,7 @@
 //     --publish      publish after creating the draft (default: draft only)
 //     --send-email   email subscribers when publishing (default: no email)
 //     --backdate     set the Substack post date to the blog pubDate (for backfilling old posts)
+//     --sync-edits   also update posts this script published whose blog source changed (no email)
 //     --refresh      re-render posts THIS SCRIPT published earlier (needs --only <slug> or --all-own);
 //                    updates them in place, never emails, never touches posts it did not create
 //     --limit N      stop after N posts;  --only <slug>  sync just that post
@@ -20,6 +21,7 @@
 // SUBSTACK_SID is the value of the `substack.sid` cookie from a logged-in browser session.
 
 import fs from 'node:fs';
+import crypto from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import yaml from 'js-yaml';
@@ -46,6 +48,7 @@ const SEND_EMAIL = args.includes('--send-email');
 const BACKDATE = args.includes('--backdate');
 const REFRESH = args.includes('--refresh');
 const ALL_OWN = args.includes('--all-own');
+const SYNC_EDITS = args.includes('--sync-edits');
 
 const ledger = JSON.parse(fs.readFileSync(LEDGER, 'utf8'));
 const PUB = ledger.publication.replace(/\/$/, '');
@@ -61,7 +64,7 @@ function loadPosts() {
       const m = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
       if (!m) throw new Error(`${f}: missing frontmatter`);
       const data = yaml.load(m[1]);
-      return { file: f, data, body: m[2], slug: String(data.slug) };
+      return { file: f, data, body: m[2], slug: String(data.slug), hash: crypto.createHash('sha256').update(raw).digest('hex').slice(0, 16) };
     })
     .filter((p) => !p.data.draft)
     .sort((a, b) => new Date(a.data.pubDate) - new Date(b.data.pubDate)); // oldest first
@@ -417,17 +420,44 @@ async function publish(post, entry) {
 async function refresh(post, entry) {
   const conv = new Converter(post, uploadImage, uploadPng);
   const doc = await conv.convert();
-  await api('PUT', `${PUB}/api/v1/drafts/${entry.draftId}`, { draft_body: JSON.stringify(doc) });
+  const title = String(post.data.title);
+  const update = { draft_body: JSON.stringify(doc), draft_title: title };
+  if (title !== entry.title) {
+    update.cover_image = entry.cover = await uploadPng(renderCover({ title, tags: post.data.tags, date: post.data.pubDate }));
+    entry.title = title;
+  }
+  await api('PUT', `${PUB}/api/v1/drafts/${entry.draftId}`, update);
   await api('GET', `${PUB}/api/v1/drafts/${entry.draftId}/prepublish`);
   await api('POST', `${PUB}/api/v1/drafts/${entry.draftId}/publish`, { send: false, share_automatically: false });
   if (entry.backdatedTo) await api('PUT', `${PUB}/api/v1/drafts/${entry.draftId}`, { post_date: entry.backdatedTo });
   entry.refreshedAt = new Date().toISOString();
+  entry.hash = post.hash;
+  entry.file = post.file;
   saveLedger();
   console.log(`refreshed ${entry.draftId}  ${post.slug}  ${[...new Set(conv.warnings)].join('; ')}`);
 }
 
 async function main() {
   const all = loadPosts();
+
+  // Slug changed but same file: carry the ledger entry over instead of publishing a duplicate.
+  for (const p of all) {
+    if (ledger.posts[p.slug]) continue;
+    const old = Object.keys(ledger.posts).find((k) => ledger.posts[k].file === p.file && !all.some((q) => q.slug === k));
+    if (old) {
+      console.log(`slug changed ${old} -> ${p.slug} (same file ${p.file}); keeping the existing Substack post`);
+      ledger.posts[p.slug] = ledger.posts[old];
+      delete ledger.posts[old];
+      saveLedger();
+    }
+  }
+
+  if (SYNC_EDITS && !DRY) {
+    const edited = all.filter((p) => { const e = ledger.posts[p.slug]; return e?.draftId && e.publishedAt && e.hash && e.hash !== p.hash; });
+    console.log(`${edited.length} published post(s) edited on the blog`);
+    if (edited.length && !SID) throw new Error('SUBSTACK_SID is not set');
+    for (const p of edited) await refresh(p, ledger.posts[p.slug]);
+  }
   if (REFRESH) {
     if (!ONLY && !ALL_OWN) throw new Error('--refresh needs --only <slug> or --all-own');
     if (!SID) throw new Error('SUBSTACK_SID is not set');
@@ -486,7 +516,7 @@ async function main() {
       draft_bylines: [{ id: userId, is_guest: false }],
       cover_image: cover,
     });
-    ledger.posts[post.slug] = { draftId: draft.id, title, cover, createdAt: new Date().toISOString() };
+    ledger.posts[post.slug] = { draftId: draft.id, title, cover, file: post.file, hash: post.hash, createdAt: new Date().toISOString() };
     saveLedger();
     titles.add(title.trim());
     console.log(`created draft ${draft.id}  ${post.slug}  "${title}"${warn.length ? '  ⚠ ' + warn.join('; ') : ''}`);

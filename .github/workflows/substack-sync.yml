@@ -25,10 +25,10 @@ jobs:
       - run: npm ci --ignore-scripts
       - name: Install CJK fonts for cover images
         run: sudo apt-get install -y -qq fonts-noto-cjk >/dev/null
-      - name: Publish new posts to Substack (with email)
+      - name: Publish new posts (with email) and sync edits (no email)
         env:
           SUBSTACK_SID: ${{ secrets.SUBSTACK_SID }}
-        run: node scripts/substack-sync.mjs --publish --send-email
+        run: node scripts/substack-sync.mjs --publish --send-email --sync-edits
       - name: Commit ledger
         if: always()
         run: |
