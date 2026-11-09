@@ -1,3 +1,4 @@
 {
-  "framework": "astro"
+  "framework": "astro",
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD -- . ':(exclude)substack-sync.json'"
 }

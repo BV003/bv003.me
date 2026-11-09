@@ -1,0 +1,259 @@
+{
+  "publication": "https://michaelliu899840.substack.com",
+  "posts": {
+    "what-i-learned-from-university": {
+      "substackSlug": "what-i-learned-from-university",
+      "note": "existing"
+    },
+    "professionals-self-media": {
+      "substackSlug": "professionals-self-media",
+      "note": "existing"
+    },
+    "anxiety": {
+      "substackSlug": "anxiety",
+      "note": "existing"
+    },
+    "how-to-become-a-good-engineer": {
+      "substackSlug": "how-to-become-a-good-engineer",
+      "note": "existing"
+    },
+    "software-development-principles": {
+      "substackSlug": "b0e",
+      "note": "existing (Chinese version: 软件开发思想)"
+    },
+    "determine-my-early-career-direction": {
+      "substackSlug": "3fd",
+      "note": "existing (earlier Chinese version: 确定我的职业初期发展方向)"
+    },
+    "the-evolution-of-software-development": {
+      "substackSlug": "the-evolution-of-software-development",
+      "note": "existing"
+    },
+    "first-impressions-of-seattle": {
+      "substackSlug": "e9f",
+      "note": "existing"
+    },
+    "use-ai-to-write-good-code": {
+      "substackSlug": "use-ai-to-write-good-code",
+      "note": "existing"
+    },
+    "notes-on-scaling-laws": {
+      "substackSlug": "notes-on-scaling-laws",
+      "note": "existing"
+    },
+    "nvim-config": {
+      "substackSlug": "replace-vscode",
+      "note": "existing (Replace VSCode!)"
+    },
+    "skill-platform": {
+      "draftId": 224105525,
+      "title": "System Design: Skill Platform",
+      "createdAt": "2026-11-09T04:34:30.323Z",
+      "cover": "https://substack-post-media.s3.amazonaws.com/public/images/0e9692b4-1a72-463d-a988-235e08eca2cd_1456x816.png",
+      "publishedAt": "2026-11-09T04:37:55.985Z",
+      "emailSent": false,
+      "url": "system-design-skill-platform",
+      "backdatedTo": "2026-07-23T17:00:00.000Z"
+    },
+    "big-and-small": {
+      "draftId": 224105782,
+      "title": "Big and Small",
+      "cover": "https://substack-post-media.s3.amazonaws.com/public/images/586721c8-2da8-495b-9923-afa91dacca65_1456x816.png",
+      "createdAt": "2026-11-09T04:38:23.300Z",
+      "publishedAt": "2026-11-09T04:38:24.006Z",
+      "emailSent": false,
+      "url": "big-and-small",
+      "backdatedTo": "2026-04-24T17:00:00.000Z"
+    },
+    "2026-summer": {
+      "draftId": 224105785,
+      "title": "2026 Summer",
+      "cover": "https://substack-post-media.s3.amazonaws.com/public/images/edf4e86c-be36-48b8-9074-5c846cce3b51_1456x816.png",
+      "createdAt": "2026-11-09T04:38:27.187Z",
+      "publishedAt": "2026-11-09T04:38:28.056Z",
+      "emailSent": false,
+      "url": "2026-summer",
+      "backdatedTo": "2026-07-01T17:00:00.000Z"
+    },
+    "dynaflow": {
+      "draftId": 224105788,
+      "title": "Paper Notes: DYNAFLOW",
+      "cover": "https://substack-post-media.s3.amazonaws.com/public/images/dadd0033-c727-4968-80fc-2863c138a694_1456x816.png",
+      "createdAt": "2026-11-09T04:38:31.672Z",
+      "publishedAt": "2026-11-09T04:38:32.368Z",
+      "emailSent": false,
+      "url": "paper-notes-dynaflow",
+      "backdatedTo": "2026-07-08T17:00:00.000Z"
+    },
+    "system-design": {
+      "draftId": 224105798,
+      "title": "Book Notes: System Design",
+      "cover": "https://substack-post-media.s3.amazonaws.com/public/images/7c3e73bd-c5fe-4962-aab9-a64f04815b30_1456x816.png",
+      "createdAt": "2026-11-09T04:38:35.832Z",
+      "publishedAt": "2026-11-09T04:38:36.489Z",
+      "emailSent": false,
+      "url": "book-notes-system-design",
+      "backdatedTo": "2026-07-16T17:00:00.000Z"
+    },
+    "unicache": {
+      "draftId": 224105805,
+      "title": "Paper Notes: UniCache",
+      "cover": "https://substack-post-media.s3.amazonaws.com/public/images/1dddf413-527c-429c-aad8-b44b7af8d941_1456x816.png",
+      "createdAt": "2026-11-09T04:38:39.901Z",
+      "publishedAt": "2026-11-09T04:38:40.633Z",
+      "emailSent": false,
+      "url": "paper-notes-unicache",
+      "backdatedTo": "2026-07-20T17:00:00.000Z"
+    },
+    "c2cserve": {
+      "draftId": 224105812,
+      "title": "Paper Notes: C2CServe",
+      "cover": "https://substack-post-media.s3.amazonaws.com/public/images/1c66fa26-890e-4b6f-904b-e3f5297f4527_1456x816.png",
+      "createdAt": "2026-11-09T04:38:44.529Z",
+      "publishedAt": "2026-11-09T04:38:45.318Z",
+      "emailSent": false,
+      "url": "paper-notes-c2cserve",
+      "backdatedTo": "2026-07-22T17:00:00.000Z"
+    },
+    "first-paper": {
+      "draftId": 224105816,
+      "title": "一次失败的投稿经历",
+      "cover": "https://substack-post-media.s3.amazonaws.com/public/images/cdd997c6-868b-4da3-8445-1d17282596a1_1456x816.png",
+      "createdAt": "2026-11-09T04:38:48.638Z",
+      "publishedAt": "2026-11-09T04:38:49.329Z",
+      "emailSent": false,
+      "url": "85c",
+      "backdatedTo": "2026-07-24T17:00:00.000Z"
+    },
+    "directkv": {
+      "draftId": 224105821,
+      "title": "Paper Notes: DirectKV",
+      "cover": "https://substack-post-media.s3.amazonaws.com/public/images/d20e4cc4-674f-4808-8272-c256a003ff29_1456x816.png",
+      "createdAt": "2026-11-09T04:38:53.239Z",
+      "publishedAt": "2026-11-09T04:38:53.988Z",
+      "emailSent": false,
+      "url": "paper-notes-directkv",
+      "backdatedTo": "2026-07-27T17:00:00.000Z"
+    },
+    "flashattention": {
+      "draftId": 224105825,
+      "title": "Paper Notes: FlashAttention",
+      "cover": "https://substack-post-media.s3.amazonaws.com/public/images/f64d2ed1-df15-4892-ab60-4b7b36506230_1456x816.png",
+      "createdAt": "2026-11-09T04:38:57.695Z",
+      "publishedAt": "2026-11-09T04:38:58.401Z",
+      "emailSent": false,
+      "url": "paper-notes-flashattention",
+      "backdatedTo": "2026-07-27T17:00:00.000Z"
+    },
+    "minisglang-code": {
+      "draftId": 224105836,
+      "title": "Code Notes: mini-sglang",
+      "cover": "https://substack-post-media.s3.amazonaws.com/public/images/173362be-a0ef-4052-aea1-27057ca6b89c_1456x816.png",
+      "createdAt": "2026-11-09T04:39:01.854Z",
+      "publishedAt": "2026-11-09T04:39:02.567Z",
+      "emailSent": false,
+      "url": "code-notes-mini-sglang",
+      "backdatedTo": "2026-07-31T17:00:00.000Z"
+    },
+    "shanghai": {
+      "draftId": 224105838,
+      "title": "上海印象",
+      "cover": "https://substack-post-media.s3.amazonaws.com/public/images/58283c83-8ff8-4d59-9a45-1bc688e9aa65_1456x816.png",
+      "createdAt": "2026-11-09T04:39:07.634Z",
+      "publishedAt": "2026-11-09T04:39:08.392Z",
+      "emailSent": false,
+      "url": "cb7",
+      "backdatedTo": "2026-08-02T17:00:00.000Z"
+    },
+    "good-cuda-kernel": {
+      "draftId": 224105841,
+      "title": "How to write a good cuda kernel",
+      "cover": "https://substack-post-media.s3.amazonaws.com/public/images/12b5ac52-361f-4b85-9a8c-f2c77f9a6c89_1456x816.png",
+      "createdAt": "2026-11-09T04:39:11.522Z",
+      "publishedAt": "2026-11-09T04:39:12.257Z",
+      "emailSent": false,
+      "url": "how-to-write-a-good-cuda-kernel",
+      "backdatedTo": "2026-09-05T17:00:00.000Z"
+    },
+    "classes-in-uw": {
+      "draftId": 224105847,
+      "title": "Keep a Record of All the Classes I Take at UW",
+      "cover": "https://substack-post-media.s3.amazonaws.com/public/images/df1725a3-63c9-4680-97d7-3c05e65f9b57_1456x816.png",
+      "createdAt": "2026-11-09T04:39:15.514Z",
+      "publishedAt": "2026-11-09T04:39:16.262Z",
+      "emailSent": false,
+      "url": "keep-a-record-of-all-the-classes",
+      "backdatedTo": "2026-09-28T17:00:00.000Z"
+    },
+    "paper-reviews": {
+      "draftId": 224105854,
+      "title": "Local and Private AI: Efficient and Scalable Systems for Intelligence at the Edge",
+      "cover": "https://substack-post-media.s3.amazonaws.com/public/images/fe5e5a6a-ce23-43df-a4e2-827c9ec50173_1456x816.png",
+      "createdAt": "2026-11-09T04:39:19.654Z",
+      "publishedAt": "2026-11-09T04:39:20.419Z",
+      "emailSent": false,
+      "url": "local-and-private-ai-efficient-and",
+      "backdatedTo": "2026-10-02T17:00:00.000Z"
+    },
+    "shoot-experience-optimization": {
+      "draftId": 224105861,
+      "title": "Interview Prep: SWE-Shoot Experience Optimization",
+      "cover": "https://substack-post-media.s3.amazonaws.com/public/images/b1edc5cb-50a9-4f61-8579-03afc737c348_1456x816.png",
+      "createdAt": "2026-11-09T04:39:23.932Z",
+      "publishedAt": "2026-11-09T04:39:24.639Z",
+      "emailSent": false,
+      "url": "interview-prep-swe-shoot-experience",
+      "backdatedTo": "2026-10-23T17:00:00.000Z"
+    },
+    "apple-local-and-cloud-models": {
+      "draftId": 224105868,
+      "title": "How Apple Uses Local Models and Cloud Models",
+      "cover": "https://substack-post-media.s3.amazonaws.com/public/images/2a3ba107-c5a2-44ae-be82-f3936aa23a49_1456x816.png",
+      "createdAt": "2026-11-09T04:39:27.984Z",
+      "publishedAt": "2026-11-09T04:39:28.813Z",
+      "emailSent": false,
+      "url": "how-apple-uses-local-models-and-cloud",
+      "backdatedTo": "2026-10-27T17:00:00.000Z"
+    },
+    "how-to-make-ai-chips": {
+      "draftId": 224105874,
+      "title": "How to Make AI Chips",
+      "cover": "https://substack-post-media.s3.amazonaws.com/public/images/4673d29f-29c5-4c1e-a56d-489eae325cb1_1456x816.png",
+      "createdAt": "2026-11-09T04:39:32.140Z",
+      "publishedAt": "2026-11-09T04:39:32.769Z",
+      "emailSent": false,
+      "url": "how-to-make-ai-chips",
+      "backdatedTo": "2026-10-29T17:00:00.000Z"
+    },
+    "ai-bubble": {
+      "draftId": 224105878,
+      "title": "AI投资是泡沫吗",
+      "cover": "https://substack-post-media.s3.amazonaws.com/public/images/0997d27e-200d-45c5-b7f2-94152b678c44_1456x816.png",
+      "createdAt": "2026-11-09T04:39:36.028Z",
+      "publishedAt": "2026-11-09T04:39:36.752Z",
+      "emailSent": false,
+      "url": "ai",
+      "backdatedTo": "2026-11-01T17:00:00.000Z"
+    },
+    "llm-d": {
+      "draftId": 224105886,
+      "title": "Llm-d Preview",
+      "cover": "https://substack-post-media.s3.amazonaws.com/public/images/55d67a5e-a603-445c-822a-e17c38301b3f_1456x816.png",
+      "createdAt": "2026-11-09T04:39:40.664Z",
+      "publishedAt": "2026-11-09T04:39:41.398Z",
+      "emailSent": false,
+      "url": "llm-d-preview",
+      "backdatedTo": "2026-11-04T17:00:00.000Z"
+    },
+    "project-working-files": {
+      "draftId": 224105892,
+      "title": "The Working Files a Project Needs",
+      "cover": "https://substack-post-media.s3.amazonaws.com/public/images/3922857b-67f3-4362-8afb-5f81f08e7324_1456x816.png",
+      "createdAt": "2026-11-09T04:39:44.843Z",
+      "publishedAt": "2026-11-09T04:39:45.595Z",
+      "emailSent": false,
+      "url": "the-working-files-a-project-needs",
+      "backdatedTo": "2026-11-05T17:00:00.000Z"
+    }
+  }
+}

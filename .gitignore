@@ -21,3 +21,6 @@ pnpm-debug.log*
 # Astro
 .astro/
 .vercel
+
+# substack sync dry-run output
+.substack-preview/
