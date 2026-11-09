@@ -13,6 +13,8 @@
 //     --publish      publish after creating the draft (default: draft only)
 //     --send-email   email subscribers when publishing (default: no email)
 //     --backdate     set the Substack post date to the blog pubDate (for backfilling old posts)
+//     --refresh      re-render posts THIS SCRIPT published earlier (needs --only <slug> or --all-own);
+//                    updates them in place, never emails, never touches posts it did not create
 //     --limit N      stop after N posts;  --only <slug>  sync just that post
 //
 // SUBSTACK_SID is the value of the `substack.sid` cookie from a logged-in browser session.
@@ -26,6 +28,7 @@ import remarkParse from 'remark-parse';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import { renderCover } from './cover.mjs';
+import { renderTable } from './render-table.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BLOG_DIR = path.join(ROOT, 'src/content/blog');
@@ -41,6 +44,8 @@ const ONLY = args.includes('--only') ? args[args.indexOf('--only') + 1] : null;
 const PUBLISH = args.includes('--publish');
 const SEND_EMAIL = args.includes('--send-email');
 const BACKDATE = args.includes('--backdate');
+const REFRESH = args.includes('--refresh');
+const ALL_OWN = args.includes('--all-own');
 
 const ledger = JSON.parse(fs.readFileSync(LEDGER, 'utf8'));
 const PUB = ledger.publication.replace(/\/$/, '');
@@ -88,13 +93,16 @@ function absUrl(url) {
   return SITE + (url.startsWith('/') ? '' : '/') + url;
 }
 
+const IMAGE_ATTRS = { src: '', alt: null, title: null, type: null, href: null, belowTheFold: false, internalRedirect: null, fullscreen: null, imageSize: null, height: null, width: null, resizeWidth: null, bytes: null, topImage: false };
+const latexId = () => Math.random().toString(36).slice(2, 12);
 const text = (t, marks) => (t ? { type: 'text', text: t, ...(marks?.length ? { marks } : {}) } : null);
 const para = (content) => ({ type: 'paragraph', ...(content?.length ? { content } : {}) });
 
 class Converter {
-  constructor(post, uploadImage) {
+  constructor(post, uploadImage, uploadPng) {
     this.post = post;
     this.uploadImage = uploadImage;
+    this.uploadPng = uploadPng;
     this.defs = {};
     this.footnotes = [];
     this.footnoteOrder = [];
@@ -161,10 +169,9 @@ class Converter {
       case 'code':
         return [{ type: 'code_block', attrs: { language: n.lang || null }, content: n.value ? [text(n.value)] : undefined }];
       case 'math':
-        this.warnings.push('block math rendered as LaTeX code block — check it');
-        return [{ type: 'code_block', attrs: { language: 'latex' }, content: [text(n.value)] }];
+        return [{ type: 'latex_block', attrs: { persistentExpression: n.value, id: latexId() } }];
       case 'table':
-        return [this.table(n)];
+        return [await this.table(n)];
       case 'html':
         return this.htmlBlock(n.value);
       case 'definition':
@@ -177,16 +184,16 @@ class Converter {
     }
   }
 
-  // Substack has no tables: render as an aligned monospace block.
-  table(n) {
+  // Substack has no table node: render the table to an image (alt text keeps the content).
+  async table(n) {
     const rows = n.children.map((r) => r.children.map((c) => this.plain(c).trim()));
-    const width = (s) => [...s].reduce((w, c) => w + (CJK.test(c) ? 2 : 1), 0);
-    const cols = Math.max(...rows.map((r) => r.length));
-    const w = Array.from({ length: cols }, (_, i) => Math.max(...rows.map((r) => width(r[i] ?? ''))));
-    const line = (r) => r.map((c, i) => (c ?? '') + ' '.repeat(w[i] - width(c ?? ''))).join(' | ').trimEnd();
-    const lines = [line(rows[0]), w.map((x) => '-'.repeat(Math.max(x, 1))).join('-+-'), ...rows.slice(1).map(line)];
-    this.warnings.push('table rendered as monospace block');
-    return { type: 'code_block', attrs: { language: null }, content: [text(lines.join('\n'))] };
+    const alt = rows.map((r) => r.join(' | ')).join('\n');
+    const url = DRY ? 'table.png' : await this.uploadPng((await renderTable(rows, n.align)).png);
+    this.warnings.push('table rendered as image');
+    return {
+      type: 'captionedImage',
+      content: [{ type: 'image2', attrs: { ...IMAGE_ATTRS, src: url, alt: alt.slice(0, 1000) } }],
+    };
   }
 
   plain(n) {
@@ -239,7 +246,7 @@ class Converter {
       content: [
         {
           type: 'image2',
-          attrs: { src: url, alt: alt || null, title: null, type: null, href: null, belowTheFold: false, internalRedirect: null, fullscreen: null, imageSize: null, height: null, width: null, resizeWidth: null, bytes: null, topImage: false, isProcessed: true },
+          attrs: { ...IMAGE_ATTRS, src: url, alt: alt || null },
         },
       ],
     };
@@ -271,7 +278,7 @@ class Converter {
           out.push(text(n.value, [...marks, { type: 'code' }]));
           break;
         case 'inlineMath':
-          out.push(text(n.value, [...marks, { type: 'code' }]));
+          out.push({ type: 'inline_latex', attrs: { persistentExpression: n.value, id: latexId() } });
           break;
         case 'link':
           out.push(...(await this.inlineOf(n.children, [...marks, { type: 'link', attrs: { href: absUrl(n.url) } }], state)));
@@ -406,8 +413,29 @@ async function publish(post, entry) {
   console.log(`published ${entry.draftId}  ${post.slug}${SEND_EMAIL ? ' (email sent)' : ''}${BACKDATE ? ` (dated ${entry.backdatedTo.slice(0, 10)})` : ''}`);
 }
 
+// Re-render a post this script published and update it in place (no email).
+async function refresh(post, entry) {
+  const conv = new Converter(post, uploadImage, uploadPng);
+  const doc = await conv.convert();
+  await api('PUT', `${PUB}/api/v1/drafts/${entry.draftId}`, { draft_body: JSON.stringify(doc) });
+  await api('GET', `${PUB}/api/v1/drafts/${entry.draftId}/prepublish`);
+  await api('POST', `${PUB}/api/v1/drafts/${entry.draftId}/publish`, { send: false, share_automatically: false });
+  if (entry.backdatedTo) await api('PUT', `${PUB}/api/v1/drafts/${entry.draftId}`, { post_date: entry.backdatedTo });
+  entry.refreshedAt = new Date().toISOString();
+  saveLedger();
+  console.log(`refreshed ${entry.draftId}  ${post.slug}  ${[...new Set(conv.warnings)].join('; ')}`);
+}
+
 async function main() {
   const all = loadPosts();
+  if (REFRESH) {
+    if (!ONLY && !ALL_OWN) throw new Error('--refresh needs --only <slug> or --all-own');
+    if (!SID) throw new Error('SUBSTACK_SID is not set');
+    const own = all.filter((p) => ledger.posts[p.slug]?.draftId && ledger.posts[p.slug].publishedAt && (!ONLY || p.slug === ONLY));
+    if (ONLY && !own.length) throw new Error(`${ONLY} was not published by this script; refusing to touch it`);
+    for (const p of own) await refresh(p, ledger.posts[p.slug]);
+    return;
+  }
   // Drafts this script created earlier but has not published yet.
   const pending = PUBLISH ? all.filter((p) => ledger.posts[p.slug]?.draftId && !ledger.posts[p.slug].publishedAt && (!ONLY || p.slug === ONLY)) : [];
   if (pending.length && !DRY) {
@@ -437,7 +465,7 @@ async function main() {
       saveLedger();
       continue;
     }
-    const conv = new Converter(post, uploadImage);
+    const conv = new Converter(post, uploadImage, uploadPng);
     const doc = await conv.convert();
     const warn = [...new Set(conv.warnings)];
 
