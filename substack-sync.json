@@ -324,6 +324,17 @@
       "publishedAt": "2026-11-09T05:25:21.578Z",
       "emailSent": true,
       "url": "thoughts-on-computer-use"
+    },
+    "embodied-thinking": {
+      "draftId": 224640549,
+      "title": "Reflections on Physical AI Research",
+      "cover": "https://substack-post-media.s3.amazonaws.com/public/images/d720fc36-859f-40fa-8102-a14664c56ee2_1456x816.png",
+      "file": "embodied-thinking.md",
+      "hash": "effb8bab87ebad57",
+      "createdAt": "2026-11-12T17:57:06.841Z",
+      "publishedAt": "2026-11-12T17:57:07.722Z",
+      "emailSent": true,
+      "url": "reflections-on-physical-ai-research"
     }
   }
 }
