@@ -55,6 +55,10 @@ I chose this paper because it pushes the TPU's idea of specialization to the ext
 
 ### Review 6: Edge-Cloud Collaborative Inference
 
+#### [Apple Intelligence Foundation Language Models: Tech Report 2025](https://arxiv.org/abs/2507.13575)
+
+I chose this report because Apple Intelligence is a real product that splits work between the device and the cloud: a roughly 3B on-device model handles simple tasks with low latency, and a larger server model on Private Cloud Compute takes over complex ones, while the cloud side is still designed to protect user privacy. I interned at Apple and use these features every day, so I wanted to see how they work underneath. The report also ties back to earlier reviews, with 2-bit quantization on the device and a Mixture-of-Experts model on the server.
+
 ### Review 7: Federated Learning
 
 ### Review 8: Privacy-Preserving ML
