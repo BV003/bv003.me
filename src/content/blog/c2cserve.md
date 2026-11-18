@@ -53,7 +53,7 @@ Experiments show the interference gap (solo-run vs. co-run throughput) widens fr
 
 ### How It Works
 
-![C2CServe Architecture](/images/architecture-c2cserve.png)
+![C2CServe Architecture](/images/c2cserve/architecture.png)
 
 C2CServe has three runtime components:
 

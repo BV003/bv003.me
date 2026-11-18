@@ -44,7 +44,7 @@ tags: ["Tech"]
 
 #### High-level design
 
-![High-Level Design](/images/skillshub-high-level-design.png)
+![High-Level Design](/images/skill-platform/high-level-design.png)
 
 
 

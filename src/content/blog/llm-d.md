@@ -7,7 +7,7 @@ tags: ["Tech"]
 
 [llm-d](https://github.com/orgs/llm-d/repositories) is an open-source project for distributed LLM inference on Kubernetes. The organization has many repositories; here are the ones that matter.
 
-![llm-d Core Repositories](/images/llm-d.png)
+![llm-d Core Repositories](/images/llm-d/core-repos.png)
 
 ### Core
 

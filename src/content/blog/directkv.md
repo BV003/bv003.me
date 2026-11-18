@@ -35,7 +35,7 @@ In standard LLM inference, each transformer layer produces **key (K) and value (
 
 ### System Architecture
 
-![System Architecture](/images/directkv.png)
+![System Architecture](/images/directkv/architecture.png)
 
 DirectKV consists of four components that work together across both **prefill** (processing input prompts) and **decode** (generating one token at a time) phases:
 
