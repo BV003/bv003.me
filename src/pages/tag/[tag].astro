@@ -2,12 +2,11 @@
 import Layout from '../../layouts/Layout.astro';
 import Header from '../../components/Header.astro';
 import PostCard from '../../components/PostCard.astro';
-import { getCollection } from 'astro:content';
-import { getReadingTime } from '../../utils/readingTime';
+import { getPublishedPosts, toPostList } from '../../utils/posts';
+import { TAGS } from '../../consts';
 
 export async function getStaticPaths() {
-  const tags = ['Tech', 'Money', 'Life', 'Fiction'];
-  return tags.map((tag) => ({
+  return TAGS.map((tag) => ({
     params: { tag: tag.toLowerCase() },
     props: { tag },
   }));
@@ -15,19 +14,9 @@ export async function getStaticPaths() {
 
 const { tag } = Astro.props;
 
-const allPosts = await getCollection('blog', ({ data }) => !data.draft);
-
-const posts = allPosts
-  .filter((post) => post.data.tags?.includes(tag))
-  .map((post) => ({
-    ...post,
-    readingTime: getReadingTime(post.body || ''),
-  }))
-  .sort((a, b) => {
-    if (a.data.pinned && !b.data.pinned) return -1;
-    if (!a.data.pinned && b.data.pinned) return 1;
-    return b.data.pubDate.getTime() - a.data.pubDate.getTime();
-  });
+const posts = toPostList(
+  (await getPublishedPosts()).filter((post) => post.data.tags.includes(tag)),
+);
 ---
 
 <Layout title={`${tag} - Michael Liu`}>

@@ -1,4 +1,5 @@
 ---
+import { TAGS } from '../consts';
 ---
 
 <header class="site-header">
@@ -11,8 +12,9 @@
       <div class="search-wrapper">
         <input
           id="search-input"
-          type="text"
+          type="search"
           placeholder="Search posts..."
+          aria-label="Search posts"
           autocomplete="off"
           class="search-input"
         />
@@ -23,10 +25,12 @@
       </div>
       <!-- Tags -->
       <div class="tags-wrapper">
-        <button 
-          id="tags-toggle" 
+        <button
+          id="tags-toggle"
+          type="button"
           class="tags-toggle"
-          onclick="document.getElementById('tags-dropdown').style.display = document.getElementById('tags-dropdown').style.display === 'block' ? 'none' : 'block';"
+          aria-expanded="false"
+          aria-controls="tags-dropdown"
         >
           Tags
         </button>
@@ -35,10 +39,9 @@
           class="tags-dropdown"
         >
           <a href="/" class="tag-option">All</a>
-          <a href="/tag/tech" class="tag-option">Tech</a>
-          <a href="/tag/money" class="tag-option">Money</a>
-          <a href="/tag/life" class="tag-option">Life</a>
-          <a href="/tag/fiction" class="tag-option">Fiction</a>
+          {TAGS.map((tag) => (
+            <a href={`/tag/${tag.toLowerCase()}`} class="tag-option">{tag}</a>
+          ))}
         </div>
       </div>
       <a href="https://bv003.github.io/" class="nav-link" target="_blank" rel="noopener noreferrer">
@@ -232,80 +235,80 @@
 </style>
 
 <script>
-  // --- Tags dropdown close on outside click ---
-  document.addEventListener('click', function(event) {
-    const dropdown = document.getElementById('tags-dropdown');
-    const toggle = document.getElementById('tags-toggle');
-    const target = event.target as Node;
-    if (dropdown && toggle && !dropdown.contains(target) && !toggle.contains(target)) {
-      dropdown.style.display = 'none';
-    }
-  });
+  type IndexEntry = { title: string; slug: string; pubDate: string; body: string };
 
-  // --- Search ---
-  (async function() {
-    const input = document.getElementById('search-input') as HTMLInputElement | null;
-    const results = document.getElementById('search-results');
-    if (!input || !results) return;
+  const input = document.getElementById('search-input') as HTMLInputElement;
+  const results = document.getElementById('search-results') as HTMLElement;
+  const dropdown = document.getElementById('tags-dropdown') as HTMLElement;
+  const toggle = document.getElementById('tags-toggle') as HTMLButtonElement;
 
-    let index: { title: string; slug: string; pubDate: string; body: string }[] = [];
+  // --- Tags dropdown ---
+  function setTagsOpen(open: boolean) {
+    dropdown.style.display = open ? 'block' : 'none';
+    toggle.setAttribute('aria-expanded', String(open));
+  }
+  toggle.addEventListener('click', () => setTagsOpen(dropdown.style.display !== 'block'));
 
-    // Fetch the search index once
-    try {
-      const resp = await fetch('/search-index.json');
-      index = await resp.json();
-    } catch (e) {
-      console.error('Failed to load search index', e);
+  // --- Search (index is fetched lazily on first interaction) ---
+  let indexPromise: Promise<IndexEntry[]> | null = null;
+  function loadIndex() {
+    indexPromise ??= fetch('/search-index.json')
+      .then((r) => r.json() as Promise<IndexEntry[]>)
+      .catch((e) => {
+        console.error('Failed to load search index', e);
+        indexPromise = null;
+        return [];
+      });
+    return indexPromise;
+  }
+
+  const escapeHtml = (s: string) =>
+    s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+  function hideResults() {
+    results.style.display = 'none';
+  }
+
+  async function search() {
+    const q = input.value.trim().toLowerCase();
+    if (!q) {
+      hideResults();
+      results.innerHTML = '';
       return;
     }
+    const index = await loadIndex();
+    if (input.value.trim().toLowerCase() !== q) return; // stale response
+    const matches = index.filter((p) => p.title.toLowerCase().includes(q) || p.body.includes(q));
+    results.innerHTML = matches.length
+      ? matches
+          .slice(0, 10)
+          .map((p) => {
+            const date = new Date(p.pubDate).toLocaleDateString('en-US', {
+              year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC',
+            });
+            return `<a href="/blog/${encodeURIComponent(p.slug)}" class="search-result"><span class="search-result-title">${escapeHtml(p.title)}</span><span class="search-result-date">${date}</span></a>`;
+          })
+          .join('')
+      : '<div class="search-empty">No posts found</div>';
+    results.style.display = 'block';
+  }
 
-    function renderResults(items: typeof index) {
-      if (items.length === 0) {
-        results.innerHTML = '<div class="search-empty">No posts found</div>';
-        results.style.display = 'block';
-        return;
-      }
-      results.innerHTML = items.slice(0, 10).map(p => {
-        const date = new Date(p.pubDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-        return `<a href="/blog/${p.slug}" class="search-result"><span class="search-result-title">${escapeHtml(p.title)}</span><span class="search-result-date">${date}</span></a>`;
-      }).join('');
-      results.style.display = 'block';
+  input.addEventListener('focus', () => {
+    loadIndex();
+    if (input.value.trim()) search();
+  });
+  input.addEventListener('input', search);
+
+  // --- Close popups on outside click / Escape ---
+  document.addEventListener('click', (event) => {
+    const target = event.target as Node;
+    if (!dropdown.contains(target) && !toggle.contains(target)) setTagsOpen(false);
+    if (!input.contains(target) && !results.contains(target)) hideResults();
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      setTagsOpen(false);
+      hideResults();
     }
-
-    function escapeHtml(s: string) {
-      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    }
-
-    input.addEventListener('input', function() {
-      const q = input.value.trim().toLowerCase();
-      if (q.length === 0) {
-        results.style.display = 'none';
-        results.innerHTML = '';
-        return;
-      }
-      const matches = index.filter(p =>
-        p.title.toLowerCase().includes(q) || p.body.toLowerCase().includes(q)
-      );
-      renderResults(matches);
-    });
-
-    // Close on outside click
-    document.addEventListener('click', function(e) {
-      const target = e.target as Node;
-      if (!input.contains(target) && !results.contains(target)) {
-        results.style.display = 'none';
-      }
-    });
-
-    // Reopen if input already has text on focus
-    input.addEventListener('focus', function() {
-      const q = input.value.trim().toLowerCase();
-      if (q.length > 0 && index.length > 0) {
-        const matches = index.filter(p =>
-          p.title.toLowerCase().includes(q) || p.body.toLowerCase().includes(q)
-        );
-        renderResults(matches);
-      }
-    });
-  })();
+  });
 </script>

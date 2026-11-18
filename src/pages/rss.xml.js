@@ -1,10 +1,8 @@
 import rss from '@astrojs/rss';
-import { getCollection } from 'astro:content';
+import { getPublishedPosts, sortByDate } from '../utils/posts';
 
 export async function GET(context) {
-  const posts = await getCollection('blog', ({ data }) => !data.draft);
-  
-  const sortedPosts = posts.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+  const sortedPosts = sortByDate(await getPublishedPosts());
 
   return rss({
     title: 'Michael Liu',

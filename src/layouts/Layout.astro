@@ -1,9 +1,16 @@
 ---
 export interface Props {
   title: string;
+  description?: string;
+  /** Load KaTeX CSS (only needed on posts that contain math). */
+  math?: boolean;
 }
 
-const { title } = Astro.props;
+const {
+  title,
+  description = "Michael Liu's personal blog - AI research, engineering, and more.",
+  math = false,
+} = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -12,12 +19,11 @@ const { title } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script is:inline defer src="https://bv003-stats.vercel.app/script.js" data-website-id="51675957-e563-40db-96c7-ae1ecee07cad"></script>
-    <meta name="description" content="Michael Liu's personal blog - AI research, engineering, and more." />
+    <meta name="description" content={description} />
     <link rel="icon" type="image/png" href="/profile.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="application/rss+xml" title="RSS Feed" href="/rss.xml" />
-    <!-- KaTeX CSS for math rendering -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+    {math && <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous" />}
     <title>{title}</title>
     <style is:global>
       :root {
@@ -152,16 +158,6 @@ const { title } = Astro.props;
         color: #111;
         font-size: 1rem;
         line-height: 1.42;
-      }
-
-      /* Astro/Shiki adds an inline dark theme to highlighted blocks. */
-      pre.astro-code {
-        background: #fff !important;
-        color: #111 !important;
-      }
-
-      pre.astro-code code {
-        color: #111 !important;
       }
       
       blockquote {
