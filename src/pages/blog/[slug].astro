@@ -5,6 +5,7 @@ import { formatDate } from '../../utils/date';
 import { getReadingTime } from '../../utils/readingTime';
 import { getPublishedPosts, hasMath } from '../../utils/posts';
 import { render } from 'astro:content';
+import { AUTHOR, excerpt, isChinese } from '../../utils/seo';
 
 export async function getStaticPaths() {
   const posts = await getPublishedPosts();
@@ -18,9 +19,33 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 const readingTime = getReadingTime(post.body || '');
+
+const description = excerpt(post.body ?? '');
+const lang = isChinese(`${post.data.title} ${post.body ?? ''}`) ? 'zh-CN' : 'en';
+const url = new URL(`/blog/${post.data.slug}/`, Astro.site).href;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description,
+  datePublished: post.data.pubDate.toISOString(),
+  inLanguage: lang,
+  keywords: post.data.tags,
+  url,
+  mainEntityOfPage: url,
+  author: AUTHOR,
+};
 ---
 
-<Layout title={`${post.data.title} - Michael Liu`} math={hasMath(post.body)}>
+<Layout
+  title={`${post.data.title} - Michael Liu`}
+  description={description}
+  math={hasMath(post.body)}
+  type="article"
+  lang={lang}
+  publishedTime={post.data.pubDate}
+  jsonLd={jsonLd}
+>
   <Header />
   
   <main class="article-shell">
