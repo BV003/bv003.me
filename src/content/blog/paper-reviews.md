@@ -61,6 +61,10 @@ I chose this report because Apple Intelligence is a real product that splits wor
 
 ### Review 7: Federated Learning
 
+#### [MARS-VFL: A Unified Benchmark for Vertical Federated Learning with Realistic Evaluation](https://neurips.cc/virtual/2025/poster/121843)
+
+I chose this paper because it is our own work, and I am the second author. Federated learning keeps raw data on each device or company and only shares embeddings or gradients, so it connects directly to the theme: training happens locally, data stays private, and on edge devices the communication cost and convergence speed decide whether it can really be deployed. MARS-VFL builds a benchmark for vertical federated learning from 12 real-world datasets, where features naturally come from different devices, domains, or modalities, and evaluates methods on efficiency, robustness, and security.
+
 ### Review 8: Privacy-Preserving ML
 
 ### Conclusion
