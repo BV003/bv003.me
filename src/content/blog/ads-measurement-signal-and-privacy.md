@@ -1,5 +1,5 @@
 ---
-title: "Interview Prep: Software Engineer Intern (Ads Measurement Signal and Privacy) - 2027 Summer"
+title: "Interview Prep: Ads Measurement & Privacy"
 slug: "ads-measurement-signal-and-privacy"
 pubDate: 2026-11-25
 tags: ["Tech"]
