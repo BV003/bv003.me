@@ -7,7 +7,7 @@ tags: ["Tech"]
 
 ### What the Team Does
 
-TikTok's Ads Measurement Signal and Privacy team works across the path from collecting an advertising signal to measuring an outcome and using that measurement to improve an ad campaign. The [2027 Software Engineer Intern posting](https://www.themuse.com/jobs/tiktok/software-engineer-intern-ads-measurement-signal-and-privacy-2027-summer) describes three connected concerns: signal integration, reliable measurement, and privacy and governance.
+TikTok's Ads Measurement Signal and Privacy team works across the path from collecting an advertising signal to measuring an outcome and using that measurement to improve an ad campaign. The 2027 Software Engineer Intern posting describes three connected concerns: signal integration, reliable measurement, and privacy and governance.
 
 A signal is an event that might help explain whether an ad worked. It could be an ad impression or click on TikTok, or a conversion event reported by an advertiser or a data partner. Those events arrive from different systems, often with different schemas, identifiers, delays, and quality levels. The engineering challenge is to turn them into data that measurement systems can use consistently.
 
